@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PolyPocket</title>
+<style>
+:root{--bg:#e8eaef;--pn:#fff;--tx:#1b1d24;--mu:#667085;--bd:#d3d7e0;--ch:#eef0f5;--ac:#ff8a00;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14161c;--pn:#1f222b;--tx:#eceef3;--mu:#9aa1b0;--bd:#323644;--ch:#2a2e3a}}
+:root[data-theme="dark"]{--bg:#14161c;--pn:#1f222b;--tx:#eceef3;--mu:#9aa1b0;--bd:#323644;--ch:#2a2e3a}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--tx);font:500 14px system-ui,-apple-system,"Segoe UI",sans-serif;overflow:hidden;overscroll-behavior:none;touch-action:none;-webkit-user-select:none;user-select:none}
+#app{display:flex;flex-direction:column;height:100%}
+#top{display:flex;gap:6px;padding:6px 8px;align-items:center}
+#top h1{font-size:15px;margin:0 auto 0 4px;font-weight:700;letter-spacing:.2px}
+#cv{flex:1;min-height:0;position:relative;background:#1c1f27}
+#cv canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;display:block}
+#sheet{background:var(--pn);border-top:1px solid var(--bd);border-radius:16px 16px 0 0;padding:8px 8px 10px}
+button{min-height:44px;min-width:44px;border:1px solid var(--bd);background:var(--ch);color:var(--tx);border-radius:12px;font:inherit;padding:0 12px;touch-action:manipulation;cursor:pointer}
+button.on{background:var(--ac);color:#111;border-color:var(--ac)}
+button:disabled{opacity:.45}
+:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
+#seg{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+#seg button{min-height:48px;font-weight:600}
+.row{display:flex;gap:6px;overflow-x:auto;margin-top:6px;scrollbar-width:none}
+.row button{flex:none}
+#edh{display:flex;align-items:center;gap:6px;margin-top:8px}
+#info{flex:1;color:var(--mu);font-size:13px}
+#steps{display:flex;gap:4px}
+#steps button{min-height:36px;min-width:42px;padding:0 6px;font-size:13px}
+.r{display:grid;grid-template-columns:44px 52px 1fr 52px;gap:6px;margin-top:6px}
+.ax{display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;border-radius:12px;background:var(--ch);touch-action:none;cursor:ew-resize}
+.r input{min-width:0;height:44px;border:1px solid var(--bd);border-radius:12px;background:var(--ch);color:var(--tx);text-align:center;font:inherit;font-size:16px;-webkit-user-select:text;user-select:text}
+#toast{position:fixed;left:50%;top:64px;transform:translateX(-50%);background:#111;color:#fff;padding:8px 14px;border-radius:20px;opacity:0;transition:opacity .2s;pointer-events:none;font-size:13px;max-width:90%;text-align:center}
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box}
+#modal[hidden]{display:none}
+#modal div{background:var(--pn);border-radius:16px;padding:12px;width:100%;max-width:480px}
+#modal textarea{width:100%;height:40vh;box-sizing:border-box;background:var(--ch);color:var(--tx);border:1px solid var(--bd);border-radius:10px;font:12px ui-monospace,monospace;-webkit-user-select:text;user-select:text;touch-action:auto}
+#hint{position:absolute;left:10px;top:8px;color:#9aa1b0;font-size:12px;pointer-events:none}
+#modal{z-index:10}#toast{z-index:20}
+#bMo{font-weight:600;padding:0 14px}
+#steps button{min-width:84px}
+#drawer{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:5;display:flex;align-items:flex-end}
+#drawer[hidden]{display:none}
+#drawer>div{background:var(--pn);width:100%;max-height:75%;overflow:auto;border-radius:16px 16px 0 0;padding:6px 12px calc(12px + env(safe-area-inset-bottom,0px));box-sizing:border-box;touch-action:pan-y}
+.cat h2{margin:0;font-size:15px;font-weight:600;padding:14px 4px;display:flex;justify-content:space-between;border-bottom:1px solid var(--bd);cursor:pointer}
+.cat h2::after{content:"▾";color:var(--mu)}.cat.open h2::after{content:"▴"}
+.cat .cb{display:none;flex-wrap:wrap;gap:8px;padding:10px 0 12px}.cat.open .cb{display:flex}
+.cb #seg{width:100%}
+#tree{width:100%;display:flex;flex-direction:column;gap:4px}.tr{display:flex;gap:4px}.tr .nm{flex:1;text-align:left}.tr.cur .nm{background:var(--ac);color:#111;border-color:var(--ac)}.tr button:first-child{padding:0}
+.lb{display:flex;flex-direction:column;gap:4px;flex:1 1 45%;font-size:13px;color:var(--mu)}.lb input,.lb select{height:44px;border:1px solid var(--bd);border-radius:12px;background:var(--ch);color:var(--tx);font:inherit;font-size:16px;padding:0 10px;-webkit-user-select:text;user-select:text}
+</style></head><body>
+<div id="app">
+<div id="top"><button id="bMenu" aria-label="Abrir menu">☰</button><h1>PolyPocket</h1><button id="bMo" aria-label="Trocar modo"></button><button id="bU" aria-label="Desfazer">↶</button><button id="bR" aria-label="Refazer">↷</button></div>
+<div id="cv"><div id="hint">1 dedo gira · 2 dedos zoom e move</div></div>
+<div id="sheet">
+<div id="edh"><span id="info"></span><span id="steps"><button id="bTm" hidden>Posição</button><button id="bSt"></button></span><button id="bCol" aria-label="Recolher painel" style="min-height:36px">▾</button></div>
+<div id="ed"></div>
+</div></div>
+<div id="drawer" hidden><div>
+<section class="cat open"><h2>Hierarquia</h2><div class="cb"><div id="tree"></div><label class="lb">Nome<input id="nm"></label><label class="lb">Pai<select id="par"></select></label><button id="bGrp">＋ Grupo vazio</button><button id="bDup">Duplicar</button></div></section>
+<section class="cat"><h2>Modo de edição</h2><div class="cb"><div id="seg"><button data-m="o" data-close>▣ Objeto</button><button data-m="v" data-close>● Vértice</button><button data-m="e" data-close>╱ Aresta</button><button data-m="f" data-close>◼ Face</button></div></div></section>
+<section class="cat"><h2>Seleção</h2><div class="cb"><button id="bM">Multi</button><button id="bLnk" data-close>Ligado</button><button id="bAll" data-close>Tudo</button></div></section>
+<section class="cat"><h2>Editar</h2><div class="cb"><button id="bExt" data-close>Extrudir</button><button id="bDel" data-close>Excluir</button><button id="bSm">Escala −</button><button id="bSp">Escala +</button></div></section>
+<section class="cat"><h2>Adicionar forma</h2><div class="cb" id="shapes"></div></section>
+<section class="cat"><h2>Vista e arquivo</h2><div class="cb"><button id="bV" data-close>Centralizar câmera</button><button id="bX" data-close>Exportar OBJ</button></div></section>
+</div></div>
+<div id="toast"></div>
+<div id="modal" hidden><div><textarea id="obj" readonly></textarea><div style="display:flex;gap:6px;margin-top:8px;padding:0;background:none"><button id="bCp" style="flex:1">Copiar OBJ</button><button id="bCl" style="flex:1">Fechar</button></div></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+let V=[],F=[],mode='v',sel=new Set(),multi=false,step=.1,undo=[],redo=[],triF=[],dirty=1,O=[],cur=null,tm=0,uid=1;
+const C0=[.52,.6,.76],C1=[1,.54,0],CE=[.9,.92,.96],CP=[.55,.8,1],C2=[.95,.7,.4],CD=[.45,.5,.6],r4=x=>Math.round(x*1e4)/1e4;
+const cv=$('#cv'),ren=new THREE.WebGLRenderer({antialias:true});
+ren.setPixelRatio(Math.min(devicePixelRatio,2));ren.setClearColor(0x1c1f27);cv.prepend(ren.domElement);
+const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(50,1,.05,200);
+scene.add(new THREE.HemisphereLight(0xffffff,0x445066,.85));
+const dl=new THREE.DirectionalLight(0xffffff,.6);dl.position.set(3,6,4);scene.add(dl);
+scene.add(new THREE.GridHelper(10,10,0x555b6b,0x2f3440));
+[[[-5,0,0],[5,0,0],0xe5484d],[[0,0,-5],[0,0,5],0x3b82f6],[[0,0,0],[0,3,0],0x30c07a]].forEach(([a,b,c])=>{const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...a),new THREE.Vector3(...b)]);scene.add(new THREE.Line(g,new THREE.LineBasicMaterial({color:c})))});
+const MAT=new THREE.MeshLambertMaterial({vertexColors:true,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:1,polygonOffsetUnits:1});let mesh,lines;
+const LMAT=new THREE.LineBasicMaterial({vertexColors:true});
+const pts=new THREE.Points(new THREE.BufferGeometry(),new THREE.PointsMaterial({size:13,sizeAttenuation:false,vertexColors:true}));
+scene.add(pts);
+const W=()=>cv.clientWidth,H=()=>cv.clientHeight;
+let th=.7,ph=1.05,dist=4.5;const tgt=new THREE.Vector3();
+function upd(){cam.position.set(tgt.x+dist*Math.sin(ph)*Math.sin(th),tgt.y+dist*Math.cos(ph),tgt.z+dist*Math.sin(ph)*Math.cos(th));cam.lookAt(tgt);cam.updateMatrix();cam.updateMatrixWorld();dirty=1}
+new ResizeObserver(()=>{ren.setSize(W(),H(),false);cam.aspect=W()/H();cam.updateProjectionMatrix();dirty=1}).observe(cv);
+(function loop(){requestAnimationFrame(loop);if(dirty){dirty=0;ren.render(scene,cam)}})();
+
+/* ---------- malha ---------- */
+const Rg=(n,y)=>[...Array(n)].map((_,i)=>[.5*Math.cos(6.2832*i/n),y,.5*Math.sin(6.2832*i/n)]);
+const SH={
+cubo:()=>[[[-.5,-.5,-.5],[.5,-.5,-.5],[.5,.5,-.5],[-.5,.5,-.5],[-.5,-.5,.5],[.5,-.5,.5],[.5,.5,.5],[-.5,.5,.5]],[[4,5,6,7],[1,0,3,2],[5,1,2,6],[0,4,7,3],[7,6,2,3],[0,1,5,4]]],
+cilindro:()=>{const n=8,v=[...Rg(n,-.5),...Rg(n,.5)],f=[];for(let i=0;i<n;i++)f.push([(i+1)%n,i,n+i,n+(i+1)%n]);f.push([...Array(n)].map((_,i)=>2*n-1-i),[...Array(n)].map((_,i)=>i));return[v,f]},
+cone:()=>{const n=8,v=[...Rg(n,-.5),[0,.5,0]],f=[];for(let i=0;i<n;i++)f.push([(i+1)%n,i,n]);f.push([...Array(n)].map((_,i)=>i));return[v,f]},
+esfera:()=>{const n=8,v=[],f=[];for(let j=1;j<4;j++){const a=Math.PI*j/4;for(let i=0;i<n;i++)v.push([.5*Math.sin(a)*Math.cos(6.2832*i/n),.5*Math.cos(a),.5*Math.sin(a)*Math.sin(6.2832*i/n)])}
+v.push([0,.5,0],[0,-.5,0]);for(let i=0;i<n;i++){const k=(i+1)%n;f.push([3*n,k,i],[3*n+1,2*n+i,2*n+k]);for(let j=0;j<2;j++)f.push([(j+1)*n+k,(j+1)*n+i,j*n+i,j*n+k])}return[v,f]},
+plano:()=>[[[-.5,0,.5],[.5,0,.5],[.5,0,-.5],[-.5,0,-.5]],[[0,1,2,3]]]};
+function applyT(o){o.g.position.set(...o.t);o.g.rotation.set(...o.r.map(d=>d*Math.PI/180));o.g.scale.set(...o.s);dirty=1}
+function newObj(name,v,f,par){const o={id:uid++,name,V:v,F:f,par:par==null?null:par,vis:true,t:[0,0,0],r:[0,0,0],s:[1,1,1]};O.push(o);return o}
+function build(){O.forEach(o=>{if(o.g&&o.g.parent)o.g.parent.remove(o.g)});O.forEach(o=>{if(!o.g){o.g=new THREE.Group();o.m=new THREE.Mesh(new THREE.BufferGeometry(),MAT);o.m.userData.o=o;o.l=new THREE.LineSegments(new THREE.BufferGeometry(),LMAT);o.g.add(o.m,o.l)}});O.forEach(o=>{const p=O.find(x=>x.id===o.par);(p?p.g:scene).add(o.g);applyT(o)});dirty=1}
+function pick(o){cur=o;V=o.V;F=o.F;sel.clear();o.g.add(pts)}
+function refresh(o){const p=[],c=[],l=[],lc=[];o.F.forEach(q=>{for(let k=1;k<q.length-1;k++)[q[0],q[k],q[k+1]].forEach(i=>{p.push(...o.V[i]);c.push(...C0)})});setG(o.m,p,c);edgeMap(o.F).forEach(([a,b])=>{l.push(...o.V[a],...o.V[b]);lc.push(...CD,...CD)});setG(o.l,l,lc)}
+const isDesc=(a,b)=>{for(let p=a.par;p!=null;p=(O.find(x=>x.id===p)||{}).par)if(p===b.id)return true;return false};
+function tree(){const el=$('#tree');el.textContent='';(function walk(p,d){O.filter(o=>o.par===p).forEach(o=>{const r=document.createElement('div');r.className='tr'+(o===cur?' cur':'');r.style.paddingLeft=d*18+'px';const e=document.createElement('button');e.textContent=o.vis?'👁':'–';e.setAttribute('aria-label','Mostrar ou ocultar');e.onclick=()=>{o.vis=!o.vis;rebuild()};const n=document.createElement('button');n.className='nm';n.textContent=(o.F.length?'▣ ':'▢ ')+o.name;n.onclick=()=>{pick(o);mode='o';paint();rebuild()};r.append(e,n);el.append(r);walk(o.id,d+1)})})(null,0);
+const s=$('#par');s.textContent='';s.add(new Option('— Sem pai (raiz) —',''));O.forEach(o=>{if(o!==cur&&!isDesc(o,cur))s.add(new Option(o.name,o.id))});s.value=cur.par==null?'':cur.par;if(document.activeElement!==$('#nm'))$('#nm').value=cur.name}
+function delObj(){if(O.length<2)return toast('Mantenha ao menos um objeto');push();const d=cur;O.forEach(o=>{if(o.par===d.id)o.par=d.par});if(d.g.parent)d.g.parent.remove(d.g);O=O.filter(o=>o!==d);build();pick(O[0]);rebuild()}
+function add(t){push();const[v,f]=SH[t]();const o=newObj(t[0].toUpperCase()+t.slice(1)+' '+uid,v,f,null);build();pick(o);mode='o';paint();rebuild();toast('Objeto criado. Mova com X Y Z')}
+function setG(o,p,c){o.geometry.dispose();const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));g.setAttribute('color',new THREE.Float32BufferAttribute(c,3));if(o.isMesh)g.computeVertexNormals();o.geometry=g}
+function edgeMap(FF=F){const E=new Map();FF.forEach(q=>q.forEach((a,k)=>{const b=q[(k+1)%q.length],key=a<b?a+','+b:b+','+a;if(!E.has(key))E.set(key,[Math.min(a,b),Math.max(a,b)])}));return E}
+function rebuild(){
+cur.V=V;cur.F=F;mesh=cur.m;lines=cur.l;O.forEach(o=>{if(o!==cur)refresh(o);o.g.visible=o.vis});
+const pos=[],col=[];triF=[];
+F.forEach((q,fi)=>{const c=mode==='f'&&sel.has(fi)?C1:mode==='o'?C2:C0;for(let k=1;k<q.length-1;k++){[q[0],q[k],q[k+1]].forEach(i=>{pos.push(...V[i]);col.push(...c)});triF.push(fi)}});
+setG(mesh,pos,col);
+const lp=[],lc=[];edgeMap().forEach(([a,b],key)=>{const s=mode==='e'&&sel.has(key)?C1:CE;lp.push(...V[a],...V[b]);lc.push(...s,...s)});setG(lines,lp,lc);
+const pp=[],pc=[];if(mode==='v')V.forEach((v,i)=>{pp.push(...v);pc.push(...(sel.has(i)?C1:CP))});setG(pts,pp,pc);
+dirty=1;ui();tree();try{localStorage.setItem('pp2',snap())}catch(e){}}
+
+/* ---------- seleção ---------- */
+function selVerts(){const s=new Set();if(mode==='o')return s;sel.forEach(x=>{if(mode==='v')s.add(x);else if(mode==='e')x.split(',').forEach(i=>s.add(+i));else F[x].forEach(i=>s.add(i))});return s}
+function fromVerts(vs){sel=new Set();if(mode==='o')return;if(mode==='v')vs.forEach(i=>sel.add(i));else if(mode==='e')edgeMap().forEach(([a,b],k)=>{if(vs.has(a)&&vs.has(b))sel.add(k)});else F.forEach((q,i)=>{if(q.every(v=>vs.has(v)))sel.add(i)})}
+function center(vs){const mn=[1e9,1e9,1e9],mx=[-1e9,-1e9,-1e9];vs.forEach(i=>{for(let a=0;a<3;a++){mn[a]=Math.min(mn[a],V[i][a]);mx[a]=Math.max(mx[a],V[i][a])}});return mn.map((m,a)=>(m+mx[a])/2)}
+function setMode(m){const vs=selVerts();mode=m;fromVerts(vs);paint();rebuild()}
+function paint(){$$('#seg button').forEach(b=>b.classList.toggle('on',b.dataset.m===mode));$('#bMo').textContent={o:'▣ Objeto',v:'● Vértice',e:'╱ Aresta',f:'◼ Face'}[mode];$('#bTm').hidden=mode!=='o'}
+function scr(i){const v=new THREE.Vector3(...V[i]).applyMatrix4(cur.g.matrixWorld).project(cam);return v.z>1?null:[(v.x+1)/2*W(),(1-v.y)/2*H()]}
+function dseg(px,py,A,B){const dx=B[0]-A[0],dy=B[1]-A[1],l=dx*dx+dy*dy||1,t=Math.max(0,Math.min(1,((px-A[0])*dx+(py-A[1])*dy)/l));return Math.hypot(px-A[0]-t*dx,py-A[1]-t*dy)}
+const rc=new THREE.Raycaster();
+function tap(x,y){let hit=null;scene.updateMatrixWorld();if(mode==='o'){rc.setFromCamera({x:x/W()*2-1,y:-(y/H())*2+1},cam);const h=rc.intersectObjects(O.filter(o=>o.vis).map(o=>o.m))[0];if(h){pick(h.object.userData.o);rebuild()}return}
+if(mode==='v'){let b=34;V.forEach((_,i)=>{const s=scr(i);if(!s)return;const d=Math.hypot(s[0]-x,s[1]-y);if(d<b){b=d;hit=i}})}
+else if(mode==='e'){let b=26;const S=V.map((_,i)=>scr(i));edgeMap().forEach(([p,q],k)=>{if(!S[p]||!S[q])return;const d=dseg(x,y,S[p],S[q]);if(d<b){b=d;hit=k}})}
+else if(F.length){rc.setFromCamera({x:x/W()*2-1,y:-(y/H())*2+1},cam);const h=rc.intersectObject(mesh)[0];if(h)hit=triF[h.faceIndex]}
+if(hit===null){if(!multi)sel.clear()}else if(multi){sel.has(hit)?sel.delete(hit):sel.add(hit)}else{sel.clear();sel.add(hit)}
+rebuild()}
+
+/* ---------- câmera por toque ---------- */
+const P=new Map();let moved=false,many=false;
+cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);P.set(e.pointerId,{x:e.clientX,y:e.clientY,sx:e.clientX,sy:e.clientY});if(P.size===1){moved=false;many=false}else many=true});
+cv.addEventListener('pointermove',e=>{const p=P.get(e.pointerId);if(!p)return;
+if(P.size===1){if(Math.hypot(e.clientX-p.sx,e.clientY-p.sy)>8)moved=true;if(moved){th-=(e.clientX-p.x)*.008;ph=Math.min(3.09,Math.max(.05,ph-(e.clientY-p.y)*.008));upd()}p.x=e.clientX;p.y=e.clientY}
+else if(P.size===2){const o=[...P.entries()].find(([k])=>k!==e.pointerId)[1];
+const d0=Math.hypot(p.x-o.x,p.y-o.y),m0x=(p.x+o.x)/2,m0y=(p.y+o.y)/2;p.x=e.clientX;p.y=e.clientY;
+const d1=Math.hypot(p.x-o.x,p.y-o.y),m1x=(p.x+o.x)/2,m1y=(p.y+o.y)/2;
+dist=Math.min(40,Math.max(.5,dist*d0/Math.max(d1,1)));
+const k=dist*2*Math.tan(cam.fov*Math.PI/360)/H(),r=new THREE.Vector3().setFromMatrixColumn(cam.matrix,0),u=new THREE.Vector3().setFromMatrixColumn(cam.matrix,1);
+tgt.addScaledVector(r,-(m1x-m0x)*k).addScaledVector(u,(m1y-m0y)*k);upd()}});
+const pe=e=>{const was=P.has(e.pointerId);P.delete(e.pointerId);if(e.type==='pointerup'&&was&&!moved&&!many&&P.size===0){const b=cv.getBoundingClientRect();tap(e.clientX-b.left,e.clientY-b.top)}};
+cv.addEventListener('pointerup',pe);cv.addEventListener('pointercancel',pe);
+
+/* ---------- edição ---------- */
+function snap(){if(cur){cur.V=V;cur.F=F}return JSON.stringify({O:O.map(({g,m,l,...r})=>r),c:cur&&cur.id,u:uid})}
+function push(){undo.push(snap());if(undo.length>60)undo.shift();redo=[]}
+function load(s){const d=JSON.parse(s);O.forEach(o=>{if(o.g&&o.g.parent)o.g.parent.remove(o.g)});O=d.O;uid=d.u;build();pick(O.find(o=>o.id===d.c)||O[0]);rebuild()}
+function moveSel(a,d,raw){if(mode==='o'){const k='trs'[tm];cur[k]=cur[k].slice();cur[k][a]=r4(cur[k][a]+d*(k==='r'&&!raw?15:1));if(k==='s')cur.s[a]=Math.max(.01,cur.s[a]);applyT(cur);rebuild();return}const vs=selVerts();if(!vs.size||!d)return;vs.forEach(i=>V[i][a]=r4(V[i][a]+d));rebuild()}
+function scaleSel(k){if(mode==='o'){push();cur.s=cur.s.map(x=>r4(Math.max(.01,x*k)));applyT(cur);return rebuild()}const vs=selVerts();if(!vs.size)return toast('Selecione algo primeiro');push();const c=center(vs);vs.forEach(i=>{for(let a=0;a<3;a++)V[i][a]=r4(c[a]+(V[i][a]-c[a])*k)});rebuild()}
+function fnorm(f){const q=F[f],n=new THREE.Vector3(),a=new THREE.Vector3(...V[q[0]]);for(let k=1;k<q.length-1;k++){const b=new THREE.Vector3(...V[q[k]]).sub(a),c=new THREE.Vector3(...V[q[k+1]]).sub(a);n.add(b.cross(c))}return n}
+function extrude(){if(mode!=='f'||!sel.size)return toast('Use o modo Face e selecione faces');push();
+const map=new Map(),n=new THREE.Vector3(),cnt=new Set(),walls=[];
+sel.forEach(f=>{F[f].forEach(i=>{if(!map.has(i)){map.set(i,V.length);V.push([...V[i]])}});n.add(fnorm(f));F[f].forEach((a,k)=>cnt.add(a+','+F[f][(k+1)%F[f].length]))});
+n.normalize().multiplyScalar(.3);
+sel.forEach(f=>{const q=F[f];q.forEach((a,k)=>{const b=q[(k+1)%q.length];if(!cnt.has(b+','+a))walls.push([a,b,map.get(b),map.get(a)])})});
+sel.forEach(f=>{F[f]=F[f].map(i=>map.get(i))});
+map.forEach(ni=>{V[ni]=[r4(V[ni][0]+n.x),r4(V[ni][1]+n.y),r4(V[ni][2]+n.z)]});F.push(...walls);rebuild()}
+function del(){if(mode==='o')return delObj();if(!sel.size)return;push();const kill=new Set();
+F.forEach((q,i)=>{if(mode==='f'&&sel.has(i))kill.add(i);else if(mode==='v'&&q.some(v=>sel.has(v)))kill.add(i);else if(mode==='e')q.forEach((a,k)=>{const b=q[(k+1)%q.length];if(sel.has(a<b?a+','+b:b+','+a))kill.add(i)})});
+const nf=F.filter((_,i)=>!kill.has(i)),used=[...new Set(nf.flat())].sort((a,b)=>a-b),m=new Map(used.map((o,i)=>[o,i]));
+V=used.map(i=>V[i]);F=nf.map(q=>q.map(i=>m.get(i)));sel.clear();rebuild()}
+function linked(){const vs=selVerts();if(!vs.size)return toast('Selecione algo primeiro');let ch=1;while(ch){ch=0;F.forEach(q=>{if(q.some(v=>vs.has(v))&&q.some(v=>!vs.has(v))){q.forEach(v=>vs.add(v));ch=1}})}fromVerts(vs);rebuild()}
+function toast(t){const e=$('#toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.opacity=0,1900)}
+function ui(){const vs=selVerts(),n=sel.size,nm={v:['vértice','vértices'],e:['aresta','arestas'],f:['face','faces'],o:['','']}[mode][n>1?1:0];
+const ob=mode==='o';$('#info').textContent=ob?cur.name+' · '+['Posição','Rotação °','Escala'][tm]:n?n+' '+nm:'Toque para selecionar';const c=ob?cur['trs'[tm]]:vs.size?center(vs):[0,0,0];
+$$('#ed input').forEach(i=>{i.disabled=!ob&&!vs.size;if(document.activeElement!==i)i.value=(ob||vs.size)?+c[i.dataset.a].toFixed(3):''});
+$('#bU').disabled=!undo.length;$('#bR').disabled=!redo.length}
+
+/* ---------- interface ---------- */
+[['X','#e5484d'],['Y','#30c07a'],['Z','#3b82f6']].forEach(([l,c],a)=>{$('#ed').insertAdjacentHTML('beforeend',`<div class="r"><b class="ax" data-a="${a}" style="color:${c}" title="Arraste para ajustar">${l}</b><button data-a="${a}" data-s="-1" aria-label="${l} menos">−</button><input inputmode="decimal" data-a="${a}" aria-label="Posição ${l}"><button data-a="${a}" data-s="1" aria-label="${l} mais">＋</button></div>`)});
+const STEPS=[.05,.1,.25,1];$('#bSt').textContent='Passo '+step;
+Object.keys(SH).forEach(k=>$('#shapes').insertAdjacentHTML('beforeend',`<button data-sh="${k}">${k[0].toUpperCase()+k.slice(1)}</button>`));
+$$('#ed button').forEach(b=>b.onclick=()=>{if(mode!=='o'&&!selVerts().size)return;push();moveSel(+b.dataset.a,b.dataset.s*step)});
+$$('#ed input').forEach(i=>i.onchange=()=>{const v=parseFloat(i.value.replace(',','.')),vs=selVerts(),a=+i.dataset.a;if(mode==='o'){if(!isFinite(v))return ui();push();moveSel(a,v-cur['trs'[tm]][a],1);return}if(!isFinite(v)||!vs.size)return ui();push();moveSel(a,v-center(vs)[a]);ui()});
+$$('.ax').forEach(el=>{let x0=0,l=0,on=0;el.onpointerdown=e=>{el.setPointerCapture(e.pointerId);x0=e.clientX;l=0;on=(mode==='o'||selVerts().size)?1:0;if(on)push()};
+el.onpointermove=e=>{if(!on)return;const n=Math.round((e.clientX-x0)/10);if(n!==l){moveSel(+el.dataset.a,(n-l)*step);l=n}};el.onpointerup=el.onpointercancel=()=>on=0});
+$('#bSt').onclick=()=>{step=STEPS[(STEPS.indexOf(step)+1)%STEPS.length];$('#bSt').textContent='Passo '+step};
+$$('#seg button').forEach(b=>b.onclick=()=>setMode(b.dataset.m));
+$$('#shapes button').forEach(b=>b.onclick=()=>{add(b.dataset.sh);closeMenu()});
+function closeMenu(){$('#drawer').hidden=true}
+$('#bMenu').onclick=()=>$('#drawer').hidden=false;
+$('#drawer').onclick=e=>{if(e.target.id==='drawer')closeMenu()};
+$$('.cat h2').forEach(h=>h.onclick=()=>{const c=h.parentNode,o=c.classList.contains('open');$$('.cat').forEach(x=>x.classList.remove('open'));if(!o)c.classList.add('open')});
+$$('#drawer [data-close]').forEach(b=>b.addEventListener('click',closeMenu));
+$('#bMo').onclick=()=>setMode({o:'v',v:'e',e:'f',f:'o'}[mode]);
+$('#bTm').onclick=()=>{tm=(tm+1)%3;$('#bTm').textContent=['Posição','Rotação','Escala'][tm];ui()};
+$('#nm').onchange=e=>{push();cur.name=e.target.value.slice(0,30)||cur.name;rebuild()};
+$('#par').onchange=e=>{push();scene.updateMatrixWorld();const np=O.find(o=>o.id===+e.target.value),g=cur.g;(np?np.g:scene).attach(g);cur.par=np?np.id:null;cur.t=g.position.toArray().map(r4);cur.r=['x','y','z'].map(k=>r4(g.rotation[k]*180/Math.PI));cur.s=g.scale.toArray().map(r4);rebuild()};
+$('#bGrp').onclick=()=>{push();const o=newObj('Grupo '+uid,[],[],null);build();pick(o);mode='o';paint();rebuild()};
+$('#bDup').onclick=()=>{push();cur.V=V;cur.F=F;const c=JSON.parse(JSON.stringify({V,F,t:cur.t,r:cur.r,s:cur.s})),o=newObj(cur.name+' cópia',c.V,c.F,cur.par);o.t=c.t;o.r=c.r;o.s=c.s;build();pick(o);rebuild();toast('Duplicado (sem os filhos)')};
+$('#bExt').onclick=extrude;$('#bDel').onclick=del;$('#bLnk').onclick=linked;
+$('#bAll').onclick=()=>{fromVerts(new Set(V.map((_,i)=>i)));rebuild()};
+$('#bSm').onclick=()=>scaleSel(.9);$('#bSp').onclick=()=>scaleSel(1.1);
+$('#bU').onclick=()=>{if(undo.length){redo.push(snap());load(undo.pop())}};
+$('#bR').onclick=()=>{if(redo.length){undo.push(snap());load(redo.pop())}};
+$('#bM').onclick=e=>{multi=!multi;e.currentTarget.classList.toggle('on',multi);toast(multi?'Multi: toque para somar ou tirar da seleção':'Multi desligado')};
+$('#bV').onclick=()=>{const vs=selVerts(),c=vs.size?center(vs):[0,0,0];tgt.set(...c);upd()};
+$('#bCol').onclick=e=>{const h=$('#ed').hidden=!$('#ed').hidden;e.currentTarget.textContent=h?'▴':'▾'};
+$('#bX').onclick=()=>{cur.V=V;cur.F=F;scene.updateMatrixWorld();let n=0,s='';O.forEach(o=>{if(!o.F.length)return;s+='o '+o.name.replace(/\s+/g,'_')+'\n';o.V.forEach(v=>{const w=new THREE.Vector3(...v).applyMatrix4(o.g.matrixWorld);s+='v '+[w.x,w.y,w.z].map(r4).join(' ')+'\n'});o.F.forEach(q=>{s+='f '+q.map(i=>i+1+n).join(' ')+'\n'});n+=o.V.length});$('#obj').value=s;$('#modal').hidden=false};
+$('#bCl').onclick=()=>$('#modal').hidden=true;
+$('#bCp').onclick=async()=>{const t=$('#obj');try{await navigator.clipboard.writeText(t.value)}catch(e){t.select();try{document.execCommand('copy')}catch(_){}}toast('OBJ copiado. Cole num arquivo .obj')};
+
+let ok=0;try{const s=localStorage.getItem('pp2');if(s){const d=JSON.parse(s);if(d.O&&d.O.length){O=d.O;uid=d.u;build();pick(O.find(o=>o.id===d.c)||O[0]);ok=1}}}catch(e){}
+paint();upd();if(ok)rebuild();else{add('cubo');undo=[]}
+</script></body></html>
