@@ -63,8 +63,11 @@ button:disabled{opacity:.45}
 #tools2 button{width:46px;min-width:46px;height:46px;min-height:46px;padding:0;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none;background:var(--pn);border:1px solid var(--bd)}
 #tools2 .tg{font-size:18px;line-height:1}#tools2 .tb{font-size:9px;margin-top:2px}
 #tools2 button.on{background:var(--ac);color:#111;border-color:var(--ac)}
-#tEdit button{opacity:.8;border-style:dashed}
-#tools2 .tc+.tc{padding-top:8px;border-top:1px solid var(--bd)}
+
+
+#tools2{scrollbar-width:thin;overscroll-behavior:contain}
+#ctx{position:absolute;z-index:6;min-width:200px;background:var(--pn);border:1px solid var(--bd);border-radius:14px;padding:6px;display:flex;flex-direction:column;gap:4px;box-shadow:0 6px 20px rgba(0,0,0,.45)}#ctx[hidden]{display:none}
+#ctx .ch{font-size:12px;color:var(--mu);padding:4px 8px}#ctx button{text-align:left;min-height:44px;background:var(--ch)}#ctx button:disabled{opacity:.4}
 .fb{position:absolute;bottom:10px;width:56px;height:56px;min-height:56px;min-width:56px;border-radius:50%;padding:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--pn);color:var(--tx);border:1px solid var(--bd);box-shadow:0 3px 10px rgba(0,0,0,.45)}
 .fb .tg{font-size:18px;line-height:1}.fb .tb{font-size:9px;margin-top:1px}.fb.on{background:var(--ac);color:#111;border-color:var(--ac)}
 #fShd{right:142px}#fCam{right:208px}#fZoom{right:274px}
@@ -85,14 +88,14 @@ button:disabled{opacity:.45}
 <div id="app">
 <div id="top"><button id="bMenu" aria-label="Abrir menu">☰</button><h1>PolyPocket</h1><button id="bMo" aria-label="Trocar modo"></button><button id="bU" aria-label="Desfazer">↶</button><button id="bR" aria-label="Refazer">↷</button></div>
 <div id="cv"><div id="hint">1 dedo gira · 2 dedos zoom e move</div>
-<svg id="ov"></svg>
-<div id="tools2"><div class="tc"><button id="bShape" aria-label="Forma"></button></div><div class="tc" id="tEdit"><button data-et aria-label="Extrusão"><span class="tg">⬆</span><span class="tb">Extrusão</span></button><button data-et aria-label="Inserção"><span class="tg">⊡</span><span class="tb">Inserção</span></button><button data-et aria-label="Chanfro"><span class="tg">◣</span><span class="tb">Chanfro</span></button><button data-et aria-label="Corte"><span class="tg">✂</span><span class="tb">Corte</span></button><button data-et aria-label="Bissecção"><span class="tg">⫽</span><span class="tb">Bissecção</span></button><button data-et aria-label="Poly Build"><span class="tg">⬡</span><span class="tb">Poly</span></button><button data-et aria-label="Gira (Spin)"><span class="tg">⟲</span><span class="tb">Gira</span></button></div></div>
+<svg id="ov"></svg><div id="ctx" hidden></div>
+<div id="tools2"><button id="bShape" aria-label="Forma"></button><button data-et aria-label="Extrusão"><span class="tg">⬆</span><span class="tb">Extrusão</span></button><button data-et aria-label="Inserção"><span class="tg">⊡</span><span class="tb">Inserção</span></button><button data-et aria-label="Chanfro"><span class="tg">◣</span><span class="tb">Chanfro</span></button><button data-et aria-label="Corte"><span class="tg">✂</span><span class="tb">Corte</span></button><button data-et aria-label="Bissecção"><span class="tg">⫽</span><span class="tb">Bissecção</span></button><button data-et aria-label="Poly Build"><span class="tg">⬡</span><span class="tb">Poly</span></button><button data-et aria-label="Gira (Spin)"><span class="tg">⟲</span><span class="tb">Gira</span></button></div>
 <div id="tools"><button data-t="cam" aria-label="Câmera"></button><button data-t="sel" aria-label="Seleção"></button><button data-t="mov" aria-label="Mover"></button><button data-t="rot" aria-label="Rotação"></button><button data-t="scl" aria-label="Escala"></button></div>
 <button id="fab" aria-label="Modificadores">🔧</button>
 <button id="fab2" aria-label="Hierarquia">📂</button>
 <button id="fShd" class="fb" aria-label="Sombreamento"></button><button id="fCam" class="fb" aria-label="Câmera"></button><button id="fZoom" class="fb" aria-label="Zoom"></button>
 <div id="zp" hidden><button data-z="in" aria-label="Aproximar">＋</button><button data-z="out" aria-label="Afastar">−</button><button data-z="all" aria-label="Enquadrar tudo">Tudo</button><button data-z="sel" aria-label="Enquadrar seleção">Seleção</button></div>
-<div id="hier" hidden><div class="mt"><b>Hierarquia</b><button id="hx" aria-label="Fechar">✕</button></div><div id="tree"></div><div id="droot" hidden>Soltar aqui para tirar do grupo</div><p class="tip">Segure um item e arraste sobre outro para colocá-lo dentro. 👁 mostra ou esconde. 🔒 trava.</p><div class="hb"><label class="lb">Nome<input id="nm"></label><label class="lb">Pai<select id="par"></select></label></div><div class="hb"><button id="bGrp">＋ Grupo vazio</button><button id="bDup">Duplicar</button></div></div>
+<div id="hier" hidden><div class="mt"><b>Hierarquia</b><button id="hx" aria-label="Fechar">✕</button></div><div id="tree"></div><div id="droot" hidden>Soltar aqui para tirar do grupo</div><p class="tip">Segure um item e arraste sobre outro para colocá-lo dentro. 👁 mostra ou esconde. 🔒 trava.</p><div class="hb"><label class="lb">Nome<input id="nm"></label><label class="lb">Pai<select id="par"></select></label></div><div class="hb"><button id="bGrp">＋ Grupo vazio</button><button id="bDup">Duplicar</button><button id="bDelO">Excluir</button></div></div>
 <div id="mods" hidden><div class="mt"><b>Modificadores</b><button id="mx" aria-label="Fechar">✕</button></div><select id="mAdd" aria-label="Adicionar modificador"></select><div id="mlist"></div></div></div>
 <div id="sheet">
 <div id="edh"><span id="info"></span><span id="steps"><button id="bTm" hidden>Posição</button><button id="bSt"></button></span><button id="bCol" aria-label="Recolher painel" style="min-height:36px">▾</button></div>
@@ -122,7 +125,7 @@ scene.add(new THREE.GridHelper(10,10,0x555b6b,0x2f3440));
 [[[-5,0,0],[5,0,0],0xe5484d],[[0,0,-5],[0,0,5],0x3b82f6],[[0,0,0],[0,3,0],0x30c07a]].forEach(([a,b,c])=>{const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...a),new THREE.Vector3(...b)]);scene.add(new THREE.Line(g,new THREE.LineBasicMaterial({color:c})))});
 const MAT=new THREE.MeshLambertMaterial({vertexColors:true,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:1,polygonOffsetUnits:1});let mesh,lines;
 const LMAT=new THREE.LineBasicMaterial({vertexColors:true});
-const pts=new THREE.Points(new THREE.BufferGeometry(),new THREE.PointsMaterial({size:13,sizeAttenuation:false,vertexColors:true}));
+const bub=(()=>{const c=document.createElement('canvas');c.width=c.height=32;const g=c.getContext&&c.getContext('2d');if(g){g.beginPath();g.arc(16,16,14,0,6.2832);g.fillStyle='#fff';g.fill()}return new THREE.CanvasTexture(c)})(),pts=new THREE.Points(new THREE.BufferGeometry(),new THREE.PointsMaterial({size:9,sizeAttenuation:false,vertexColors:true,map:bub,alphaTest:.5,transparent:true}));
 scene.add(pts);
 const W=()=>cv.clientWidth,H=()=>cv.clientHeight;
 let th=.7,ph=1.05,dist=4.5;const tgt=new THREE.Vector3();
@@ -178,7 +181,7 @@ rebuild()}
 
 /* ---------- câmera por toque ---------- */
 const P=new Map();let moved=false,many=false;
-cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);P.set(e.pointerId,{x:e.clientX,y:e.clientY,sx:e.clientX,sy:e.clientY});if(P.size===1){moved=false;many=false;gStart(e)}else many=true});
+cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);P.set(e.pointerId,{x:e.clientX,y:e.clientY,sx:e.clientX,sy:e.clientY});if(P.size===1){moved=false;many=false;gStart(e)}else{many=true;cStart(e)}});
 cv.addEventListener('pointermove',e=>{const p=P.get(e.pointerId);if(!p)return;
 if(P.size===1){if(Math.hypot(e.clientX-p.sx,e.clientY-p.sy)>8)moved=true;if(moved)oneDrag(e,p);p.x=e.clientX;p.y=e.clientY}
 else if(P.size===2){const o=[...P.entries()].find(([k])=>k!==e.pointerId)[1];
@@ -187,7 +190,7 @@ const d1=Math.hypot(p.x-o.x,p.y-o.y),m1x=(p.x+o.x)/2,m1y=(p.y+o.y)/2;
 ovClear();dist=distClamp(dist*d0/Math.max(d1,1));
 const k=dist*2*Math.tan(cam.fov*Math.PI/360)/H(),r=new THREE.Vector3().setFromMatrixColumn(cam.matrix,0),u=new THREE.Vector3().setFromMatrixColumn(cam.matrix,1);
 tgt.addScaledVector(r,-(m1x-m0x)*k).addScaledVector(u,(m1y-m0y)*k);upd()}});
-const pe=e=>{const was=P.has(e.pointerId);P.delete(e.pointerId);if(was&&P.size===0)gEnd(e);if(e.type==='pointerup'&&was&&!moved&&!many&&P.size===0&&(tool==='cam'||(tool==='sel'&&sub===0))){const b=cv.getBoundingClientRect();tap(e.clientX-b.left,e.clientY-b.top)}};
+const pe=e=>{cEnd(e);const was=P.has(e.pointerId);P.delete(e.pointerId);if(was&&P.size===0)gEnd(e);if(e.type==='pointerup'&&was&&!moved&&!many&&P.size===0&&(tool==='cam'||(tool==='sel'&&sub===0))){const b=cv.getBoundingClientRect();tap(e.clientX-b.left,e.clientY-b.top)}};
 cv.addEventListener('pointerup',pe);cv.addEventListener('pointercancel',pe);
 
 /* ---------- edição ---------- */
@@ -212,7 +215,7 @@ function linked(){const vs=selVerts();if(!vs.size)return toast('Selecione algo p
 const ek=(a,b)=>a<b?a+','+b:b+','+a,mid3=(a,b)=>[0,1,2].map(i=>r4((V[a][i]+V[b][i])/2));
 function needEdit(){if(mode==='o'){toast('Entre no modo Vértice, Aresta ou Face');return 1}}
 function tgtFaces(){if(mode==='f'&&sel.size)return[...sel];const vs=selVerts();if(vs.size){const r=[];F.forEach((q,i)=>{if(q.every(v=>vs.has(v)))r.push(i)});if(r.length)return r}return F.map((_,i)=>i)}
-function subdiv(){if(needEdit())return;push();const T=new Set(tgtFaces()),mid=new Map();
+function subdiv(lst){if(needEdit())return;push();const T=new Set(lst||tgtFaces()),mid=new Map();
 T.forEach(f=>{const q=F[f];q.forEach((a,k)=>{const b=q[(k+1)%q.length],key=ek(a,b);if(!mid.has(key)){mid.set(key,V.length);V.push(mid3(a,b))}})});
 const F2=[];F.forEach((q,f)=>{const n=q.length;if(T.has(f)){const c=V.length;V.push([0,1,2].map(i=>r4(q.reduce((s,v)=>s+V[v][i],0)/n)));const ms=q.map((a,k)=>mid.get(ek(a,q[(k+1)%n])));q.forEach((a,k)=>F2.push([a,ms[k],c,ms[(k+n-1)%n]]))}else{const L=[];q.forEach((a,k)=>{L.push(a);const x=mid.get(ek(a,q[(k+1)%n]));if(x!=null)L.push(x)});F2.push(L)}});
 F=F2;sel.clear();rebuild();toast('Subdividido: '+F.length+' faces')}
@@ -285,11 +288,11 @@ r.append(fo,n,b(o.vis?'👁':'–',()=>{o.vis=!o.vis;rebuild()},'Mostrar ou esco
 const s=$('#par');s.textContent='';s.add(new Option('— Sem pai (raiz) —',''));O.forEach(o=>{if(o!==cur&&!isDesc(o,cur)&&!locked(o))s.add(new Option(o.name,o.id))});s.value=cur.par==null?'':cur.par;if(document.activeElement!==$('#nm'))$('#nm').value=cur.name}
 let tool='cam',sub=0,gs={x0:0,y0:0,pts:[],last:0,pushed:false,warned:false};
 const NAMES={cam:'Câmera',sel:'Seleção',mov:'Mover',rot:'Rotação',scl:'Escala'},LAB={cam:['Orbitar','Deslizar'],mov:['Auto','X','Y','Z'],sel:['Ponto','Caixa','Círculo','Laço'],rot:['Auto','Y','X','Z'],scl:['Auto','Tudo','X','Y','Z']},GL={cam:['⟳','✥'],mov:['✛','✛','✛','✛'],sel:['•','▭','◯','➰'],rot:['↻','↻','↻','↻'],scl:['⤢','⤢','⤢','⤢','⤢']};
-function hintTxt(){if(tool==='add')return addHint();const z=' · 2 dedos movem a câmera';return tool==='cam'?(sub?'1 dedo move a câmera · 2 dedos zoom':'1 dedo gira · 2 dedos zoom e move'):tool==='sel'?(sub?'Arraste para selecionar ('+LAB.sel[sub]+')':'Toque para selecionar')+z:(tool==='mov'?(sub?'Arraste para mover em '+LAB.mov[sub]:'Horizontal move em X · vertical em Y · diagonal em Z'):tool==='rot'?(sub?'Arraste para girar em '+LAB.rot[sub]:'Horizontal gira em X · vertical em Y · diagonal em Z'):(sub===0?'Horizontal escala em X · vertical em Y · diagonal em Z':sub===1?'Arraste para escalar tudo':'Arraste para escalar em '+LAB.scl[sub]))+z}
-function toolsUI(){$$('#tools button').forEach(b=>{const t=b.dataset.t,s=t===tool?sub:0;b.classList.toggle('on',t===tool);b.innerHTML='<span class="tg">'+GL[t][s]+'</span><span class="tb">'+LAB[t][s]+'</span>'});$('#hint').textContent=hintTxt();$('#bSt').textContent=stl();$('#bTm').textContent=['Posição','Rotação','Escala'][tm];ui()}
+function hintTxt(){if(tool==='add')return addHint();if(ETN[tool])return etHint();const z=' · 2 dedos movem a câmera';return tool==='cam'?(sub?'1 dedo move a câmera · 2 dedos zoom':'1 dedo gira · 2 dedos zoom e move'):tool==='sel'?(sub?'Arraste para selecionar ('+LAB.sel[sub]+')':'Toque para selecionar')+z:(tool==='mov'?(sub?'Arraste para mover em '+LAB.mov[sub]:'Horizontal move em X · vertical em Y · diagonal em Z'):tool==='rot'?(sub?'Arraste para girar em '+LAB.rot[sub]:'Horizontal gira em X · vertical em Y · diagonal em Z'):(sub===0?'Horizontal escala em X · vertical em Y · diagonal em Z':sub===1?'Arraste para escalar tudo':'Arraste para escalar em '+LAB.scl[sub]))+z}
+function toolsUI(){$$('#tools button').forEach(b=>{const t=b.dataset.t,s=t===tool?sub:0;b.classList.toggle('on',t===tool);b.innerHTML='<span class="tg">'+GL[t][s]+'</span><span class="tb">'+LAB[t][s]+'</span>'});$('#hint').textContent=hintTxt();$('#bSt').textContent=stl();etUI();$('#bTm').textContent=['Posição','Rotação','Escala'][tm];ui()}
 function ovClear(){$('#ov').innerHTML=''}
 function ovDraw(x,y){const o=$('#ov');if(sub===1)o.innerHTML=`<rect x="${Math.min(gs.x0,x)}" y="${Math.min(gs.y0,y)}" width="${Math.abs(x-gs.x0)}" height="${Math.abs(y-gs.y0)}"/>`;else if(sub===2)o.innerHTML=`<circle cx="${gs.x0}" cy="${gs.y0}" r="${Math.hypot(x-gs.x0,y-gs.y0)}"/>`;else o.innerHTML=`<polygon points="${gs.pts.map(p=>p.join(',')).join(' ')}"/>`}
-function gStart(e){$('#zp').hidden=true;const b=cv.getBoundingClientRect(),x=e.clientX-b.left,y=e.clientY-b.top;gs={x0:x,y0:y,pts:[[x,y]],last:0,pushed:false,warned:false};ovClear()}
+function gStart(e){$('#zp').hidden=true;$('#ctx').hidden=true;const b=cv.getBoundingClientRect(),x=e.clientX-b.left,y=e.clientY-b.top;gs={x0:x,y0:y,pts:[[x,y]],last:0,pushed:false,warned:false,t0:Date.now()};ovClear()}
 function inPoly(a,Q){let c=false;for(let i=0,j=Q.length-1;i<Q.length;j=i++){const A=Q[i],B=Q[j];if((A[1]>a[1])!==(B[1]>a[1])&&a[0]<(B[0]-A[0])*(a[1]-A[1])/(B[1]-A[1])+A[0])c=!c}return c}
 function noSel(){if(!gs.warned){gs.warned=true;toast('Selecione algo antes')}}
 function rotSel(a,deg){if(mode==='o'){cur.r=cur.r.slice();cur.r[a]=r4(cur.r[a]+deg);applyT(cur);rebuild();return}const vs=selVerts();if(!vs.size)return noSel();const c=center(vs),i=(a+1)%3,j=(a+2)%3,rd=deg*Math.PI/180,co=Math.cos(rd),si=Math.sin(rd);vs.forEach(k=>{const p=V[k],di=p[i]-c[i],dj=p[j]-c[j];p[i]=r4(c[i]+di*co-dj*si);p[j]=r4(c[j]+di*si+dj*co)});rebuild()}
@@ -301,11 +304,12 @@ else F.forEach((q,i)=>{if(q.every(v=>S[v])&&inside([q.reduce((s,v)=>s+S[v][0],0)
 sel=add;rebuild();toast(add.size+' selecionado(s)')}
 function oneDrag(e,p){const b=cv.getBoundingClientRect(),x=e.clientX-b.left,y=e.clientY-b.top;
 if(tool==='add'){addDrag(e,p);return}
+if(ETN[tool]){etDrag(e,p);return}
 if(tool==='cam'){if(sub===0){th-=(e.clientX-p.x)*.008;ph=Math.min(3.09,Math.max(.05,ph-(e.clientY-p.y)*.008))}else{const k=dist*2*Math.tan(cam.fov*Math.PI/360)/Math.max(H(),1),r=new THREE.Vector3().setFromMatrixColumn(cam.matrix,0),u=new THREE.Vector3().setFromMatrixColumn(cam.matrix,1);tgt.addScaledVector(r,-(e.clientX-p.x)*k).addScaledVector(u,(e.clientY-p.y)*k)}upd();return}
 if(tool==='sel'){if(sub>0){gs.pts.push([x,y]);ovDraw(x,y)}return}
 if(tool==='mov'||tool==='rot'||tool==='scl'){movDrag(e,p);return}
 const n=Math.round((e.clientX-p.sx)/10);if(n!==gs.last){if(!gs.pushed){gs.pushed=true;push()}const d=n-gs.last;gs.last=n;if(tool==='rot')rotSel([1,0,2][sub],d*step*15);else sclSel(sub?sub-1:-1,Math.pow(1+step/2,d))}}
-function gEnd(e){if(tool==='add'){addEnd(e);return}if(tool==='sel'&&sub>0&&moved&&!many&&e.type==='pointerup'){const b=cv.getBoundingClientRect(),x=e.clientX-b.left,y=e.clientY-b.top,x0=gs.x0,y0=gs.y0;gs.pts.push([x,y]);const R=Math.hypot(x-x0,y-y0);areaSel(sub===1?(a=>a[0]>=Math.min(x0,x)&&a[0]<=Math.max(x0,x)&&a[1]>=Math.min(y0,y)&&a[1]<=Math.max(y0,y)):sub===2?(a=>Math.hypot(a[0]-x0,a[1]-y0)<=R):(a=>inPoly(a,gs.pts)))}ovClear()}
+function gEnd(e){if(tool==='add'){addEnd(e);return}if(ETN[tool]){etEnd(e);return}if(tool==='sel'&&sub>0&&moved&&!many&&e.type==='pointerup'){const b=cv.getBoundingClientRect(),x=e.clientX-b.left,y=e.clientY-b.top,x0=gs.x0,y0=gs.y0;gs.pts.push([x,y]);const R=Math.hypot(x-x0,y-y0);areaSel(sub===1?(a=>a[0]>=Math.min(x0,x)&&a[0]<=Math.max(x0,x)&&a[1]>=Math.min(y0,y)&&a[1]<=Math.max(y0,y)):sub===2?(a=>Math.hypot(a[0]-x0,a[1]-y0)<=R):(a=>inPoly(a,gs.pts)))}ovClear()}
 const AXC=['#e5484d','#30c07a','#3b82f6'];
 function movSel(a,d){if(mode==='o'){cur.t=cur.t.slice();cur.t[a]=r4(cur.t[a]+d);applyT(cur);rebuild();return}const vs=selVerts();if(!vs.size)return noSel();vs.forEach(i=>{V[i][a]=r4(V[i][a]+d)});rebuild()}
 function axScreen(a){scene.updateMatrixWorld();const e=new THREE.Vector3();e.setComponent(a,1);let p0,p1;if(mode==='o'){const par=cur.g.parent||scene,t=new THREE.Vector3(...cur.t);p0=par.localToWorld(t.clone());p1=par.localToWorld(t.clone().add(e))}else{const vs=selVerts();if(!vs.size)return null;const c=new THREE.Vector3(...center(vs));p0=cur.g.localToWorld(c.clone());p1=cur.g.localToWorld(c.clone().add(e))}const s=v=>{const q=v.clone().project(cam);return[(q.x+1)/2*W(),(1-q.y)/2*H()]},A=s(p0),B=s(p1);return{c:A,d:[B[0]-A[0],B[1]-A[1]]}}
@@ -342,6 +346,106 @@ function frameBox(b){if(!b){tgt.set(0,0,0);dist=distClamp(4.5*fk())}else{tgt.set
 function frameAll(){scene.updateMatrixWorld();cur.V=V;cur.F=F;frameBox(wbox(O.filter(o=>o.vis).map(o=>[o.g,(evalMods(o)||o).V])));toast('Enquadrado: tudo')}
 function frameSel(){scene.updateMatrixWorld();cur.V=V;cur.F=F;const vs=mode==='o'?new Set():selVerts();if(vs.size){frameBox(wbox([[cur.g,[...vs].map(i=>V[i])]]));toast('Enquadrado: seleção')}else{frameBox(wbox([[cur.g,(evalMods(cur)||cur).V]]));toast('Enquadrado: objeto')}}
 function paintFabs(){const s=$('#fShd'),c=$('#fCam');s.innerHTML='<span class="tg">◐</span><span class="tb">'+SHD[shd]+'</span>';c.innerHTML='<span class="tg">📷</span><span class="tb">'+VW[viewIdx][0]+'</span>';$('#fZoom').innerHTML='<span class="tg">🔍</span><span class="tb">Zoom</span>';s.classList.toggle('on',shd!==0);c.classList.toggle('on',viewIdx!==0)}
+const ETID=['ext','ins','bev','cut','bis','pbd','spn'],ETN={ext:'Extrusão',ins:'Inserção',bev:'Chanfro',cut:'Corte',bis:'Bissecção',pbd:'Poly',spn:'Gira'},ETL={ext:['Região','Manifold','Normais','Indiv.','Cursor'],ins:['Região','Indiv.'],bev:['Arestas','Vértices'],cut:['Anel','Deslocado'],bis:['Faca','Bisect'],pbd:['Construir'],spn:['Y','X','Z']},ETG={ext:'⬆',ins:'⊡',bev:'◣',cut:'✂',bis:'⫽',pbd:'⬡',spn:'⟲'};
+const fail=m=>{toast(m);return null},un3=(a,b)=>{const e=[0,1,2].map(i=>V[b][i]-V[a][i]),l=Math.hypot(...e)||1;return e.map(x=>x/l)};
+function etUI(){$$('#tools2 [data-et]').forEach(b=>{const t=b.dataset.et;if(!ETN[t])return;const on=t===tool;b.classList.toggle('on',on);b.innerHTML='<span class="tg">'+ETG[t]+'</span><span class="tb">'+(on?ETL[t][sub]:ETN[t])+'</span>'})}
+function etHint(){const s=sub,h={ext:'Selecione faces e arraste no sentido da normal'+(s===4?' (a região segue o dedo)':''),ins:'Selecione faces e arraste na horizontal para inserir',bev:'Selecione '+(s?'vértices':'arestas')+' e arraste na horizontal',cut:'Selecione uma aresta e arraste na horizontal para deslizar o corte',bis:s?'Arraste uma linha: corta o objeto inteiro':'Arraste uma linha: corta só o que está à frente',pbd:'Arraste um vértice para movê-lo. Arraste ou toque numa aresta aberta para criar face',spn:'Selecione arestas (perfil) e arraste na horizontal para o ângulo'};return ETN[tool]+' ('+ETL[tool][s]+'): '+h[tool]}
+function etPrep(){const m=(tool==='ext'||tool==='ins')?'f':(tool==='cut'||tool==='spn')?'e':tool==='bev'?(sub?'v':'e'):null;if(m&&mode!==m)setMode(m)}
+function etClick(id){const was=tool==='add';if(was)addCancel(true);if(!was&&tool===id)sub=(sub+1)%ETL[id].length;else if(tool!==id){tool=id;sub=0}tm=0;etPrep();toolsUI();toast(ETN[id]+': '+ETL[id][sub])}
+function ovSeg(x0,y0,x1,y1){$('#ov').innerHTML='<line x1="'+x0+'" y1="'+y0+'" x2="'+x1+'" y2="'+y1+'" style="stroke:#ff8a00;stroke-width:3;stroke-dasharray:none;fill:none"/>'}
+function hitLocal(x,y,lp){scene.updateMatrixWorld();rc.setFromCamera({x:x/W()*2-1,y:-(y/H())*2+1},cam);const wc=cur.g.localToWorld(new THREE.Vector3(lp[0],lp[1],lp[2])),pl=new THREE.Plane().setFromNormalAndCoplanarPoint(cam.getWorldDirection(new THREE.Vector3()),wc),h=new THREE.Vector3();if(!rc.ray.intersectPlane(pl,h))return null;const l=cur.g.worldToLocal(h);return[l.x,l.y,l.z]}
+function efmap(){const m=new Map();F.forEach((q,f)=>q.forEach((a,j)=>{const k=ek(a,q[(j+1)%q.length]);(m.get(k)||m.set(k,[]).get(k)).push([f,j])}));return m}
+function inwN(f,a,b){const n=fnorm(f).normalize(),e=new THREE.Vector3(V[b][0]-V[a][0],V[b][1]-V[a][1],V[b][2]-V[a][2]).normalize();return n.cross(e).normalize()}
+function cleanMesh(){const r=wcollapse(V,F,near(V,1e-4));V=r[0];F=r[1];const seen=new Map();F.forEach((q,i)=>{const k=[...q].sort((a,b)=>a-b).join(',');(seen.get(k)||seen.set(k,[]).get(k)).push(i)});const kill=new Set();seen.forEach(a=>{if(a.length>=2)a.forEach(i=>kill.add(i))});F=F.filter((_,i)=>!kill.has(i));const used=[...new Set(F.flat())].sort((a,b)=>a-b),m=new Map(used.map((o,i)=>[o,i]));V=used.map(i=>V[i]);F=F.map(q=>q.map(i=>m.get(i)));sel.clear()}
+function walkCaps(vs,outOf,efm){const caps=[];vs.forEach(v=>{let c0=null;for(let f=0;f<F.length&&!c0;f++){const j=F[f].indexOf(v);if(j>=0)c0=[f,j]}if(!c0)return;let c=c0,seq=[],ok=true,g=0;do{seq.push(...outOf(c[0],c[1]));const q=F[c[0]],nx=q[(c[1]+1)%q.length],fs=efm.get(ek(v,nx));if(!fs||fs.length!==2){ok=false;break}const o=fs.find(x=>x[0]!==c[0]);if(!o){ok=false;break}c=[o[0],F[o[0]].indexOf(v)]}while((c[0]!==c0[0]||c[1]!==c0[1])&&++g<64);if(!ok||g>=64)return;const L=[];seq.forEach(x=>{if(L[L.length-1]!==x)L.push(x)});if(L.length>1&&L[0]===L[L.length-1])L.pop();if(new Set(L).size>=3)caps.push(L.reverse())});return caps}
+function xop(list,max,fin){return{kind:'x',list,t0:0,max,fin,set:t=>list.forEach(o=>{V[o.i]=[r4(o.b[0]+o.d[0]*t),r4(o.b[1]+o.d[1]*t),r4(o.b[2]+o.d[2]*t)]})}}
+function extOp(k){const S=[...sel],N=S.map(f=>fnorm(f).normalize()),list=[],walls=[],mk=i=>{V.push(V[i].slice());return V.length-1};
+if(k===3){S.forEach((f,si)=>{const q=F[f],n=q.length,m=q.map(mk);q.forEach((a,j)=>walls.push([a,q[(j+1)%n],m[(j+1)%n],m[j]]));m.forEach(i=>list.push({i,b:V[i].slice(),d:N[si].toArray()}));F[f]=m})}
+else{const map=new Map(),dn=new Map(),dir=new Set();S.forEach((f,si)=>{F[f].forEach((a,j)=>{if(!map.has(a)){map.set(a,mk(a));dn.set(a,new THREE.Vector3())}dn.get(a).add(N[si]);dir.add(a+','+F[f][(j+1)%F[f].length])})});
+S.forEach(f=>{const q=F[f];q.forEach((a,j)=>{const b=q[(j+1)%q.length];if(!dir.has(b+','+a))walls.push([a,b,map.get(b),map.get(a)])})});
+const avg=new THREE.Vector3();N.forEach(n=>avg.add(n));avg.normalize();map.forEach((ni,i)=>{const dv=dn.get(i),d=k===2&&dv.lengthSq()>1e-9?dv.clone().normalize():avg;list.push({i:ni,b:V[ni].slice(),d:d.toArray()})});S.forEach(f=>{F[f]=F[f].map(i=>map.get(i))})}
+F.push(...walls);const cen=[0,1,2].map(a=>list.reduce((s,o)=>s+o.b[a],0)/list.length),av=new THREE.Vector3(...[0,1,2].map(a=>list.reduce((s,o)=>s+o.d[a],0))).normalize(),op=xop(list,undefined,k===1?cleanMesh:undefined);op.kind=k===4?'cursor':'n';
+const P0=cur.g.localToWorld(new THREE.Vector3(...cen)).project(cam),P1=cur.g.localToWorld(new THREE.Vector3(...cen).add(av)).project(cam),sx=(P1.x-P0.x)*W()/2,sy=-(P1.y-P0.y)*H()/2,L=Math.hypot(sx,sy);op.sd=L>1e-6?[sx/L,sy/L]:[0,-1];
+op.setXY=(x,y)=>{const h=hitLocal(x,y,cen);if(!h)return;const T=[h[0]-cen[0],h[1]-cen[1],h[2]-cen[2]];list.forEach(o=>{V[o.i]=[r4(o.b[0]+T[0]),r4(o.b[1]+T[1]),r4(o.b[2]+T[2])]})};return op}
+function insOp(k){const S=[...sel],list=[],ring=[],mk=i=>{V.push(V[i].slice());return V.length-1};let rmin=1e9;const groups=k===1?S.map(f=>[f]):[S];
+groups.forEach(G=>{const dd=new Set(),nx=new Map(),pv=new Map(),ow=new Map();G.forEach(f=>F[f].forEach((a,j)=>dd.add(a+','+F[f][(j+1)%F[f].length])));
+G.forEach(f=>{const q=F[f];q.forEach((a,j)=>{const b=q[(j+1)%q.length];if(!dd.has(b+','+a)){(nx.get(a)||nx.set(a,[]).get(a)).push(b);(pv.get(b)||pv.set(b,[]).get(b)).push(a);ow.set(a+','+b,f)}})});
+G.forEach(f=>{const q=F[f],c=[0,1,2].map(i=>q.reduce((s,v)=>s+V[v][i],0)/q.length);q.forEach((a,j)=>{const b=q[(j+1)%q.length],e=[0,1,2].map(i=>V[b][i]-V[a][i]),l=Math.hypot(...e)||1,w=[0,1,2].map(i=>c[i]-V[a][i]);rmin=Math.min(rmin,Math.hypot(e[1]*w[2]-e[2]*w[1],e[2]*w[0]-e[0]*w[2],e[0]*w[1]-e[1]*w[0])/l)})});
+const inner=new Map();nx.forEach((_,v)=>inner.set(v,mk(v)));
+inner.forEach((ni,v)=>{const n1=nx.get(v),p1=pv.get(v);let d=new THREE.Vector3();if(n1&&p1&&n1.length===1&&p1.length===1){const m1=inwN(ow.get(p1[0]+','+v),p1[0],v),m2=inwN(ow.get(v+','+n1[0]),v,n1[0]);d=m1.clone().add(m2).multiplyScalar(1/Math.max(.25,1+m1.dot(m2)))}list.push({i:ni,b:V[ni].slice(),d:d.toArray()})});
+nx.forEach((bs,a)=>bs.forEach(b=>ring.push([a,b,inner.get(b),inner.get(a)])));G.forEach(f=>{F[f]=F[f].map(v=>inner.has(v)?inner.get(v):v)})});
+F.push(...ring);return xop(list,Math.max(.001,rmin*.9))}
+function bevEdgeOp(){const efm=efmap(),B=new Set();sel.forEach(k=>{if((efm.get(k)||[]).length===2)B.add(k)});if(!B.size)return fail('Chanfro precisa de arestas com duas faces');
+const list=[],mk=(v,d)=>{V.push(V[v].slice());list.push({i:V.length-1,b:V[v].slice(),d});return V.length-1},mark=new Set(),slide=new Map(),S=(a,v)=>{const k=ek(a,v)+'@'+v;if(!slide.has(k))slide.set(k,mk(v,un3(v,a)));return slide.get(k)};
+F.forEach(q=>q.forEach((v,j)=>{const n=q.length,p=q[(j+n-1)%n],x=q[(j+1)%n],bp=B.has(ek(p,v)),bn=B.has(ek(v,x));if(bp&&!bn)mark.add(ek(v,x)+'@'+v);if(bn&&!bp)mark.add(ek(p,v)+'@'+v)}));
+const out=new Map(),nf=[];F.forEach((q,f)=>{const n=q.length,L=[];q.forEach((v,j)=>{const p=q[(j+n-1)%n],x=q[(j+1)%n],bp=B.has(ek(p,v)),bn=B.has(ek(v,x));let o;
+if(bp&&bn){const m1=inwN(f,p,v),m2=inwN(f,v,x);o=[mk(v,m1.clone().add(m2).multiplyScalar(1/Math.max(.25,1+m1.dot(m2))).toArray())]}else if(bp)o=[S(x,v)];else if(bn)o=[S(p,v)];
+else{o=[];if(mark.has(ek(p,v)+'@'+v))o.push(S(p,v));if(mark.has(ek(v,x)+'@'+v))o.push(S(x,v));if(!o.length)o=[v]}out.set(f+','+j,o);L.push(...o)});nf.push(L)});
+const strips=[];B.forEach(k=>{const[[f1,j1],[f2,j2]]=efm.get(k),n1=F[f1].length,n2=F[f2].length,A1=out.get(f1+','+j1)[0],B1=out.get(f1+','+((j1+1)%n1))[0],B2=out.get(f2+','+j2)[0],A2=out.get(f2+','+((j2+1)%n2))[0];strips.push([B1,A1,A2,B2])});
+const bv=new Set();B.forEach(k=>k.split(',').forEach(x=>bv.add(+x)));const caps=walkCaps([...bv],(f,j)=>out.get(f+','+j),efm);let ml=1e9;efm.forEach((_,k)=>{const[a,b]=k.split(',').map(Number);if(bv.has(a)||bv.has(b))ml=Math.min(ml,Math.hypot(V[a][0]-V[b][0],V[a][1]-V[b][1],V[a][2]-V[b][2]))});
+F=nf.concat(strips,caps);return xop(list,Math.max(.001,ml*.45),()=>{const r=wcollapse(V,F,[]);V=r[0];F=r[1];sel=new Set()})}
+function bevVertOp(){const Vs=new Set(sel),efm=efmap(),list=[],slide=new Map(),mk=(v,d)=>{V.push(V[v].slice());list.push({i:V.length-1,b:V[v].slice(),d});return V.length-1},S=(a,v)=>{const k=a+'@'+v;if(!slide.has(k))slide.set(k,mk(v,un3(v,a)));return slide.get(k)};
+const outOf=(f,j)=>{const q=F[f],n=q.length,v=q[j];return Vs.has(v)?[S(q[(j+n-1)%n],v),S(q[(j+1)%n],v)]:[v]};const nf=F.map((q,f)=>{const L=[];q.forEach((v,j)=>L.push(...outOf(f,j)));return L});
+const caps=walkCaps([...Vs],outOf,efm);let ml=1e9;efm.forEach((_,k)=>{const[a,b]=k.split(',').map(Number);if(Vs.has(a)||Vs.has(b))ml=Math.min(ml,Math.hypot(V[a][0]-V[b][0],V[a][1]-V[b][1],V[a][2]-V[b][2]))});
+F=nf.concat(caps);return xop(list,Math.max(.001,ml*.45),()=>{const r=wcollapse(V,F,[]);V=r[0];F=r[1];sel=new Set()})}
+function cutOp(k){const efm=efmap(),ring=new Map(),vis=new Set(),st=new Map(),Q=[];
+if(k===0)sel.forEach(key=>{vis.add(key);st.set(key,+key.split(',')[0]);Q.push(key)});else sel.forEach(key=>{const a=+key.split(',')[0],b=+key.split(',')[1];(efm.get(key)||[]).forEach(([f])=>{const q=F[f];if(q.length!==4)return;[a,b].forEach(v=>{const jj=q.indexOf(v),pv=q[(jj+3)%4],nv=q[(jj+1)%4],o=ek(pv,v)===key?nv:pv,sk=ek(v,o);if(!vis.has(sk)){vis.add(sk);st.set(sk,v);Q.push(sk)}})})});
+if(!Q.length)return fail('O corte precisa de faces de 4 lados');
+while(Q.length){const key=Q.pop();F.forEach((q,f)=>{if(q.length!==4||ring.has(f))return;for(let i=0;i<4;i++){const p=[0,1,2,3].map(j=>q[(i+j)%4]);if(ek(p[0],p[1])===key){ring.set(f,i);const k2=ek(p[2],p[3]);if(!vis.has(k2)){vis.add(k2);st.set(k2,st.get(key)===p[0]?p[3]:p[2]);Q.push(k2)}break}}})}
+if(!ring.size)return fail('O corte precisa de faces de 4 lados');
+const mid=new Map(),list=[];vis.forEach(key=>{const[a,b]=key.split(',').map(Number),s=st.get(key),e=s===a?b:a;V.push(V[s].slice());mid.set(key,V.length-1);list.push({i:V.length-1,s,e})});
+const F2=[],ns=new Set();F.forEach((q,f)=>{if(ring.has(f)){const i=ring.get(f),p=[0,1,2,3].map(j=>q[(i+j)%4]),m1=mid.get(ek(p[0],p[1])),m2=mid.get(ek(p[2],p[3]));F2.push([p[0],m1,m2,p[3]],[m1,p[1],p[2],m2]);ns.add(ek(m1,m2))}else{const L=[];q.forEach((a,j)=>{L.push(a);const x=mid.get(ek(a,q[(j+1)%q.length]));if(x!=null)L.push(x)});F2.push(L)}});
+F2.forEach((L,fi)=>{const R=[];L.forEach((a,j)=>{R.push(a);const b=L[(j+1)%L.length],m=mid.get(ek(a,b));if(m!=null&&m!==a&&m!==b)R.push(m)});F2[fi]=R});F=F2;const f0=k?.3:.5,op={kind:'f',f0,list,fin:()=>{sel=ns},set:f=>list.forEach(o=>{V[o.i]=[0,1,2].map(a=>r4(V[o.s][a]+(V[o.e][a]-V[o.s][a])*f))})};op.set(f0);return op}
+function spinOp(){const a=[1,0,2][sub],E=[...sel].map(k=>k.split(',').map(Number)),V0=V.map(p=>p.slice()),F0=F.map(q=>q.slice()),vs=[...new Set(E.flat())],i1=(a+1)%3,i2=(a+2)%3;
+return{kind:'a',t0:0,set:ang=>{V=V0.map(p=>p.slice());F=F0.map(q=>q.slice());if(ang<1)return;const n=Math.max(1,Math.ceil(ang/45-1e-9)),full=ang>=359.99,cnt=full?n:n+1,cp=[];
+for(let k=0;k<cnt;k++){const m=new Map(),th=ang*k/n*Math.PI/180,co=Math.cos(th),si=Math.sin(th);vs.forEach(v=>{const p=V0[v],r=Math.hypot(p[i1],p[i2]);if(k===0||r<1e-6){m.set(v,v);return}const q=p.slice();q[i1]=r4(p[i1]*co-p[i2]*si);q[i2]=r4(p[i1]*si+p[i2]*co);V.push(q);m.set(v,V.length-1)});cp.push(m)}
+for(let k=0;k<n;k++){const k2=(k+1)%cnt;E.forEach(([u,w])=>{let q=[cp[k].get(u),cp[k].get(w),cp[k2].get(w),cp[k2].get(u)];q=q.filter((x,i)=>x!==q[(i+1)%q.length]);if(q.length<3)return;const nw=[0,0,0],c=[0,0,0];for(let i=1;i<q.length-1;i++){const A=V[q[0]],B=V[q[i]],C=V[q[i+1]],u1=[B[0]-A[0],B[1]-A[1],B[2]-A[2]],w1=[C[0]-A[0],C[1]-A[1],C[2]-A[2]];nw[0]+=u1[1]*w1[2]-u1[2]*w1[1];nw[1]+=u1[2]*w1[0]-u1[0]*w1[2];nw[2]+=u1[0]*w1[1]-u1[1]*w1[0]}q.forEach(i=>{for(let j=0;j<3;j++)c[j]+=V[i][j]/q.length});c[a]=0;if(nw[0]*c[0]+nw[1]*c[1]+nw[2]*c[2]<0)q.reverse();F.push(q)})}}}}
+function bisect(x0,y0,x1,y1){if(Math.hypot(x1-x0,y1-y0)<14)return;scene.updateMatrixWorld();cur.V=V;cur.F=F;const s0=snap(),knife=sub===0;
+const dirAt=(x,y)=>{rc.setFromCamera({x:x/W()*2-1,y:-(y/H())*2+1},cam);return rc.ray.direction.clone()},d0=dirAt(x0,y0),d1=dirAt(x1,y1),cp=cam.position.clone(),inv=cur.g.matrixWorld.clone().invert(),Lc=p=>p.clone().applyMatrix4(inv),pl=new THREE.Plane().setFromCoplanarPoints(Lc(cp),Lc(cp.clone().add(d0)),Lc(cp.clone().add(d1)));
+const dd=V.map(v=>pl.distanceToPoint(new THREE.Vector3(v[0],v[1],v[2]))),sg=dd.map(d=>d>=0?1:-1),only=mode==='f'&&sel.size?sel:null,ip=(a,b)=>V[a].map((x,i)=>x+(V[b][i]-x)*dd[a]/(dd[a]-dd[b])),sp=P=>{const q=new THREE.Vector3(P[0],P[1],P[2]).applyMatrix4(cur.g.matrixWorld).project(cam);return[(q.x+1)/2*W(),(1-q.y)/2*H()]},sx=x1-x0,sy=y1-y0,sl=sx*sx+sy*sy,cutF=new Set();
+F.forEach((q,f)=>{const n=q.length,ce=[];q.forEach((a,j)=>{const b=q[(j+1)%n];if(sg[a]!==sg[b])ce.push([a,b])});if(ce.length!==2)return;
+if(!knife){if(only&&!only.has(f))return}else{const nw=fnorm(f).transformDirection(cur.g.matrixWorld),ctr=new THREE.Vector3(...[0,1,2].map(i=>q.reduce((s,v)=>s+V[v][i],0)/n)).applyMatrix4(cur.g.matrixWorld);if(nw.dot(ctr.sub(cam.position))>=0)return;if(!ce.every(([a,b])=>{const s=sp(ip(a,b)),t=((s[0]-x0)*sx+(s[1]-y0)*sy)/sl;return t>=-.02&&t<=1.02}))return}cutF.add(f)});
+if(!cutF.size)return toast('Nada foi cortado');const mids=new Map(),mid=(a,b)=>{const k=ek(a,b);if(!mids.has(k)){V.push(ip(a,b).map(r4));mids.set(k,V.length-1)}return mids.get(k)};
+cutF.forEach(f=>{const q=F[f],n=q.length;q.forEach((a,j)=>{const b=q[(j+1)%n];if(sg[a]!==sg[b])mid(a,b)})});
+const F2=[],ns=new Set();F.forEach((q,f)=>{const n=q.length,L2=[],mk2=[];q.forEach((a,j)=>{const b=q[(j+1)%n];L2.push(a);const m=mids.get(ek(a,b));if(m!=null){if(cutF.has(f))mk2.push(L2.length);L2.push(m)}});if(cutF.has(f)&&mk2.length===2){const[i1,i2]=mk2;F2.push(L2.slice(i1,i2+1),L2.slice(i2).concat(L2.slice(0,i1+1)));ns.add(ek(L2[i1],L2[i2]))}else F2.push(L2)});
+F=F2;mode='e';sel=ns;paint();undo.push(s0);if(undo.length>60)undo.shift();redo=[];rebuild();toast('Corte: '+cutF.size+' faces cortadas')}
+function nearV(x,y,r){let b=r,k=-1;scene.updateMatrixWorld();V.forEach((_,i)=>{const s=scr(i);if(!s)return;const d=Math.hypot(s[0]-x,s[1]-y);if(d<b){b=d;k=i}});return k}
+function nearBE(x,y,r){scene.updateMatrixWorld();const dir=new Set();F.forEach(q=>q.forEach((a,j)=>dir.add(a+','+q[(j+1)%q.length])));let b=r,k=null;F.forEach(q=>q.forEach((a,j)=>{const c=q[(j+1)%q.length];if(dir.has(c+','+a))return;const A=scr(a),B=scr(c);if(!A||!B)return;const d=dseg(x,y,A,B);if(d<b){b=d;k=[a,c]}}));return k}
+function pbDrag(x,y){if(gs.pb===undefined){const v=nearV(x,y,30),e=v<0?nearBE(x,y,24):null;gs.pb=v>=0?{k:'v',i:v}:e?{k:'e',a:e[0],b:e[1]}:null;if(gs.pb){gs.snap=snap();gs.pbc=false}}
+const T=gs.pb;if(!T)return;const sn=h=>h.map(t=>r4(step?Math.round(t/step)*step:t));if(T.k==='v'){const h=hitLocal(x,y,V[T.i]);if(!h)return;V[T.i]=sn(h);gs.pbc=true;rebuild();return}
+if(!T.made){V.push(V[T.a].slice(),V[T.b].slice());T.na=V.length-2;T.nb=V.length-1;F.push([T.b,T.a,T.na,T.nb]);T.made=true}
+const m=[0,1,2].map(i=>(V[T.a][i]+V[T.b][i])/2),h=hitLocal(x,y,m);if(!h)return;const d=[0,1,2].map(i=>h[i]-m[i]);V[T.na]=sn([0,1,2].map(i=>V[T.a][i]+d[i]));V[T.nb]=sn([0,1,2].map(i=>V[T.b][i]+d[i]));gs.pbc=true;rebuild()}
+function pbEnd(e,ok){if(gs.pb&&gs.pbc){if(ok){undo.push(gs.snap);if(undo.length>60)undo.shift();redo=[];rebuild()}else etRevert();return}
+if(!ok||moved)return;const b=cv.getBoundingClientRect(),x=e.clientX-b.left,y=e.clientY-b.top,be=nearBE(x,y,24);if(!be)return toast('Toque numa aresta aberta (de borda)');const m=[0,1,2].map(i=>(V[be[0]][i]+V[be[1]][i])/2),h=hitLocal(x,y,m);if(!h)return;const s0=snap();V.push(h.map(t=>r4(step?Math.round(t/step)*step:t)));F.push([be[1],be[0],V.length-1]);undo.push(s0);redo=[];rebuild();toast('Triângulo criado')}
+function etBegin(){gs.snap=snap();const k=sub;if(tool==='ext'||tool==='ins'){if(mode!=='f'||!sel.size)return fail('Selecione faces no modo Face');return tool==='ext'?extOp(k):insOp(k)}
+if(tool==='bev'){if(k===0){if(mode!=='e'||!sel.size)return fail('Selecione arestas no modo Aresta');return bevEdgeOp()}if(mode!=='v'||!sel.size)return fail('Selecione vértices no modo Vértice');return bevVertOp()}
+if(tool==='cut'){if(mode!=='e'||!sel.size)return fail('Selecione uma aresta no modo Aresta');return cutOp(k)}if(tool==='spn'){if(mode!=='e'||!sel.size)return fail('Selecione arestas (o perfil) no modo Aresta');return spinOp()}return null}
+function etUpdate(op,dx,dy,x,y){let t=0,txt='';if(op.kind==='cursor'){op.setXY(x,y);op.changed=true;txt='segue o dedo'}else{if(op.kind==='n'){const px=dx*op.sd[0]+dy*op.sd[1];t=step?Math.round(px/10)*step:px*.01}else if(op.kind==='x')t=Math.max(0,step?Math.round(dx/10)*step:dx*.01);else if(op.kind==='f'){t=Math.min(.98,Math.max(.02,op.f0+dx/200));if(step)t=Math.round(t*20)/20;t=Math.min(.95,Math.max(.05,t))}else{t=Math.min(360,Math.max(0,Math.abs(dx)/200*360));if(step)t=Math.round(t/15)*15}
+if(op.max!=null)t=Math.min(t,op.max);t=r4(t);op.set(t);op.changed=op.changed||op.kind==='f'||t!==0;txt=op.kind==='a'?t+'°':op.kind==='f'?Math.round(t*100)+'%':t}rebuild();$('#hint').textContent=ETN[tool]+': '+txt}
+function etDrag(e,p){const b=cv.getBoundingClientRect(),x=e.clientX-b.left,y=e.clientY-b.top;if(tool==='bis'){gs.x1=x;gs.y1=y;ovSeg(gs.x0,gs.y0,x,y);return}if(tool==='pbd'){pbDrag(x,y);return}if(gs.dead)return;
+if(!gs.op){scene.updateMatrixWorld();cur.V=V;cur.F=F;gs.op=etBegin();if(!gs.op){gs.dead=true;return}}etUpdate(gs.op,e.clientX-p.sx,e.clientY-p.sy,x,y);ovSeg(gs.x0,gs.y0,x,y)}
+function etRevert(){if(!gs.snap)return;const d=JSON.parse(gs.snap),o=d.O.find(x=>x.id===cur.id);if(!o)return;V=o.V;F=o.F;cur.V=V;cur.F=F;rebuild()}
+function etCommit(){const op=gs.op;if(!op.changed){etRevert();return}if(op.fin)op.fin();undo.push(gs.snap);if(undo.length>60)undo.shift();redo=[];rebuild();toast(ETN[tool]+' aplicado')}
+function etEnd(e){ovClear();const ok=e.type==='pointerup'&&!many;if(tool==='bis'){if(ok&&moved)bisect(gs.x0,gs.y0,gs.x1,gs.y1);return}if(tool==='pbd'){pbEnd(e,ok);return}if(!gs.op)return;if(ok)etCommit();else etRevert()}
+let ctxT=null;
+function cStart(e){ctxT={id:e.pointerId,x:e.clientX,y:e.clientY,t:Date.now(),ok:!moved&&Date.now()-(gs.t0||0)>150}}
+function cEnd(e){if(!ctxT||e.pointerId!==ctxT.id)return;const c=ctxT;ctxT=null;if(c.ok&&e.type==='pointerup'&&Date.now()-c.t<400&&Math.hypot(e.clientX-c.x,e.clientY-c.y)<16)openCtx(e.clientX,e.clientY)}
+function adjF(){const vs=selVerts();return F.map((q,i)=>(mode==='e'?q.some((a,j)=>sel.has(ek(a,q[(j+1)%q.length]))):q.some(v=>vs.has(v)))?i:-1).filter(i=>i>=0)}
+function sepFaces(){if(mode==='f')return[...sel];const vs=selVerts(),r=[];if(vs.size)F.forEach((q,i)=>{if(q.every(v=>vs.has(v)))r.push(i)});return r}
+function fillFace(){const vs=[...selVerts()];if(vs.length<3)return toast('Selecione 3 ou mais vértices (ou arestas de um contorno)');const P=vs.map(i=>V[i]),c=[0,1,2].map(a=>P.reduce((s,p)=>s+p[a],0)/P.length),d=P.map(p=>[p[0]-c[0],p[1]-c[1],p[2]-c[2]]),cr=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+let bi=0;d.forEach((v,i)=>{if(Math.hypot(...v)>Math.hypot(...d[bi]))bi=i});const u=d[bi];let bm=1e-9,n=null;d.forEach(v=>{const k=cr(u,v),m=Math.hypot(...k);if(m>bm){bm=m;n=k}});if(!n)return toast('Pontos em linha: não dá para criar face');
+const nn=n.map(x=>x/Math.hypot(...n)),uu=u.map(x=>x/Math.hypot(...u)),ww=cr(nn,uu),ord=vs.map((vi,i)=>[Math.atan2(d[i][0]*ww[0]+d[i][1]*ww[1]+d[i][2]*ww[2],d[i][0]*uu[0]+d[i][1]*uu[1]+d[i][2]*uu[2]),vi]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+const dir=new Set();F.forEach(q=>q.forEach((a,j)=>dir.add(a+','+q[(j+1)%q.length])));let same=0,opp=0;ord.forEach((a,j)=>{const b=ord[(j+1)%ord.length];if(dir.has(a+','+b))same++;if(dir.has(b+','+a))opp++});
+let flip=same>opp;if(same===opp){const mc=[0,1,2].map(a=>V.reduce((s,p)=>s+p[a],0)/V.length);flip=nn[0]*(c[0]-mc[0])+nn[1]*(c[1]-mc[1])+nn[2]*(c[2]-mc[2])<0}
+if(flip)ord.reverse();push();F.push(ord);mode='f';sel=new Set([F.length-1]);paint();rebuild();toast('Face criada')}
+function edgeMidIns(){const keys=[...sel];if(!keys.length)return;push();const mid=new Map();keys.forEach(k=>{const[a,b]=k.split(',').map(Number);V.push(mid3(a,b));mid.set(k,V.length-1)});F=F.map(q=>{const L=[];q.forEach((a,j)=>{L.push(a);const m=mid.get(ek(a,q[(j+1)%q.length]));if(m!=null)L.push(m)});return L});mode='v';sel=new Set(mid.values());paint();rebuild();toast(keys.length+' vértice(s) no meio. Use Criar face para ligar')}
+function triSel(){const T=[...sel];if(!T.length)return;push();const add=[];T.forEach(f=>{const q=F[f];if(q.length<4)return;F[f]=[q[0],q[1],q[2]];for(let k=2;k<q.length-1;k++)add.push([q[0],q[k],q[k+1]])});F.push(...add);sel=new Set([...T,...add.map((_,i)=>F.length-add.length+i)]);rebuild();toast('Triangulado')}
+function flipSel(){if(!sel.size)return;push();[...sel].forEach(f=>{F[f]=F[f].slice().reverse()});rebuild();toast('Normais invertidas')}
+function separateSel(){const fs=sepFaces();if(!fs.length)return toast('Selecione faces (ou pontos que formem faces)');push();const used=[...new Set(fs.flatMap(f=>F[f]))],m=new Map(used.map((o,i)=>[o,i])),V2=used.map(i=>V[i].slice()),F2=fs.map(f=>F[f].map(i=>m.get(i))),ks=new Set(fs),keep=F.filter((_,i)=>!ks.has(i)),u2=[...new Set(keep.flat())].sort((a,b)=>a-b),m2=new Map(u2.map((o,i)=>[o,i]));
+const o=newObj(cur.name+' parte',V2,F2,cur.par);o.t=cur.t.slice();o.r=cur.r.slice();o.s=cur.s.slice();V=u2.map(i=>V[i]);F=keep.map(q=>q.map(i=>m2.get(i)));sel.clear();cur.V=V;cur.F=F;build();pick(o);mode='o';paint();rebuild();toast('Separado em um novo objeto')}
+const CTX={v:[['Criar face',()=>fillFace()],['Mesclar no centro',()=>mergeSel()],['Subdividir',()=>subdiv(adjF())],['Separar',()=>separateSel()],['Excluir vértices',()=>del()]],e:[['Criar face',()=>fillFace()],['Inserir vértice no meio',()=>edgeMidIns()],['Subdividir',()=>subdiv(adjF())],['Mesclar (colapsar)',()=>mergeSel()],['Separar',()=>separateSel()],['Excluir arestas',()=>del()]],f:[['Subdividir',()=>subdiv()],['Triangular',()=>triSel()],['Inverter normais',()=>flipSel()],['Separar',()=>separateSel()],['Excluir faces',()=>del()]],o:[['Duplicar',()=>$('#bDup').onclick()],['Esconder',()=>{cur.vis=false;rebuild()}],['Excluir objeto',()=>$('#bDelO').onclick()]]};
+function openCtx(px,py){const b=cv.getBoundingClientRect(),el=$('#ctx'),n=mode==='o'?1:sel.size;el.textContent='';const h=document.createElement('div');h.className='ch';h.textContent=({o:'Objeto',v:'Vértice',e:'Aresta',f:'Face'}[mode])+(mode==='o'?' · '+cur.name:n?' · '+n+' selecionado(s)':' · nada selecionado');el.append(h);
+(CTX[mode]||[]).forEach(([t,fn])=>{const bt=document.createElement('button');bt.textContent=t;bt.disabled=!n;bt.onclick=()=>{el.hidden=true;fn()};el.append(bt)});el.hidden=false;const w=el.offsetWidth||200,hh=el.offsetHeight||260;el.style.left=Math.max(8,Math.min(W()-w-8,px-b.left-w/2))+'px';el.style.top=Math.max(8,Math.min(H()-hh-8,py-b.top-20))+'px'}
 function toast(t){const e=$('#toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.opacity=0,1900)}
 function ui(){const vs=selVerts(),n=sel.size,nm={v:['vértice','vértices'],e:['aresta','arestas'],f:['face','faces'],o:['','']}[mode][n>1?1:0];
 const ob=mode==='o';$('#info').textContent=ob?cur.name+' · '+['Posição','Rotação °','Escala'][tm]:n?n+' '+nm:'Toque para selecionar';const c=ob?cur['trs'[tm]]:vs.size?center(vs):[0,0,0];
@@ -365,8 +469,8 @@ $('#drawer').onclick=e=>{if(e.target.id==='drawer')closeMenu()};
 $$('.cat h2').forEach(h=>h.onclick=()=>{const c=h.parentNode,o=c.classList.contains('open');$$('.cat').forEach(x=>x.classList.remove('open'));if(!o)c.classList.add('open')});
 $$('#drawer [data-close]').forEach(b=>b.addEventListener('click',closeMenu));
 $('#bMo').onclick=()=>setMode({o:'v',v:'e',e:'f',f:'o'}[mode]);
-$('#bSub').onclick=subdiv;$('#bCut').onclick=cut;
-['fab','fab2','fShd','fCam','fZoom','zp','mods','hier','tools','tools2'].forEach(id=>$('#'+id).addEventListener('pointerdown',e=>e.stopPropagation()));
+$('#bSub').onclick=()=>subdiv();$('#bCut').onclick=cut;
+['fab','fab2','fShd','fCam','fZoom','zp','ctx','mods','hier','tools','tools2'].forEach(id=>$('#'+id).addEventListener('pointerdown',e=>e.stopPropagation()));
 $('#fab').onclick=()=>{const h=$('#mods');h.hidden=!h.hidden;if(!h.hidden){modUI();$('#hier').hidden=true}sync()};$('#mx').onclick=()=>{$('#mods').hidden=true;sync()};
 $('#fab2').onclick=()=>{const h=$('#hier');h.hidden=!h.hidden;if(!h.hidden){$('#mods').hidden=true;tree()}sync()};$('#hx').onclick=()=>{$('#hier').hidden=true;sync()};
 $('#sheet').append($('#mods'),$('#hier'));function sync(){$('#sheet').classList.toggle('pn',!$('#mods').hidden||!$('#hier').hidden)}
@@ -396,7 +500,8 @@ $('#bShape').onclick=()=>{if(addT===null)addStart(SHAPES[shapeIdx]);else{shapeId
 $('#fShd').onclick=()=>{shd=(shd+1)%3;applyShd();paintFabs();toast('Sombreamento: '+SHD[shd])};
 $('#fCam').onclick=()=>{viewIdx=(viewIdx+1)%VW.length;setView(viewIdx);paintFabs();toast('Vista: '+VW[viewIdx][0])};
 $('#fZoom').onclick=()=>{$('#zp').hidden=!$('#zp').hidden};
+$('#bDelO').onclick=()=>{if(O.length<2)return toast('Mantenha ao menos um objeto');const n=cur.name,k=O.some(o=>o.par===cur.id);delObj();toast('"'+n+'" excluído'+(k?'; os filhos subiram um nível':'')+'. ↶ desfaz')};
 $$('#zp [data-z]').forEach(b=>b.onclick=()=>{const k=b.dataset.z;if(k==='in')zoomBy(.8);else if(k==='out')zoomBy(1.25);else if(k==='all')frameAll();else frameSel()});
-$$('#tools2 [data-et]').forEach(b=>b.onclick=()=>toast(b.getAttribute('aria-label')+': em breve'));
+$$('#tools2 [data-et]').forEach((b,i)=>{b.dataset.et=ETID[i];b.onclick=()=>etClick(ETID[i])});
 paint();upd();if(ok)rebuild();else{add('cubo');undo=[]}toolsUI();paintAdd();paintFabs();
 </script></body></html>
