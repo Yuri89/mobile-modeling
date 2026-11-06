@@ -149,13 +149,15 @@ body.pntm .cat.mesh{display:none}
 #top h1 small{font:600 11px "JetBrains Mono",monospace;color:var(--cy);text-shadow:none;margin-left:8px;letter-spacing:.06em}
 .ptabs{grid-template-columns:repeat(5,1fr)!important}.ptabs button{font-size:12px!important}
 #ptree{display:flex;flex-direction:column;gap:4px}
+#lpw{display:flex;gap:8px;padding:0 0 8px}#lpw button{flex:1;min-height:44px;font-size:13px;min-width:0}
 #lum{display:none;flex:none;flex-direction:column;gap:8px;height:min(56vh,440px);box-sizing:border-box;padding:8px 10px;background:rgba(13,19,34,.97);border-top:1px solid rgba(255,183,77,.4);position:relative;z-index:3}
 #app.lum #lum{display:flex}
 #app.lum #tools,#app.lum #tools2,#app.lum #nav,#app.lum #sheet,#app.lum #bMo,#app.lum #zp{display:none!important}
 body.lumm .cat.mesh{display:none}
 #ldone{min-width:84px;height:44px;background:var(--cy);color:#090d16;border-color:var(--cy);font-weight:700}
 #linfo{flex:1;min-width:0;font-size:14px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#ltabs.ptabs{grid-template-columns:repeat(4,1fr)!important}
+#ltabs.ptabs{grid-template-columns:repeat(2,1fr)!important}
+#msw{flex-wrap:wrap}#msw button{flex:1 1 calc(50% - 4px);min-height:48px}
 #lbody{flex:1;min-height:0;overflow:auto;touch-action:pan-y;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .lb input[type=range]{padding:0;border:0;background:transparent;height:34px;accent-color:#00f5ff}
 .lb b{color:var(--cy);font-weight:600}
@@ -164,6 +166,9 @@ body.lumm .cat.mesh{display:none}
 .msty small{font-size:9.5px;color:var(--mu)}.msty button.on small{color:#111}
 .eprs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.eprs button{min-width:0;padding:0 4px;font-size:13px}
 .rep p{margin:6px 0;font-size:12.5px;line-height:1.45;color:var(--tx)}
+#lBase{min-width:96px;height:44px;font-size:12.5px;padding:0 8px}
+.seg{display:flex;gap:6px;margin:4px 0}.seg button{flex:1;min-width:0;min-height:38px;padding:0 4px;font-size:12.5px}
+.fxl{border:1px solid var(--bd);border-radius:14px;padding:8px 10px;margin:8px 0}.fxm{font-size:12px;color:var(--mu);margin:6px 0 0}
 </style></head><body>
 <div id="app">
 <div id="top"><button id="bMenu" aria-label="Abrir menu" data-ic="menu"></button><h1>PolyPocket</h1><button id="bMo" aria-label="Trocar modo"></button><div class="hist"><button id="bU" aria-label="Desfazer" data-ic="undo"></button><button id="bR" aria-label="Refazer" data-ic="redo"></button></div></div>
@@ -179,14 +184,14 @@ body.lumm .cat.mesh{display:none}
 <div id="edh"><span id="info"></span><span id="steps"><button id="bTm" hidden>Posição</button><button id="bSt"></button></span><button id="bCol" aria-label="Recolher painel" data-ic="chev"></button></div>
 <div id="ed"></div>
 </div></div>
-<div id="drawer" hidden><div><div id="msw"><button id="mModel" aria-label="Modo Modelar"></button><button id="mPaint" aria-label="Modo Pintar"></button><button id="mLuz" aria-label="Modo Luz"></button></div>
+<div id="drawer" hidden><div><div id="msw"><button id="mModel" aria-label="Modo Modelar"></button><button id="mPaint" aria-label="Modo Pintar"></button><button id="mShd" aria-label="Modo Shader"></button><button id="mLuz" aria-label="Modo Luz"></button></div><div id="lpw"><button id="bLp"></button><button id="bLpC" data-close>Configurar luz…</button></div>
 
 
 
 
 
 <section class="cat mesh"><h2>Malha e objeto</h2><div class="cb"><button id="bDis" data-close>Dissolver seleção</button><button id="bOrS" data-close>Origem na seleção</button><button id="bOrC" data-close>Origem no centro</button><button id="bOrB" data-close>Origem na base</button><button id="bApX" data-close>Aplicar escala/rotação</button><button id="bVis">Selecionar só visíveis</button></div></section>
-<section class="cat open"><h2>Vista e arquivo</h2><div class="cb"><button id="bV" data-close>Centralizar câmera</button><button id="bX" data-close>Exportar OBJ</button><button id="bGlb" data-close>Exportar GLB (com paleta)</button><button id="bSv" data-close>Salvar projeto (arquivo)</button><button id="bOp" data-close>Abrir projeto…</button><input type="file" id="fProj" accept=".json,application/json" hidden></div></section>
+<section class="cat open"><h2>Vista e arquivo</h2><div class="cb"><button id="bV" data-close>Centralizar câmera</button><button id="bBase">Ver só a base</button><button id="bX" data-close>Exportar OBJ</button><button id="bGlb" data-close>Exportar GLB (com paleta)</button><button id="bSv" data-close>Salvar projeto (arquivo)</button><button id="bOp" data-close>Abrir projeto…</button><input type="file" id="fProj" accept=".json,application/json" hidden></div></section>
 </div></div>
 <div id="toast"></div>
 <div id="modal" hidden><div><textarea id="obj" readonly></textarea><div style="display:flex;gap:6px;margin-top:8px;padding:0;background:none"><button id="bCp" style="flex:1">Copiar OBJ</button><button id="bCl" style="flex:1">Fechar</button></div></div></div>
@@ -239,15 +244,16 @@ const C0=[.13,.33,.41],C1=[1,.6,0],CE=[0,.9,.95],CP=[.2,.95,1],C2=[1,.7,.3],CD=[
 /* ---------- pintura: dados ---------- */
 class Fc extends Array{map(f,t){const r=super.map(f,t);r.k=this.k;return r}slice(a,b){const r=super.slice(a,b);r.k=this.k;return r}}
 function hydF(f,K){return f.map((q,i)=>{const r=Fc.from(q),k=K?K[i]:q.k;if(k!=null&&k>=0)r.k=k;return r})}
-function hydrate(L){L.forEach(o=>{o.F=hydF(o.F,o.K);delete o.K})}
+function hydrate(L){L.forEach(o=>{o.F=hydF(o.F,o.K);delete o.K;if(o.lt)o._lt=1;delete o.lt});for(let i=L.length-1;i>=0&&L.length>1;i--)if(L[i]._lt&&!L[i].F.length){const id=L[i].id,pp=L[i].par;L.forEach(x=>{if(x.par===id)x.par=pp});L.splice(i,1)}L.forEach(o=>{delete o._lt})}
 function inh(q,a){const r=Fc.from(a);if(q&&q.k!=null)r.k=q.k;return r}
 const kOf=q=>q.k==null?-1:q.k;
-let PAL=null,GM=0,PNT=0,selK=0,ptool='brush',ISO=0,LUZ=0,ENV={n:'Padrão',sky:'#bfe6ff',gnd:'#2a3550',bg:'#0a0e18',int:.9};
-const DEFG=[.588,.639,.694];
+let PAL=null,GM=0,PNT=0,selK=0,ptool='brush',ISO=0,SHM=0,LUM=0,BASE=1,ENV={n:'Padrão',sky:'#bfe6ff',gnd:'#2a3550',bg:'#0a0e18',int:.9,sc:'#fff4d6',si:1.6,az:40,el:55,sh:1,gr:1,on:0};
+const DEFG=[.588,.639,.694];function MPV(){return!!(SHM||LUM)}
+const FXT={value:0};let FXRUN=0;
 const ybo=v=>{let a=1e9,b=-1e9;for(let i=0;i<v.length;i++){const y=v[i][1];if(y<a)a=y;if(y>b)b=y}return[a,b]};
 function palAt(k,t){const c=PAL.cells[k],x=Math.min(1,Math.max(0,t))*(c.length-1),i=Math.min(c.length-2,Math.floor(x)),f=x-i,a=c[i],b=c[i+1];return[(a[0]+(b[0]-a[0])*f)/255,(a[1]+(b[1]-a[1])*f)/255,(a[2]+(b[2]-a[2])*f)/255]}
 function palMid(k){const c=PAL.cells[k];if(!c.av)c.av=palAt(k,.5);return c.av}
-function pcl(q,p3,yb,base,mx){const k=q.k;if(k==null||k<0||!PAL||k>=PAL.cells.length)return LUZ?DEFG:base;const c=GM?palAt(k,yb[1]-yb[0]>1e-9?(yb[1]-p3[1])/(yb[1]-yb[0]):.5):palMid(k);return mx&&!LUZ?[c[0]*.75+C2[0]*.25,c[1]*.75+C2[1]*.25,c[2]*.75+C2[2]*.25]:c}
+function pcl(q,p3,yb,base,mx){const k=q.k;if(BASE&&!PNT)return MPV()?DEFG:base;if(k==null||k<0||!PAL||k>=PAL.cells.length)return MPV()?DEFG:base;const c=GM?palAt(k,yb[1]-yb[0]>1e-9?(yb[1]-p3[1])/(yb[1]-yb[0]):.5):palMid(k);return mx&&!MPV()?[c[0]*.75+C2[0]*.25,c[1]*.75+C2[1]*.25,c[2]*.75+C2[2]*.25]:c}
 const hx3=(r,g,b)=>'#'+[r,g,b].map(x=>Math.round(x).toString(16).padStart(2,'0')).join('');
 const rgbOf=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
 function mkCell(top,bot){return[0,.25,.5,.75,1].map(f=>top.map((x,i)=>Math.round(x+(bot[i]-x)*f)))}
@@ -260,7 +266,7 @@ function savePal(){try{localStorage.setItem('pp2pal',JSON.stringify({name:PAL.na
 initPal();
 
 const cv=$('#cv'),ren=new THREE.WebGLRenderer({antialias:true,alpha:true});
-ren.setPixelRatio(Math.min(devicePixelRatio,2));ren.setClearColor(0x090d16,0);cv.prepend(ren.domElement);
+ren.setPixelRatio(Math.min(devicePixelRatio,2));ren.setClearColor(0x090d16,0);ren.shadowMap.enabled=true;ren.shadowMap.type=THREE.PCFSoftShadowMap;cv.prepend(ren.domElement);
 const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(50,1,.05,2000);
 scene.fog=new THREE.Fog(0x090d16,6,20);const hemi=new THREE.HemisphereLight(0xd8f6ff,0x1d2a40,.9);scene.add(hemi);
 const dl=new THREE.DirectionalLight(0xffffff,.6);dl.position.set(3,6,4);scene.add(dl);
@@ -276,7 +282,7 @@ const W=()=>cv.clientWidth,H=()=>cv.clientHeight;
 let th=.7,ph=1.05,dist=4.5;const tgt=new THREE.Vector3();
 function upd(){scene.fog.near=dist+2.5;scene.fog.far=dist+12;cam.position.set(tgt.x+dist*Math.sin(ph)*Math.sin(th),tgt.y+dist*Math.cos(ph),tgt.z+dist*Math.sin(ph)*Math.cos(th));cam.lookAt(tgt);cam.updateMatrix();cam.updateMatrixWorld();dirty=1}
 new ResizeObserver(()=>{ren.setSize(W(),H(),false);cam.aspect=W()/H();cam.updateProjectionMatrix();dirty=1}).observe(cv);
-(function loop(){requestAnimationFrame(loop);if(dirty){dirty=0;ren.render(scene,cam)}})();
+(function loop(){requestAnimationFrame(loop);FXT.value=(performance.now()/1000)%600;if(FXRUN&&MPV())dirty=1;if(dirty){dirty=0;ren.render(scene,cam)}})();
 
 /* ---------- malha ---------- */
 const Rg=(n,y)=>[...Array(n)].map((_,i)=>[.5*Math.cos(6.2832*i/n),y,.5*Math.sin(6.2832*i/n)]);
@@ -289,8 +295,8 @@ v.push([0,.5,0],[0,-.5,0]);for(let i=0;i<n;i++){const k=(i+1)%n;f.push([3*n,k,i]
 plano:()=>[[[-.5,0,.5],[.5,0,.5],[.5,0,-.5],[-.5,0,-.5]],[[0,1,2,3]]]};
 function applyT(o){o.g.position.set(...o.t);o.g.rotation.set(...o.r.map(d=>d*Math.PI/180));o.g.scale.set(...o.s);dirty=1}
 function newObj(name,v,f,par){const o={id:uid++,name,V:v,F:hydF(f),par:par==null?null:par,vis:true,mods:[],t:[0,0,0],r:[0,0,0],s:[1,1,1]};O.push(o);return o}
-function build(){O.forEach(o=>{if(o.g&&o.g.parent)o.g.parent.remove(o.g)});O.forEach(o=>{if(!o.g){o.g=new THREE.Group();o.m=new THREE.Mesh(new THREE.BufferGeometry(),MAT);o.m.userData.o=o;o.rm=new THREE.Mesh(new THREE.BufferGeometry(),MAT);o.rm.userData.o=o;o.rm.visible=false;o.l=new THREE.LineSegments(new THREE.BufferGeometry(),LMAT);o.g.add(o.m,o.rm,o.l)}});O.forEach(o=>{const p=O.find(x=>x.id===o.par);(p?p.g:scene).add(o.g);applyT(o)});dirty=1}
-function pick(o){cur=o;V=o.V;F=o.F;sel.clear();o.g.add(pts,ptsG);modUI();if(LUZ)lRender()}
+function build(){O.forEach(o=>{if(o.g&&o.g.parent)o.g.parent.remove(o.g)});O.forEach(o=>{if(!o.g){o.g=new THREE.Group();o.m=new THREE.Mesh(new THREE.BufferGeometry(),MAT);o.m.userData.o=o;o.rm=new THREE.Mesh(new THREE.BufferGeometry(),MAT);o.rm.userData.o=o;o.rm.visible=false;o.l=new THREE.LineSegments(new THREE.BufferGeometry(),LMAT);o.m.castShadow=o.m.receiveShadow=o.rm.castShadow=o.rm.receiveShadow=true;o.g.add(o.m,o.rm,o.l)}});O.forEach(o=>{const p=O.find(x=>x.id===o.par);(p?p.g:scene).add(o.g);applyT(o)});dirty=1}
+function pick(o){cur=o;V=o.V;F=o.F;sel.clear();o.g.add(pts,ptsG);modUI();if(SHM||LUM)lRender()}
 function refresh(o){const p=[],c=[],l=[],lc=[];const yb=ybo(o.V);o.F.forEach(q=>{triOf(q,o.V).forEach(t=>t.forEach(i=>{p.push(...o.V[i]);c.push(...pcl(q,o.V[i],yb,C0,false))}))});setG(o.m,p,c);edgeMap(o.F).forEach(([a,b])=>{l.push(...o.V[a],...o.V[b]);lc.push(...CD,...CD)});setG(o.l,l,lc);showRes(o,false)}
 const isDesc=(a,b)=>{for(let p=a.par;p!=null;p=(O.find(x=>x.id===p)||{}).par)if(p===b.id)return true;return false};
 function treeOld(){const el=$('#tree');el.textContent='';(function walk(p,d){O.filter(o=>o.par===p).forEach(o=>{const r=document.createElement('div');r.className='tr'+(o===cur?' cur':'');r.style.paddingLeft=d*18+'px';const e=document.createElement('button');e.textContent=o.vis?'👁':'–';e.setAttribute('aria-label','Mostrar ou ocultar');e.onclick=()=>{o.vis=!o.vis;rebuild()};const n=document.createElement('button');n.className='nm';n.textContent=(o.F.length?'▣ ':'▢ ')+o.name;n.onclick=()=>{pick(o);mode='o';paint();rebuild()};r.append(e,n);el.append(r);walk(o.id,d+1)})})(null,0);
@@ -307,7 +313,7 @@ function saveNow(){clearTimeout(svT);if(!svOn)return;svOn=0;try{localStorage.set
 function saveSoon(){svOn=1;clearTimeout(svT);svT=setTimeout(saveNow,600)}
 addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')saveNow()});addEventListener('pagehide',saveNow);
 function rebuild(){
-cur.V=V;cur.F=F;mesh=cur.m;lines=cur.l;cur._d=1;O.forEach(o=>{if(o!==cur&&o.vis&&o._d!==0){refresh(o);o._d=0}o.g.visible=o.vis&&(!ISO||o===cur||isDesc(o,cur));if(o.lt)lightSync(o)});
+cur.V=V;cur.F=F;mesh=cur.m;lines=cur.l;cur._d=1;O.forEach(o=>{if(o!==cur&&o.vis&&o._d!==0){refresh(o);o._d=0}o.g.visible=o.vis&&(!ISO||o===cur||isDesc(o,cur))});if(LPV())shadowFit();fxScan();
 const pos=[],col=[];triF=[];
 const yb0=ybo(V);F.forEach((q,fi)=>{const hl=mode==='f'&&sel.has(fi),c=hl?C1:mode==='o'?C2:C0;triOf(q,V).forEach(t=>{t.forEach(i=>{pos.push(...V[i]);col.push(...(hl?c:pcl(q,V[i],yb0,c,mode==='o')))});triF.push(fi)})});
 setG(mesh,pos,col);
@@ -324,7 +330,7 @@ function paint(){$$('#seg button').forEach(b=>b.classList.toggle('on',b.dataset.
 function scr(i){const v=new THREE.Vector3(...V[i]).applyMatrix4(cur.g.matrixWorld).project(cam);return v.z>1?null:[(v.x+1)/2*W(),(1-v.y)/2*H()]}
 function dseg(px,py,A,B){const dx=B[0]-A[0],dy=B[1]-A[1],l=dx*dx+dy*dy||1,t=Math.max(0,Math.min(1,((px-A[0])*dx+(py-A[1])*dy)/l));return Math.hypot(px-A[0]-t*dx,py-A[1]-t*dy)}
 const rc=new THREE.Raycaster();
-function tap(x,y){let hit=null;scene.updateMatrixWorld();if(mode==='o'){rc.setFromCamera({x:x/W()*2-1,y:-(y/H())*2+1},cam);const h=rc.intersectObjects(O.filter(o=>o.vis&&!locked(o)).map(o=>o.lt&&o.lp?o.lp:(o.rm.visible?o.rm:o.m)))[0];if(h){pick(h.object.userData.o);rebuild()}return}
+function tap(x,y){let hit=null;scene.updateMatrixWorld();if(mode==='o'){rc.setFromCamera({x:x/W()*2-1,y:-(y/H())*2+1},cam);const h=rc.intersectObjects(O.filter(o=>o.vis&&!locked(o)).map(o=>o.rm.visible?o.rm:o.m))[0];if(h){pick(h.object.userData.o);rebuild()}return}
 if(mode==='v'){const cd=[];V.forEach((_,i)=>{const s=scr(i);if(!s)return;const d=Math.hypot(s[0]-x,s[1]-y);if(d<34)cd.push([d,i])});cd.sort((a,b)=>a[0]-b[0]);const c=cd.find(e=>visV(e[1]));if(c)hit=c[1]}
 else if(mode==='e'){const S=V.map((_,i)=>scr(i)),cd=[];edgeMap().forEach(([p,q],k)=>{if(!S[p]||!S[q])return;const d=dseg(x,y,S[p],S[q]);if(d<26)cd.push([d,k,p,q])});cd.sort((a,b)=>a[0]-b[0]);const c=cd.find(e=>visE(e[2],e[3]));if(c)hit=c[1]}
 else if(F.length){rc.setFromCamera({x:x/W()*2-1,y:-(y/H())*2+1},cam);const h=rc.intersectObject(mesh)[0];if(h)hit=triF[h.faceIndex]}
@@ -346,9 +352,9 @@ const pe=e=>{cEnd(e);const was=P.has(e.pointerId);P.delete(e.pointerId);if(was&&
 cv.addEventListener('pointerup',pe);cv.addEventListener('pointercancel',pe);
 
 /* ---------- edição ---------- */
-function snap(){if(cur){cur.V=V;cur.F=F}return JSON.stringify({O:O.map(({g,m,l,rm,_d,ll,lh,lp,lg,lk,lhk,_pmat,_pk,...r})=>({...r,K:r.F.map(kOf)})),c:cur&&cur.id,u:uid,m:mode,s:[...sel],e:ENV})}
+function snap(){if(cur){cur.V=V;cur.F=F}return JSON.stringify({O:O.map(({g,m,l,rm,_d,_pmat,_pk,...r})=>({...r,K:r.F.map(kOf)})),c:cur&&cur.id,u:uid,m:mode,s:[...sel]})}
 function push(){undo.push(snap());if(undo.length>60)undo.shift();redo=[]}
-function load(s){const d=JSON.parse(s);O.forEach(o=>{if(o.g&&o.g.parent)o.g.parent.remove(o.g);disposeObj(o)});O=d.O;hydrate(O);uid=d.u;build();pick(O.find(o=>o.id===d.c)||O[0]);restoreSel(d);{const ee=envClean(d.e);if(ee){ENV=ee;applyLuz()}}rebuild()}
+function load(s){const d=JSON.parse(s);O.forEach(o=>{if(o.g&&o.g.parent)o.g.parent.remove(o.g);disposeObj(o)});O=d.O;hydrate(O);uid=d.u;build();pick(O.find(o=>o.id===d.c)||O[0]);restoreSel(d);rebuild()}
 function restoreSel(d){const m=PNT?'f':(['o','v','e','f'].includes(d.m)?d.m:mode),n=m==='v'?V.length:F.length;mode=m;sel=new Set(((PNT&&d.m!=='f')?[]:(d.s||[])).filter(x=>m==='e'?String(x).split(',').every(i=>+i<V.length):m==='o'?false:x<n));paint()}
 function moveSel(a,d,raw){if(mode==='o'){const k='trs'[tm];cur[k]=cur[k].slice();cur[k][a]=r4(cur[k][a]+d*(k==='r'&&!raw?15:1));if(k==='s')cur.s[a]=Math.max(.01,cur.s[a]);applyT(cur);rebuild();return}const vs=selVerts();if(!vs.size||!d)return;vs.forEach(i=>V[i][a]=r4(V[i][a]+d));rebuild()}
 function scaleSel(k){if(mode==='o'){push();cur.s=cur.s.map(x=>r4(Math.max(.01,x*k)));applyT(cur);return rebuild()}const vs=selVerts();if(!vs.size)return toast('Selecione algo primeiro');push();const c=center(vs);vs.forEach(i=>{for(let a=0;a<3;a++)V[i][a]=r4(c[a]+(V[i][a]-c[a])*k)});rebuild()}
@@ -409,7 +415,7 @@ decimate:{n:'Decimar (Decimate)',d:{ratio:.5},p:[['ratio','Razão de faces',.05,
 run:(v,f,m)=>{const tg=Math.max(1,Math.round(f.length*m.ratio));for(let it=0;it<400&&f.length>tg;it++){let b=null,d=1e9;edgeMap(f).forEach(([x,y])=>{const L=Math.hypot(v[x][0]-v[y][0],v[x][1]-v[y][1],v[x][2]-v[y][2]);if(L<d){d=L;b=[x,y]}});if(!b)break;const r=wcollapse(v,f,[b]);if(!r[1].length)break;[v,f]=r}return[v,f]}},
 triangulate:{n:'Triangular (Triangulate)',d:{},p:[],run:(v,f)=>[v,f.flatMap(q=>triOf(q,v).map(x=>inh(q,x)))]}};
 function evalMods(o){const ms=(o.mods||[]).filter(m=>m.on&&MOD[m.t]);if(!ms.length||!o.F.length)return null;let v=o.V.map(a=>a.slice()),f=o.F.map(q=>q.slice());ms.forEach(m=>{try{[v,f]=MOD[m.t].run(v,f,m)}catch(e){}});return{V:v,F:f}}
-function showRes(o,cage){const R=evalMods(o);o.rm.visible=!!R;o.m.material=R?MATG:pmat(o);o.rm.material=pmat(o);if(!R){o.m.visible=true;return}const p=[],c=[];tri(R.V,R.F,p,c,o===cur&&mode==='o'?C2:C0,o===cur&&mode==='o');setG(o.rm,p,c);o.m.visible=cage;if(!cage){const l=[],lc=[];edgeMap(R.F).forEach(([a,b])=>{l.push(...R.V[a],...R.V[b]);lc.push(...CE,...CE)});setG(o.l,l,lc)}}
+function showRes(o,cage){const R=evalMods(o);o.rm.visible=!!R;o.m.material=R?MATG:pmat(o);o.rm.material=pmat(o);o.m.castShadow=!R;if(!R){o.m.visible=true;return}const p=[],c=[];tri(R.V,R.F,p,c,o===cur&&mode==='o'?C2:C0,o===cur&&mode==='o');setG(o.rm,p,c);o.m.visible=cage;if(!cage){const l=[],lc=[];edgeMap(R.F).forEach(([a,b])=>{l.push(...R.V[a],...R.V[b]);lc.push(...CE,...CE)});setG(o.l,l,lc)}}
 function modUI(){const b=$('#mlist');if(!b||!cur)return;cur.mods=cur.mods||[];b.textContent='';if(!cur.mods.length){const e=document.createElement('p');e.textContent='Nenhum modificador neste objeto.';e.style.color='var(--mu)';b.append(e)}
 cur.mods.forEach((m,i)=>{const D=MOD[m.t],c=document.createElement('div'),h=document.createElement('div');c.className='mc';h.className='mh';
 const mk=(t,fn,al)=>{const x=document.createElement('button');x.innerHTML=t;x.setAttribute('aria-label',al||t);x.onclick=fn;return x};
@@ -500,7 +506,7 @@ function wbox(items){const mn=[1e9,1e9,1e9],mx=[-1e9,-1e9,-1e9],v=new THREE.Vect
 function frameBox(b){if(!b){tgt.set(0,0,0);dist=distClamp(4.5*fk())}else{tgt.set(b.c[0],b.c[1],b.c[2]);dist=distClamp(Math.max(b.r,.3)/Math.sin(cam.fov*Math.PI/360)*1.15)}upd()}
 function frameAll(){scene.updateMatrixWorld();cur.V=V;cur.F=F;frameBox(wbox(O.filter(o=>o.vis).map(o=>[o.g,(evalMods(o)||o).V])));toast('Enquadrado: tudo')}
 function frameSel(){scene.updateMatrixWorld();cur.V=V;cur.F=F;const vs=mode==='o'?new Set():selVerts();if(vs.size){frameBox(wbox([[cur.g,[...vs].map(i=>V[i])]]));toast('Enquadrado: seleção')}else{frameBox(wbox([[cur.g,(evalMods(cur)||cur).V]]));toast('Enquadrado: objeto')}}
-function paintFabs(){const s=$('#fShd'),c=$('#fCam');s.innerHTML='<span class="tg">'+ic('shade')+'</span><span class="tb">'+SHD[shd]+'</span>';c.innerHTML='<span class="tg">'+ic('persp')+'</span><span class="tb">'+VW[viewIdx][0]+'</span>';$('#fZoom').innerHTML='<span class="tg">'+ic('zoom')+'</span><span class="tb">Zoom</span>';s.classList.remove('on');c.classList.remove('on')}
+function paintFabs(){const s=$('#fShd'),c=$('#fCam');s.innerHTML='<span class="tg">'+ic('shade')+'</span><span class="tb">'+(BASE?SHDS[shd]+' · Base':SHD[shd])+'</span>';c.innerHTML='<span class="tg">'+ic('persp')+'</span><span class="tb">'+VW[viewIdx][0]+'</span>';$('#fZoom').innerHTML='<span class="tg">'+ic('zoom')+'</span><span class="tb">Zoom</span>';s.classList.remove('on');c.classList.remove('on')}
 const ETID=['ext','ins','bev','cut','bis','pbd','spn'],ETN={ext:'Extrusão',ins:'Inserção',bev:'Chanfro',cut:'Corte',bis:'Bissecção',pbd:'Poly',spn:'Gira'},ETL={ext:['Região','Manifold','Normais','Indiv.','Cursor'],ins:['Região','Indiv.'],bev:['Arestas','Vértices'],cut:['Anel','Deslocado'],bis:['Faca','Bisect'],pbd:['Construir'],spn:['Y','X','Z']},ETG={ext:ic('ext'),ins:ic('ins'),bev:ic('bev'),cut:ic('cut'),bis:ic('bis'),pbd:ic('poly'),spn:ic('spin')};
 const fail=m=>{toast(m);return null},un3=(a,b)=>{const e=[0,1,2].map(i=>V[b][i]-V[a][i]),l=Math.hypot(...e)||1;return e.map(x=>x/l)};
 function etUI(){$$('#tools2 [data-et]').forEach(b=>{const t=b.dataset.et;if(!ETN[t])return;const on=t===tool;b.classList.toggle('on',on);b.innerHTML='<span class="tg">'+ETG[t]+'</span><span class="tb">'+(on?ETL[t][sub]:ETN[t])+'</span>'})}
@@ -644,7 +650,7 @@ $('#bTm').onclick=()=>{tm=(tm+1)%3;$('#bTm').textContent=['Posição','Rotação
 $('#nm').onchange=e=>{push();cur.name=e.target.value.slice(0,30)||cur.name;rebuild()};
 $('#par').onchange=e=>{const np=O.find(o=>o.id===+e.target.value);reparent(cur,np||null)};
 $('#bGrp').onclick=()=>{push();const o=newObj('Grupo '+uid,[],[],null);build();pick(o);mode='o';paint();rebuild()};
-$('#bDup').onclick=()=>{push();cur.V=V;cur.F=F;const c=JSON.parse(JSON.stringify({V,F,t:cur.t,r:cur.r,s:cur.s,mods:cur.mods||[]})),o=newObj(cur.name+' cópia',c.V,hydF(c.F,F.map(kOf)),cur.par);o.t=c.t;o.r=c.r;o.s=c.s;o.mods=c.mods;if(cur.lt)o.lt={...cur.lt};if(cur.mt)o.mt={...cur.mt};build();pick(o);rebuild();toast('Duplicado (sem os filhos)')};
+$('#bDup').onclick=()=>{push();cur.V=V;cur.F=F;const c=JSON.parse(JSON.stringify({V,F,t:cur.t,r:cur.r,s:cur.s,mods:cur.mods||[]})),o=newObj(cur.name+' cópia',c.V,hydF(c.F,F.map(kOf)),cur.par);o.t=c.t;o.r=c.r;o.s=c.s;o.mods=c.mods;if(cur.mt)o.mt={...cur.mt};if(cur.fx)o.fx=JSON.parse(JSON.stringify(cur.fx));build();pick(o);rebuild();toast('Duplicado (sem os filhos)')};
 
 
 
@@ -657,11 +663,11 @@ $('#bX').onclick=()=>{cur.V=V;cur.F=F;scene.updateMatrixWorld();let n=0,s='';O.f
 $('#bCl').onclick=()=>$('#modal').hidden=true;
 $('#bCp').onclick=async()=>{const t=$('#obj');try{await navigator.clipboard.writeText(t.value)}catch(e){t.select();try{document.execCommand('copy')}catch(_){}}toast('OBJ copiado. Cole num arquivo .obj')};
 
-let ok=0;try{const s=localStorage.getItem('pp2');if(s){const d=JSON.parse(s);if(d.O&&d.O.length){O=d.O;hydrate(O);{const ee=envClean(d.e);if(ee)ENV=ee}uid=d.u;build();pick(O.find(o=>o.id===d.c)||O[0]);ok=1}}}catch(e){}
+let ok=0;try{const s=localStorage.getItem('pp2');if(s){const d=JSON.parse(s);if(d.O&&d.O.length){O=d.O;hydrate(O);uid=d.u;build();pick(O.find(o=>o.id===d.c)||O[0]);ok=1}}}catch(e){}
 $$('#tools button').forEach(b=>b.onclick=()=>{if(b._lp){b._lp=false;return}const t=b.dataset.t,wasAdd=tool==='add';if(t==='sel')selMode=0;if(wasAdd)addCancel(true);if(!wasAdd&&tool===t)sub=(sub+1)%LAB[t].length;else if(tool!==t){tool=t;sub=0}tm=t==='rot'?1:t==='scl'?2:0;toolsUI();toast(NAMES[t]+': '+LAB[t][sub])});
 lpHold($('#tools [data-t=sel]'),()=>{if(tool==='add')addCancel(true);if(tool!=='sel'){tool='sel';sub=0;selMode=1}else selMode=selMode===1?2:1;tm=0;toolsUI();toast('Seleção: '+(selMode===1?'somando (toque ou área adiciona)':'tirando (toque ou área remove)'))});
 $('#bShape').onclick=()=>{const sbn=$('#bShape');if(sbn._lp){sbn._lp=false;return}if(addT===null)addStart(SHAPES[shapeIdx]);else{shapeIdx=(shapeIdx+1)%SHAPES.length;addSwitch(SHAPES[shapeIdx])}};lpAttach($('#bShape'),()=>SHAPES.map(k=>[GLS[k]+' '+LS[k],()=>{shapeIdx=SHAPES.indexOf(k);if(addT===null)addStart(k);else addSwitch(k)},k===addT]));
-$('#fShd').onclick=()=>{shd=(shd+1)%3;applyShd();paintFabs();toast('Sombreamento: '+SHD[shd])};
+$('#fShd').onclick=()=>{shd=(shd+1)%3;applyShd();paintFabs();toast('Sombreamento: '+SHD[shd]+(BASE?' · base (sem pintura)':''))};
 $('#fCam').onclick=()=>{viewIdx=(viewIdx+1)%VW.length;setView(viewIdx);paintFabs();toast('Vista: '+VW[viewIdx][0])};
 $('#fZoom').onclick=()=>{$('#zp').hidden=!$('#zp').hidden};
 $('#bDelO').onclick=()=>{if(O.length<2)return toast('Mantenha ao menos um objeto');const n=cur.name,k=O.some(o=>o.par===cur.id);delObj();toast('"'+n+'" excluído'+(k?'; os filhos subiram um nível':'')+'. ↶ desfaz')};
@@ -681,7 +687,7 @@ const invalidateAll=()=>O.forEach(o=>{o._d=1});
 const cssGrad=c=>'linear-gradient(to bottom,'+c.map((s,i)=>'rgb('+s[0]+','+s[1]+','+s[2]+') '+Math.round(i/(c.length-1)*100)+'%').join(',')+')';
 const hid=id=>{const e=$(id);if(e)e.hidden=true};
 function pHint(){return({brush:'Pincel: toque ou arraste sobre as faces para pintar',bucket:'Balde: toque numa face para pintar as faces ligadas da mesma cor',swap:'Trocar: toque numa face para trocar todas as faces com a mesma cor',pick:'Pegar: toque numa face para copiar a cor dela',cam:'Câmera: 1 dedo gira · 2 dedos dão zoom e movem'})[ptool]||''}
-function pOpen(){if(LUZ)lClose();if(tool==='add')addCancel(true);['#mods','#hier','#zp','#ctx','#opt'].forEach(hid);sync();pPrev={tool,sub,mode};tool='paint';PNT=1;ptool='brush';if(mode!=='f')setMode('f');$('#app').classList.add('pnt');mswUpdate();pRender();toolsUI();$('#hint').textContent=pHint();rebuild()}
+function pOpen(){if(SHM||LUM)lClose();if(tool==='add')addCancel(true);['#mods','#hier','#zp','#ctx','#opt'].forEach(hid);sync();pPrev={tool,sub,mode};tool='paint';PNT=1;ptool='brush';if(mode!=='f')setMode('f');$('#app').classList.add('pnt');mswUpdate();pRender();toolsUI();$('#hint').textContent=pHint();rebuild()}
 function pClose(){$('#app').classList.remove('pnt');PNT=0;ISO=0;mswUpdate();tool=pPrev&&pPrev.tool!=='paint'?pPrev.tool:'cam';sub=pPrev?pPrev.sub:0;const pm=pPrev?pPrev.mode:'o';if(pm!==mode)setMode(pm);toolsUI();rebuild()}
 $('#pdone').onclick=pClose;
 function pInfo(){const c=PAL.cells[selK];$('#pbig').style.background=c?cssGrad(c):'#222';$('#pinfo').innerHTML=c?'<b>Cor '+(selK+1)+'</b> <span>de '+PAL.cells.length+'</span><br><span>'+hx3(...c[0])+((c[0]+'')!==(c[c.length-1]+'')?' → '+hx3(...c[c.length-1]):'')+' · '+cur.name.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</span>':'Paleta vazia';}
@@ -690,10 +696,11 @@ function pRender(){$('#pts').innerHTML=PT.map(([id,ico,l])=>'<button data-pt="'+
 $('#pts').onclick=e=>{const b=e.target.closest('button');if(!b)return;ptool=b.dataset.pt;pRender()};
 $('#ptabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.tb;if(i===ptab)pcolp=!pcolp;else{ptab=i;pcolp=0}$('#pnt').classList.toggle('mini',!!pcolp);pRender()};
 function pBody(keep){const b=$('#pbody'),st=keep?b.scrollTop:0;b.style.display=pcolp?'none':'';if(pcolp)return;
-if(ptab===0){b.innerHTML='<div class="prow" style="margin-bottom:8px"><select id="psel" aria-label="Paleta"><option value="">'+PAL.name+'</option><option value="g">Gradientes 36×6</option><option value="b">Básica 48</option><option value="v">Vazia (só minhas cores)</option></select><button id="pGm">'+(GM?'Degradê':'Plano')+'</button><button id="pEd" class="'+(LMAT.visible?'on':'')+'">Arestas</button></div><div id="pgrid">'+PAL.cells.map((c,i)=>'<button class="psw'+(i===selK?' on':'')+'" data-k="'+i+'" style="background:'+cssGrad(c)+'"><i>'+(i+1)+'</i></button>').join('')+'</div>';
+if(ptab===0){b.innerHTML='<div class="prow" style="margin-bottom:8px"><select id="psel" aria-label="Paleta"><option value="">'+PAL.name+'</option><option value="g">Gradientes 36×6</option><option value="b">Básica 48</option><option value="v">Vazia (só minhas cores)</option></select><button id="pGm">'+(GM?'Degradê':'Plano')+'</button><button id="pEd" class="'+(LMAT.visible?'on':'')+'">Arestas</button><button id="pLp" class="'+(ENV.on?'on':'')+'">Sombra</button></div><div id="pgrid">'+PAL.cells.map((c,i)=>'<button class="psw'+(i===selK?' on':'')+'" data-k="'+i+'" style="background:'+cssGrad(c)+'"><i>'+(i+1)+'</i></button>').join('')+'</div>';
  $('#psel').onchange=e=>{const v=e.target.value;if(v==='g')PAL=decPal(EMB,36,'Gradientes 36×6');else if(v==='b')PAL=basicPal();else if(v==='v')PAL={name:'Minhas cores',cols:8,cells:[]};else return;selK=0;pAfter();toast('Paleta trocada: as faces guardam o número da cor')};
  $('#pGm').onclick=()=>{GM=1-GM;savePal();invalidateAll();rebuild();pBody(1);toast(GM?'Degradê: a cor varia de cima para baixo':'Plano: uma cor por face')};
  $('#pEd').onclick=()=>{LMAT.visible=!LMAT.visible;dirty=1;pBody(1)};
+ $('#pLp').onclick=()=>$('#bLp').onclick();
  $('#pgrid').onclick=e=>{const x=e.target.closest('.psw');if(x)pSel(+x.dataset.k)}}
 else if(ptab===1){b.innerHTML='<div class="prow"><label class="lb">Topo<input type="color" id="cTop" value="#ff9800"></label><label class="lb">Base<input type="color" id="cBot" value="#ff9800"></label></div><label class="ck"><input type="checkbox" id="cGrad">Degradê (topo → base)</label><div id="cPrev"></div><div class="prow"><button id="cAdd" style="flex:1">Adicionar à paleta</button><button id="cUpd" style="flex:1">Atualizar cor</button></div><p class="tip">Atualizar muda todas as faces que usam a cor selecionada.</p>';
  const c=PAL.cells[selK];if(c){$('#cTop').value=hx3(...c[0]);$('#cBot').value=hx3(...c[c.length-1]);$('#cGrad').checked=(c[0]+'')!==(c[c.length-1]+'')}
@@ -839,85 +846,70 @@ if(!v3(o.t)||!v3(o.r)||!v3(o.s))return'Transformação inválida em "'+nm+'"'}
 for(const o of L){if(o.par!=null){if(!ids.has(o.par))return'Pai inexistente';let g=0,p=o.par;while(p!=null&&g++<L.length+1){const x=L.find(y=>y.id===p);p=x?x.par:null}if(g>L.length)return'Hierarquia em ciclo'}}
 return null}
 function projClean(d){return d.scene.O.map(o=>{const m=[];(Array.isArray(o.mods)?o.mods:[]).forEach(x=>{if(!x||typeof x.t!=='string'||!Object.prototype.hasOwnProperty.call(MOD,x.t))return;const y={t:x.t,on:x.on!==false};Object.keys(MOD[x.t].d).forEach(k=>{if(typeof x[k]===typeof MOD[x.t].d[k])y[k]=x[k]});m.push(y)});
-return{lt:ltClean(o.lt),mt:mtClean(o.mt),id:o.id,name:String(o.name||'Objeto').slice(0,60),V:o.V.map(v=>v.slice()),F:o.F.map(q=>q.slice()),K:Array.isArray(o.K)&&o.K.length===o.F.length?o.K.map(k=>Number.isInteger(k)?k:-1):undefined,par:o.par==null?null:o.par,vis:o.vis!==false,lock:!!o.lock,fold:!!o.fold,mods:m,t:o.t.slice(),r:o.r.slice(),s:o.s.slice()}})}
-function projSave(){cur.V=V;cur.F=F;const d={app:'PolyPocket',fmt:1,saved:new Date().toISOString(),scene:JSON.parse(snap()),pal:{name:PAL.name,cols:PAL.cols,cells:PAL.cells},gm:GM},st=new Date().toISOString().slice(0,16).replace(/[-:]/g,'').replace('T','_');
+return{fx:fxClean(o.fx),mt:mtClean(o.mt),id:o.id,name:String(o.name||'Objeto').slice(0,60),V:o.V.map(v=>v.slice()),F:o.F.map(q=>q.slice()),K:Array.isArray(o.K)&&o.K.length===o.F.length?o.K.map(k=>Number.isInteger(k)?k:-1):undefined,par:o.par==null?null:o.par,vis:o.vis!==false,lock:!!o.lock,fold:!!o.fold,mods:m,t:o.t.slice(),r:o.r.slice(),s:o.s.slice()}})}
+function projSave(){cur.V=V;cur.F=F;const d={app:'PolyPocket',fmt:1,saved:new Date().toISOString(),scene:JSON.parse(snap()),pal:{name:PAL.name,cols:PAL.cols,cells:PAL.cells},gm:GM,luz:ENV,noise:NZ},st=new Date().toISOString().slice(0,16).replace(/[-:]/g,'').replace('T','_');
 saveBlob(new Blob([JSON.stringify(d)],{type:'application/json'}),'polypocket_'+st+'.json');toast('Projeto salvo em arquivo')}
 async function projOpen(f){if(!f)return;if(f.size>40e6)return toast('Arquivo grande demais');let d;try{d=JSON.parse(await f.text())}catch(e){return toast('Arquivo inválido (não é JSON)')}
 const err=projCheck(d);if(err)return toast(err);
-const L=projClean(d),u2=Math.max(...L.map(o=>o.id))+1;push();load(JSON.stringify({O:L,c:d.scene.c,u:u2,m:'o',s:[],e:d.scene.e}));
+const L=projClean(d),u2=Math.max(...L.map(o=>o.id))+1;push();load(JSON.stringify({O:L,c:d.scene.c,u:u2,m:'o',s:[]}));
 const p=d.pal;if(p&&Number.isInteger(p.cols)&&p.cols>=1&&p.cols<=256&&Array.isArray(p.cells)&&p.cells.length<=4096&&p.cells.every(c=>Array.isArray(c)&&c.length>=2&&c.every(s=>Array.isArray(s)&&s.length===3&&s.every(x=>Number.isInteger(x)&&x>=0&&x<=255)))){PAL={name:String(p.name||'Paleta').slice(0,40),cols:p.cols,cells:p.cells.map(c=>c.map(s=>s.slice()))};GM=d.gm?1:0;selK=0;savePal()}
-invalidateAll();rebuild();if(PNT)pRender();toast('Projeto aberto: '+L.length+' objeto(s). Desfazer volta ao anterior')}
+{const le=envClean(d.luz);if(le){ENV=le;saveEnv()}}if(Array.isArray(d.noise)){NZ=nzClean(d.noise);Object.keys(NZC).forEach(k=>delete NZC[k]);nzSave()}applyLuz();invalidateAll();rebuild();if(PNT)pRender();toast('Projeto aberto: '+L.length+' objeto(s). Desfazer volta ao anterior')}
 $('#bGlb').onclick=expGlb;$('#bSv').onclick=projSave;$('#bOp').onclick=()=>$('#fProj').click();$('#fProj').onchange=e=>{const f=e.target.files[0];e.target.value='';projOpen(f)};
 
 /* ---------- bloco 6: modos Modelar / Pintar no menu + hierarquia na pintura ---------- */
 $('#mModel').innerHTML='<span class="tg">'+ic('cube')+'</span><span class="tb">Modelar</span>';
 $('#mPaint').innerHTML='<span class="tg">'+ic('palette')+'</span><span class="tb">Pintar</span>';
-function mswUpdate(){$('#mModel').classList.toggle('on',!PNT&&!LUZ);$('#mPaint').classList.toggle('on',!!PNT);$('#mLuz').classList.toggle('on',!!LUZ);document.body.classList.toggle('pntm',!!PNT);document.body.classList.toggle('lumm',!!LUZ);$('#top h1').innerHTML='PolyPocket'+(PNT?'<small>PINTURA</small>':LUZ?'<small>LUZ</small>':'')}
-$('#mModel').onclick=()=>{closeMenu();if(PNT)pClose();if(LUZ)lClose()};
-$('#mPaint').onclick=()=>{closeMenu();if(LUZ)lClose();if(!PNT)pOpen()};
-$('#mLuz').onclick=()=>{closeMenu();if(!LUZ)lOpen()};
+function mswUpdate(){$('#mModel').classList.toggle('on',!PNT&&!SHM&&!LUM);$('#mPaint').classList.toggle('on',!!PNT);$('#mShd').classList.toggle('on',!!SHM);$('#mLuz').classList.toggle('on',!!LUM);document.body.classList.toggle('pntm',!!PNT);document.body.classList.toggle('lumm',!!(SHM||LUM));$('#top h1').innerHTML='PolyPocket'+(PNT?'<small>PINTURA</small>':SHM?'<small>SHADER</small>':LUM?'<small>LUZ</small>':'')}
+$('#mModel').onclick=()=>{closeMenu();if(PNT)pClose();if(SHM||LUM)lClose()};
+$('#mPaint').onclick=()=>{closeMenu();if(SHM||LUM)lClose();if(!PNT)pOpen()};
+$('#mShd').onclick=()=>{closeMenu();if(LUM)lClose();if(!SHM)lOpen('sh')};
+$('#mLuz').onclick=()=>{closeMenu();if(SHM)lClose();if(!LUM)lOpen('lz')};
 mswUpdate();
 function pTree(){const el=$('#ptree');if(!el)return;el.textContent='';
 (function walk(p,d){O.filter(o=>(o.par==null?null:o.par)===p).forEach(o=>{const kids=O.some(x=>x.par===o.id),r=document.createElement('div');r.className='tr'+(o===cur?' cur':'')+(locked(o)?' lk':'');r.style.paddingLeft=d*16+'px';
 const fo=document.createElement('button');fo.className='fo';fo.textContent=kids?(o.fold?'▸':'▾'):'·';fo.setAttribute('aria-label','Abrir ou fechar grupo');fo.onclick=()=>{o.fold=!o.fold;pTree()};
-const n=document.createElement('button');n.className='nm';const pn=o.F.filter(q=>q.k!=null&&q.k>=0).length;n.textContent=(o.lt?'☀ ':o.F.length?'▣ ':'▢ ')+o.name+(o.F.length?'  '+pn+'/'+o.F.length:'');n.onclick=()=>pObj(o);
+const n=document.createElement('button');n.className='nm';const pn=o.F.filter(q=>q.k!=null&&q.k>=0).length;n.textContent=(o.F.length?'▣ ':'▢ ')+o.name+(o.F.length?'  '+pn+'/'+o.F.length:'');n.onclick=()=>pObj(o);
 const ey=document.createElement('button');ey.innerHTML=ic(o.vis?'eye':'eyeoff');ey.setAttribute('aria-label','Mostrar ou esconder');ey.onclick=()=>{o.vis=!o.vis;rebuild();pTree()};
 r.append(fo,n,ey);el.append(r);if(!o.fold)walk(o.id,d+1)})})(null,0)}
-function pObj(o){if(o.lt)return toast('Luz não tem faces para pintar');if(locked(o))return toast('Objeto bloqueado: libere o cadeado na hierarquia do modo Modelar');pick(o);rebuild();pInfo();pTree();toast('Pintando: '+o.name)}
+function pObj(o){if(locked(o))return toast('Objeto bloqueado: libere o cadeado na hierarquia do modo Modelar');pick(o);rebuild();pInfo();pTree();toast('Pintando: '+o.name)}
 function pGroup(){if(!PAL.cells.length)return toast('Adicione uma cor na aba Cor');const ids=new Set([cur.id]);let ch=1;while(ch){ch=0;O.forEach(o=>{if(o.par!=null&&ids.has(o.par)&&!ids.has(o.id)){ids.add(o.id);ch=1}})}
 const L=O.filter(o=>ids.has(o.id)&&!locked(o)||o===cur),todo=[];L.forEach(o=>{o.F.forEach((q,i)=>{if(kOf(q)!==selK)todo.push([o,i])})});
 if(!todo.length)return toast('Nada mudou');push();todo.forEach(([o,i])=>{paintOF(o,i,selK);o._d=1});rebuild();pTree();toast(todo.length+' faces pintadas em '+L.filter(o=>o.F.length).length+' objeto(s)')}
 
-/* ---------- bloco 7: luz, material e perfis de motor ---------- */
+/* ---------- bloco 7: shader, luz e sombra (configuração de prévia) ---------- */
 const MSTY=[['pbr','Padrão','Realista (PBR)'],['unlit','Sem luz','Cor chapada'],['glow','Brilho','Emissivo'],['glass','Vidro','Transparente'],['toon','Cartoon','Só na prévia']],MNAME={pbr:'Padrão',unlit:'Sem luz',glow:'Brilho',glass:'Vidro',toon:'Cartoon'};
-const ENVP={dia:{n:'Dia',sky:'#bfe3ff',gnd:'#6b5a3e',int:.9,bg:'#7ec8ff',sun:{c:'#fff4d6',i:2.2,t:[5,9,4]}},tarde:{n:'Entardecer',sky:'#ffb27a',gnd:'#3a2a4a',int:.6,bg:'#43294f',sun:{c:'#ff9a4d',i:1.6,t:[7,2.5,3]}},noite:{n:'Noite',sky:'#1c2a55',gnd:'#05070d',int:.35,bg:'#04060f',sun:{c:'#8fb4ff',i:.6,t:[-4,7,-3]}},estudio:{n:'Estúdio',sky:'#ffffff',gnd:'#8a8a8a',int:.8,bg:'#20242c',sun:{c:'#ffffff',i:1.8,t:[3,6,5]}},neon:{n:'Neon',sky:'#6a3dff',gnd:'#00323a',int:.5,bg:'#0b0618',sun:{c:'#ff3dcb',i:1.4,t:[-5,4,3]}}};
+const ENVP={dia:{n:'Dia',sky:'#bfe3ff',gnd:'#6b5a3e',int:.9,bg:'#7ec8ff',sc:'#fff4d6',si:2.2,az:40,el:60},tarde:{n:'Entardecer',sky:'#ffb27a',gnd:'#3a2a4a',int:.6,bg:'#43294f',sc:'#ff9a4d',si:1.6,az:75,el:18},noite:{n:'Noite',sky:'#1c2a55',gnd:'#05070d',int:.35,bg:'#04060f',sc:'#8fb4ff',si:.6,az:220,el:50},estudio:{n:'Estúdio',sky:'#ffffff',gnd:'#8a8a8a',int:.8,bg:'#20242c',sc:'#ffffff',si:1.8,az:20,el:50},neon:{n:'Neon',sky:'#6a3dff',gnd:'#00323a',int:.5,bg:'#0b0618',sc:'#ff3dcb',si:1.4,az:300,el:35}};
 function isHex(x){return typeof x==='string'&&/^#[0-9a-f]{6}$/i.test(x)}
 function numc(x,a,b,d){return typeof x==='number'&&isFinite(x)?Math.min(b,Math.max(a,x)):d}
-function envClean(e){if(!e||typeof e!=='object')return null;return{n:String(e.n||'Personalizado').slice(0,24),sky:isHex(e.sky)?e.sky:'#bfe6ff',gnd:isHex(e.gnd)?e.gnd:'#2a3550',bg:isHex(e.bg)?e.bg:'#0a0e18',int:numc(e.int,0,5,.9)}}
-function ltClean(x){if(!x||typeof x!=='object'||!['sun','point','spot'].includes(x.k))return undefined;return{k:x.k,c:isHex(x.c)?x.c:'#ffffff',i:numc(x.i,0,100,1),r:numc(x.r,0,1000,0),a:numc(x.a,1,90,35),p:numc(x.p,0,1,.2)}}
+function envClean(e){if(!e||typeof e!=='object')return null;return{n:String(e.n||'Personalizado').slice(0,24),sky:isHex(e.sky)?e.sky:'#bfe6ff',gnd:isHex(e.gnd)?e.gnd:'#2a3550',bg:isHex(e.bg)?e.bg:'#0a0e18',int:numc(e.int,0,5,.9),sc:isHex(e.sc)?e.sc:'#fff4d6',si:numc(e.si,0,10,1.6),az:numc(e.az,0,360,40),el:numc(e.el,3,90,55),sh:e.sh===0||e.sh===false?0:1,gr:e.gr===0||e.gr===false?0:1,on:e.on?1:0}}
 function mtClean(x){if(!x||typeof x!=='object'||!MNAME[x.k])return undefined;return{k:x.k,ro:numc(x.ro,0,1,.85),me:numc(x.me,0,1,0),gl:numc(x.gl,0,20,1),al:numc(x.al,0,1,.4),db:x.db?1:0}}
 const MDEF={k:'pbr',ro:.85,me:0,gl:1,al:.4,db:0},matOf=o=>Object.assign({},MDEF,o.mt);
-let ENG={p:'gen',l:1,m:1};try{const e=JSON.parse(localStorage.getItem('pp2eng'));if(e&&['unity','unreal','godot','gen'].includes(e.p))ENG={p:e.p,l:e.l?1:0,m:numc(e.m,.001,10000,1)}}catch(e){}
+const LPV=()=>!!LUM||!!ENV.on;
+ENV=envClean(ENV)||ENV;try{const e=envClean(JSON.parse(localStorage.getItem('pp2luz')));if(e)ENV=e}catch(e){}
+const saveEnv=()=>{try{localStorage.setItem('pp2luz',JSON.stringify(ENV))}catch(e){}};
+let ENG={p:'gen',l:0,m:1};try{const e=JSON.parse(localStorage.getItem('pp2eng'));if(e&&['unity','unreal','godot','gen'].includes(e.p))ENG={p:e.p,l:e.l?1:0,m:numc(e.m,.001,10000,1)}}catch(e){}
 const saveEng=()=>{try{localStorage.setItem('pp2eng',JSON.stringify(ENG))}catch(e){}};
-const saveEnv=()=>saveSoon();
-/* ----- materiais de prévia (só no modo Luz) ----- */
+/* ----- materiais de prévia (modo Shader) ----- */
 const TOON3=(()=>{const t=new THREE.DataTexture(new Uint8Array([70,160,255]),3,1,THREE.LuminanceFormat);t.minFilter=t.magFilter=THREE.NearestFilter;t.needsUpdate=true;return t})();
-function prevMat(o){const m=matOf(o),key=[m.k,m.ro,m.me,m.gl,m.al,m.db].join('|');if(o._pk===key&&o._pmat)return o._pmat;if(o._pmat)o._pmat.dispose();
-const side=(m.db||m.k==='glass')?THREE.DoubleSide:THREE.FrontSide,b={vertexColors:true,side};let x;
-if(m.k==='unlit')x=new THREE.MeshBasicMaterial(b);
-else if(m.k==='toon')x=new THREE.MeshToonMaterial({...b,gradientMap:TOON3});
-else if(m.k==='glass')x=new THREE.MeshStandardMaterial({...b,roughness:.1,metalness:0,transparent:true,opacity:m.al,depthWrite:false});
-else{x=new THREE.MeshStandardMaterial({...b,roughness:m.ro,metalness:m.me});if(m.k==='glow'){const u={value:m.gl};x.onBeforeCompile=s=>{s.uniforms.uGlow=u;s.fragmentShader=s.fragmentShader.replace('#include <common>','#include <common>\nuniform float uGlow;').replace('vec3 totalEmissiveRadiance = emissive;','vec3 totalEmissiveRadiance = emissive + vColor * uGlow;')};x.customProgramCacheKey=()=>'pp-glow'}}
-o._pk=key;o._pmat=x;return x}
-function pmat(o){return LUZ&&!o.lt?prevMat(o):MAT}
-/* ----- ambiente ----- */
+function pmat(o){return MPV()?prevMat(o):MAT}
+/* ----- luz única de prévia, ambiente e sombras ----- */
 let LGRID=0,LMVIS=true,lPrev=null,_env=null,_envk='';
 const envL=new THREE.HemisphereLight(0xffffff,0x444444,.9);envL.visible=false;scene.add(envL);
+const sun=new THREE.DirectionalLight(0xffffff,1);sun.visible=false;sun.shadow.mapSize.set(1024,1024);sun.shadow.bias=-.0006;sun.shadow.normalBias=.03;scene.add(sun,sun.target);
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.ShadowMaterial({opacity:.4}));ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;ground.visible=false;scene.add(ground);
 function envTex(){const k=ENV.sky+ENV.gnd;if(_env&&_envk===k)return _env;const mk=f=>{const c=document.createElement('canvas');c.width=c.height=32;const g=c.getContext&&c.getContext('2d');if(!g)return null;f(g);return c};
 const side=()=>mk(g=>{const gr=g.createLinearGradient(0,0,0,32);gr.addColorStop(0,ENV.sky);gr.addColorStop(.5,ENV.sky);gr.addColorStop(.5,ENV.gnd);gr.addColorStop(1,ENV.gnd);g.fillStyle=gr;g.fillRect(0,0,32,32)}),flat=c=>mk(g=>{g.fillStyle=c;g.fillRect(0,0,32,32)});
 const im=[side(),side(),flat(ENV.sky),flat(ENV.gnd),side(),side()];if(im.some(x=>!x))return null;if(_env)_env.dispose();_env=new THREE.CubeTexture(im);_env.needsUpdate=true;_envk=k;return _env}
-function applyLuz(){const on=!!LUZ;hemi.visible=dl.visible=!on;envL.visible=on;envL.color.set(ENV.sky);envL.groundColor.set(ENV.gnd);envL.intensity=ENV.int;
-ren.setClearColor(on?ENV.bg:0x090d16,on?1:0);scene.fog.color.set(on?ENV.bg:0x090d16);scene.fog.near=on?12:6;scene.fog.far=on?60:20;
-grid.visible=!on||!!LGRID;axl.forEach(a=>{a.visible=!on||!!LGRID});LMAT.visible=on?false:LMVIS;scene.environment=on?envTex():null;dirty=1}
-/* ----- luzes como objetos ----- */
-function sceneCenter(){scene.updateMatrixWorld();const mn=[1e9,1e9,1e9],mx=[-1e9,-1e9,-1e9];let n=0;O.forEach(o=>{if(!o.F.length||!o.vis)return;o.V.forEach(v=>{const w=new THREE.Vector3(...v).applyMatrix4(o.g.matrixWorld);[w.x,w.y,w.z].forEach((x,a)=>{if(x<mn[a])mn[a]=x;if(x>mx[a])mx[a]=x});n++})});return n?mn.map((m,a)=>(m+mx[a])/2):[0,0,0]}
-function aimLight(o,tg){scene.updateMatrixWorld();const eye=new THREE.Vector3();o.g.getWorldPosition(eye);const m=new THREE.Matrix4().lookAt(eye,new THREE.Vector3(...tg),new THREE.Vector3(0,1,0)),q=new THREE.Quaternion().setFromRotationMatrix(m);
-if(o.g.parent&&o.g.parent!==scene){const pq=new THREE.Quaternion();o.g.parent.getWorldQuaternion(pq);q.premultiply(pq.invert())}
-const e=new THREE.Euler().setFromQuaternion(q,'XYZ');o.r=[e.x,e.y,e.z].map(x=>r4(x*180/Math.PI));applyT(o)}
-function lightHelper(L){const g=new THREE.Group(),col=new THREE.Color(L.c),pts=[];g.add(new THREE.Mesh(new THREE.SphereGeometry(.14,10,8),new THREE.MeshBasicMaterial({color:col,fog:false})));
-if(L.k==='sun'){for(let i=0;i<8;i++){const a=i/8*6.2832;pts.push(Math.cos(a)*.22,Math.sin(a)*.22,0,Math.cos(a)*.38,Math.sin(a)*.38,0)}pts.push(0,0,0,0,0,-1.6,0,0,-1.6,.12,0,-1.4,0,0,-1.6,-.12,0,-1.4)}
-else if(L.k==='point'){const r=.3;[[1,0,0],[0,1,0],[0,0,1]].forEach(([x,y,z])=>pts.push(x*r,y*r,z*r,-x*r,-y*r,-z*r))}
-else{const d=1.6,rr=Math.tan(Math.min(L.a,80)*Math.PI/180)*d;for(let i=0;i<4;i++){const a=i/4*6.2832;pts.push(0,0,0,Math.cos(a)*rr,Math.sin(a)*rr,-d)}for(let i=0;i<16;i++){const a=i/16*6.2832,b=(i+1)/16*6.2832;pts.push(Math.cos(a)*rr,Math.sin(a)*rr,-d,Math.cos(b)*rr,Math.sin(b)*rr,-d)}}
-const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));g.add(new THREE.LineSegments(geo,new THREE.LineBasicMaterial({color:col,fog:false})));return g}
-function lightSync(o){const L=o.lt;if(!L)return;
-if(!o.ll||o.lk!==L.k){if(o.ll)o.g.remove(o.ll);if(o.lg)o.g.remove(o.lg);o.lg=null;o.ll=L.k==='sun'?new THREE.DirectionalLight():L.k==='point'?new THREE.PointLight():new THREE.SpotLight();o.ll.position.set(0,0,0);if(L.k!=='point'){o.lg=new THREE.Object3D();o.lg.position.set(0,0,-1);o.g.add(o.lg);o.ll.target=o.lg}o.g.add(o.ll);o.lk=L.k}
-if(!o.lp){o.lp=new THREE.Mesh(new THREE.SphereGeometry(.4,8,6),new THREE.MeshBasicMaterial({visible:false}));o.lp.userData.o=o;o.g.add(o.lp)}
-o.ll.color.set(L.c);o.ll.intensity=(L.k==='sun'?1:6)*L.i;if(L.k!=='sun'){o.ll.distance=L.r;o.ll.decay=2}if(L.k==='spot'){o.ll.angle=Math.min(89,L.a)*Math.PI/180;o.ll.penumbra=L.p}
-o.ll.visible=!!LUZ&&!!o.vis;const hk=L.k+L.c+L.a;if(o.lhk!==hk){if(o.lh){o.g.remove(o.lh);o.lh.traverse(x=>{if(x.geometry)x.geometry.dispose();if(x.material)x.material.dispose()})}o.lh=lightHelper(L);o.g.add(o.lh);o.lhk=hk}o.lh.visible=!!o.vis&&!PNT}
-function mkLight(k,over){const nm={sun:'Sol',point:'Luz de ponto',spot:'Holofote'},o=newObj(nm[k]+' '+uid,[],[],null);o.lt=Object.assign({k,c:'#ffffff',i:k==='sun'?1.5:k==='point'?2:3,r:0,a:35,p:.2},over&&over.lt);o.t=(over&&over.t)||(k==='sun'?[4,8,4]:k==='point'?[2,3,2]:[0,5,0]);build();if(k!=='point')aimLight(o,sceneCenter());return o}
-function newLight(k){push();const o=mkLight(k);pick(o);mode='o';paint();rebuild();lRender();toast('Luz criada. Ajuste cor, intensidade e posição abaixo');return o}
-function delLight(o){if(O.length<2)return toast('Mantenha ao menos um objeto');pick(o);delObj();lRender()}
-function applyEnvP(key){const p=ENVP[key];if(!p)return;push();ENV={n:p.n,sky:p.sky,gnd:p.gnd,bg:p.bg,int:p.int};saveEnv();let o=O.find(x=>x.lt&&x.lt.k==='sun'&&x.name==='Sol (tema)');if(!o){o=mkLight('sun');o.name='Sol (tema)'}o.lt.c=p.sun.c;o.lt.i=p.sun.i;o.t=p.sun.t.slice();applyT(o);aimLight(o,sceneCenter());applyLuz();invalidateAll();rebuild();lRender();toast('Ambiente: '+p.n)}
+function sceneBox(){scene.updateMatrixWorld();const mn=[1e9,1e9,1e9],mx=[-1e9,-1e9,-1e9],v=new THREE.Vector3();let n=0;O.forEach(o=>{if(!o.vis||!o.F.length)return;o.V.forEach(p=>{v.set(p[0],p[1],p[2]).applyMatrix4(o.g.matrixWorld);if(v.x<mn[0])mn[0]=v.x;if(v.y<mn[1])mn[1]=v.y;if(v.z<mn[2])mn[2]=v.z;if(v.x>mx[0])mx[0]=v.x;if(v.y>mx[1])mx[1]=v.y;if(v.z>mx[2])mx[2]=v.z;n++})});
+if(!n)return{c:[0,0,0],r:2,min:[0,0,0]};const c=mn.map((m,a)=>(m+mx[a])/2);return{c,r:Math.max(.5,Math.hypot(mx[0]-mn[0],mx[1]-mn[1],mx[2]-mn[2])/2),min:mn}}
+function sunDir(){const a=ENV.az*Math.PI/180,e=ENV.el*Math.PI/180;return[Math.cos(e)*Math.sin(a),Math.sin(e),Math.cos(e)*Math.cos(a)]}
+function shadowFit(){if(!LPV())return;const b=sceneBox(),r=Math.max(1.5,b.r*1.2),d=sunDir();sun.target.position.set(...b.c);sun.position.set(b.c[0]+d[0]*r*2.5,b.c[1]+d[1]*r*2.5,b.c[2]+d[2]*r*2.5);
+const c=sun.shadow.camera;c.left=c.bottom=-r;c.right=c.top=r;c.near=.1;c.far=r*6;c.updateProjectionMatrix();sun.target.updateMatrixWorld();ground.position.set(b.c[0],.003,b.c[2]);ground.scale.set(r*6,r*6,1)}
+function applyLuz(){const lp=LPV(),mp=MPV(),sm=!!LUM;hemi.visible=dl.visible=!lp;envL.visible=lp;envL.color.set(ENV.sky);envL.groundColor.set(ENV.gnd);envL.intensity=ENV.int;
+sun.visible=lp;sun.color.set(ENV.sc);sun.intensity=ENV.si;sun.castShadow=lp&&!!ENV.sh;ground.visible=lp&&!!ENV.sh&&!!ENV.gr;
+ren.setClearColor(sm?ENV.bg:0x090d16,sm?1:0);scene.fog.color.set(sm?ENV.bg:0x090d16);scene.fog.near=sm?12:6;scene.fog.far=sm?60:20;
+grid.visible=!sm||!!LGRID;axl.forEach(a=>{a.visible=!sm||!!LGRID});LMAT.visible=mp?false:LMVIS;scene.environment=mp?envTex():null;shadowFit();dirty=1}
+function applyEnvP(key){const p=ENVP[key];if(!p)return;ENV=envClean(Object.assign({},ENV,p));saveEnv();applyLuz();lRender();toast('Tema: '+p.n)}
 /* ----- exportar ----- */
 const lin=c=>{const x=c/255;return x<=.04045?x/12.92:Math.pow((x+.055)/1.055,2.4)};
 const glbOpts=()=>({profile:ENG.p,lights:ENG.l,lmul:ENG.m});
@@ -929,16 +921,13 @@ else if(m.k==='toon'){pb.metallicFactor=0;pb.roughnessFactor=1;d.name='Cartoon (
 else if(m.k==='glass'){pb.baseColorFactor=[1,1,1,m.al];pb.metallicFactor=0;pb.roughnessFactor=.1;d.alphaMode='BLEND'}
 else if(m.k==='glow'){d.emissiveTexture={index:0};if(m.gl>1&&prof!=='unreal'){d.emissiveFactor=[1,1,1];d.extensions={KHR_materials_emissive_strength:{emissiveStrength:m.gl}};used.add('KHR_materials_emissive_strength')}else{const f=Math.min(1,m.gl);d.emissiveFactor=[f,f,f]}}
 return d}
-function buildGLB(png,opts){opts=Object.assign(glbOpts(),opts||{});cur.V=V;cur.F=F;const nc=PAL.cells.length,chunks=[],bv=[],acc=[],meshes=[],nodes=[],mats=[],midx=new Map(),used=new Set(),lights=[];let off=0;
+function buildGLB(png,opts){opts=Object.assign(glbOpts(),opts||{});cur.V=V;cur.F=F;const nc=PAL.cells.length,chunks=[],bv=[],acc=[],meshes=[],nodes=[],mats=[],midx=new Map(),used=new Set();let off=0;
 const addBuf=(ta,target)=>{const u8=new Uint8Array(ta.buffer,ta.byteOffset,ta.byteLength),pad=(4-off%4)%4;if(pad){chunks.push(new Uint8Array(pad));off+=pad}bv.push({buffer:0,byteOffset:off,byteLength:u8.length,...(target?{target}:{})});chunks.push(u8);off+=u8.length;return bv.length-1};
 const matFor=o=>{const m=matOf(o),key=JSON.stringify(m);if(!midx.has(key)){midx.set(key,mats.length);mats.push(gMat(m,opts.profile,used))}return midx.get(key)};
 const idx=new Map();
 O.forEach(o0=>{const o=Object.assign({},o0,evalMods(o0)||{}),nd={name:o0.name};
 const qn=new THREE.Quaternion().setFromEuler(new THREE.Euler(...o0.r.map(d=>d*Math.PI/180),'XYZ'));nd.translation=o0.t.map(Number);nd.rotation=[qn.x,qn.y,qn.z,qn.w];nd.scale=o0.s.map(Number);
-if(o0.lt&&opts.lights&&o0.vis){const L=o0.lt,gl={type:L.k==='sun'?'directional':L.k==='point'?'point':'spot',name:o0.name,color:[1,3,5].map(i=>lin(parseInt(L.c.slice(i,i+2),16))),intensity:L.i*opts.lmul};
-if(L.k!=='sun'&&L.r>0)gl.range=L.r;if(L.k==='spot'){const oc=Math.min(Math.PI/2,L.a*Math.PI/180);gl.spot={outerConeAngle:oc,innerConeAngle:oc*(1-Math.max(.02,L.p))}}
-nd.extensions={KHR_lights_punctual:{light:lights.length}};lights.push(gl);used.add('KHR_lights_punctual')}
-if(o0.vis&&o.F.length&&!o0.lt){const pos=[],nor=[],uv=[],yb=ybo(o.V);
+if(o0.vis&&o.F.length){const pos=[],nor=[],uv=[],yb=ybo(o.V);
 o.F.forEach(q=>{const k=q.k!=null&&q.k>=0&&q.k<nc?q.k:nc;triOf(q,o.V).forEach(t=>{const a=o.V[t[0]],b=o.V[t[1]],c=o.V[t[2]],ux=b[0]-a[0],uy=b[1]-a[1],uz=b[2]-a[2],wx=c[0]-a[0],wy=c[1]-a[1],wz=c[2]-a[2];let nx=uy*wz-uz*wy,ny=uz*wx-ux*wz,nz=ux*wy-uy*wx;const l=Math.hypot(nx,ny,nz);if(l<1e-12){nx=0;ny=1;nz=0}else{nx/=l;ny/=l;nz/=l}
 t.forEach(i=>{const p=o.V[i];pos.push(p[0],p[1],p[2]);nor.push(nx,ny,nz);const tt=yb[1]-yb[0]>1e-9?(yb[1]-p[1])/(yb[1]-yb[0]):.5,uvv=uvOf(k,tt);uv.push(uvv[0],1-uvv[1])})})});
 if(pos.length){const mn=[1e30,1e30,1e30],mx=[-1e30,-1e30,-1e30];for(let i=0;i<pos.length;i+=3)for(let a=0;a<3;a++){mn[a]=Math.min(mn[a],pos[i+a]);mx[a]=Math.max(mx[a],pos[i+a])}
@@ -948,63 +937,275 @@ idx.set(o0.id,nodes.length);nodes.push(nd)});
 if(!meshes.length)return null;
 O.forEach(o0=>{if(o0.par!=null&&idx.has(o0.par)){const p=nodes[idx.get(o0.par)];(p.children||(p.children=[])).push(idx.get(o0.id))}});
 const roots=O.filter(o=>o.par==null||!idx.has(o.par)).map(o=>idx.get(o.id)),img=addBuf(png),pad=(4-off%4)%4;if(pad){chunks.push(new Uint8Array(pad));off+=pad}
+let lights=null;if(opts.lights){const b=sceneBox(),d=sunDir(),eye=new THREE.Vector3(b.c[0]+d[0]*5,b.c[1]+d[1]*5,b.c[2]+d[2]*5),q=new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().lookAt(eye,new THREE.Vector3(...b.c),new THREE.Vector3(0,1,0)));
+lights=[{type:'directional',name:'Sol da prévia',color:[1,3,5].map(i=>lin(parseInt(ENV.sc.slice(i,i+2),16))),intensity:ENV.si*opts.lmul}];used.add('KHR_lights_punctual');
+nodes.push({name:'Sol da prévia',translation:eye.toArray(),rotation:[q.x,q.y,q.z,q.w],extensions:{KHR_lights_punctual:{light:0}}});roots.push(nodes.length-1)}
 const g={asset:{version:'2.0',generator:'PolyPocket'},scene:0,scenes:[{nodes:roots}],nodes,meshes,materials:mats,textures:[{sampler:0,source:0}],samplers:[{magFilter:9729,minFilter:9729,wrapS:33071,wrapT:33071}],images:[{bufferView:img,mimeType:'image/png'}],accessors:acc,bufferViews:bv,buffers:[{byteLength:off}]};
-if(lights.length)g.extensions={KHR_lights_punctual:{lights}};if(used.size)g.extensionsUsed=[...used];
+if(lights)g.extensions={KHR_lights_punctual:{lights}};if(used.size)g.extensionsUsed=[...used];
 const js=new TextEncoder().encode(JSON.stringify(g)),jl=Math.ceil(js.length/4)*4,tot=12+8+jl+8+off,out=new Uint8Array(tot),dv=new DataView(out.buffer);
 dv.setUint32(0,0x46546C67,true);dv.setUint32(4,2,true);dv.setUint32(8,tot,true);dv.setUint32(12,jl,true);dv.setUint32(16,0x4E4F534A,true);out.set(js,20);out.fill(0x20,20+js.length,20+jl);
 dv.setUint32(20+jl,off,true);dv.setUint32(24+jl,0x004E4942,true);let p=28+jl;chunks.forEach(c=>{out.set(c,p);p+=c.length});return out}
 
-/* ----- painel Luz ----- */
-const PNAME={unity:'Unity',unreal:'Unreal',godot:'Godot',gen:'Genérico'},LT=['Luzes','Material','Ambiente','Motor'];
-let ltab=0,lPushT=0,lPushOn=0;
+/* ----- painéis: Shader (objeto) e Luz (cenário) ----- */
+const PNAME={unity:'Unity',unreal:'Unreal',godot:'Godot',gen:'Genérico'},LTS=['Material','Efeitos','Exportar'],LTL=['Sol','Ambiente'];
+let ltabS=0,ltabL=0,lPushT=0,lPushOn=0;
+const lTabs=()=>LUM?LTL:LTS,lTab=()=>LUM?ltabL:ltabS;
 const lPushOnce=()=>{if(!lPushOn){push();lPushOn=1}clearTimeout(lPushT);lPushT=setTimeout(()=>{lPushOn=0},700)};
-$('#app').insertAdjacentHTML('beforeend','<div id="lum"><div class="prow"><div id="linfo"></div><button id="ldone">Modelar</button></div><div class="ptabs" id="ltabs"></div><div id="lbody"></div></div>');
+$('#app').insertAdjacentHTML('beforeend','<div id="lum"><div class="prow"><div id="linfo"></div><button id="lBase" aria-label="Alternar entre base e pintado"></button><button id="ldone">Modelar</button></div><div class="ptabs" id="ltabs"></div><div id="lbody"></div></div>');
 const rng=(id,label,min,max,step,val)=>'<label class="lb">'+label+' <b id="'+id+'v">'+val+'</b><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"></label>';
 const bindR=(id,fn)=>{const e=$('#'+id);if(!e)return;e.oninput=()=>{lPushOnce();fn(e.value);const v=$('#'+id+'v');if(v)v.textContent=e.value;dirty=1;saveSoon()}};
-function lOpen(){if(LUZ)return;if(PNT)pClose();if(tool==='add')addCancel(true);['#mods','#hier','#zp','#ctx','#opt'].forEach(hid);sync();lPrev={tool,sub,mode,shd};LMVIS=LMAT.visible;LUZ=1;tool='cam';sub=0;shd=0;applyShd();if(mode!=='o')setMode('o');$('#app').classList.add('lum');mswUpdate();applyLuz();invalidateAll();lRender();toolsUI();rebuild()}
-function lClose(){if(!LUZ)return;$('#app').classList.remove('lum');LUZ=0;if(lPrev){tool=lPrev.tool==='paint'?'cam':lPrev.tool;sub=lPrev.sub;shd=lPrev.shd;applyShd()}applyLuz();mswUpdate();invalidateAll();if(lPrev&&lPrev.mode!==mode)setMode(lPrev.mode);toolsUI();rebuild()}
+const bindC=(id,fn)=>{const e=$('#'+id);if(!e)return;e.oninput=()=>{fn(e.value);const v=$('#'+id+'v');if(v)v.textContent=e.value;dirty=1}};
+const setEnv=p=>{ENV=envClean(Object.assign({},ENV,p,{n:'Personalizado'}));saveEnv();applyLuz()};
+function lOpen(kind){if(SHM||LUM)return;if(PNT)pClose();if(tool==='add')addCancel(true);['#mods','#hier','#zp','#ctx','#opt'].forEach(hid);sync();lPrev={tool,sub,mode,shd};LMVIS=LMAT.visible;if(kind==='lz')LUM=1;else SHM=1;tool='cam';sub=0;shd=0;applyShd();if(mode!=='o')setMode('o');$('#app').classList.add('lum');mswUpdate();applyLuz();invalidateAll();lRender();toolsUI();rebuild()}
+function lClose(){if(!(SHM||LUM))return;$('#app').classList.remove('lum');SHM=0;LUM=0;if(lPrev){tool=lPrev.tool==='paint'?'cam':lPrev.tool;sub=lPrev.sub;shd=lPrev.shd;applyShd()}applyLuz();mswUpdate();invalidateAll();if(lPrev&&lPrev.mode!==mode)setMode(lPrev.mode);toolsUI();rebuild()}
 $('#ldone').onclick=lClose;
-function lRender(){if(!LUZ)return;$('#linfo').innerHTML='<b>Luz e material</b><br><span style="color:var(--mu);font-size:12px">'+(cur?cur.name.replace(/&/g,'&amp;').replace(/</g,'&lt;'):'')+'</span>';$('#ltabs').innerHTML=LT.map((n,i)=>'<button data-lt="'+i+'" class="'+(i===ltab?'on':'')+'">'+n+'</button>').join('');lBody()}
-$('#ltabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;ltab=+b.dataset.lt;lRender()};
-function lTree(){const el=$('#ltree');if(!el)return;el.textContent='';const L=O.filter(o=>o.lt);if(!L.length){el.innerHTML='<p class="tip">Nenhuma luz ainda. Crie um Sol, um Ponto ou um Holofote, ou escolha um tema na aba Ambiente.</p>';return}
-L.forEach(o=>{const r=document.createElement('div');r.className='tr'+(o===cur?' cur':'');const n=document.createElement('button');n.className='nm';n.textContent='☀ '+o.name+'  ('+({sun:'Sol',point:'Ponto',spot:'Holofote'})[o.lt.k]+')';n.onclick=()=>{pick(o);rebuild()};
-const e=document.createElement('button');e.innerHTML=ic(o.vis?'eye':'eyeoff');e.setAttribute('aria-label','Mostrar ou esconder');e.onclick=()=>{o.vis=!o.vis;rebuild();lTree()};
-const d=document.createElement('button');d.textContent='×';d.setAttribute('aria-label','Excluir luz');d.onclick=()=>delLight(o);r.append(n,e,d);el.append(r)})}
-function lEd(){const el=$('#led');if(!el)return;const o=cur;if(!o||!o.lt){el.innerHTML='';return}const L=o.lt;
-el.innerHTML='<div class="prow" style="margin:8px 0 2px"><label class="lb" style="flex:1">Cor<input type="color" id="lC" value="'+L.c+'"></label></div>'+rng('lI','Intensidade',0,10,.1,L.i)+(L.k!=='sun'?rng('lR','Alcance (0 = infinito)',0,50,.5,L.r):'')+(L.k==='spot'?rng('lA','Ângulo do cone',5,90,1,L.a)+rng('lP','Suavidade da borda',0,1,.05,L.p):'')+rng('lX','Posição X',-12,12,.1,o.t[0])+rng('lY','Posição Y',-12,12,.1,o.t[1])+rng('lZ','Posição Z',-12,12,.1,o.t[2])+(L.k!=='point'?'<div class="prow" style="margin-top:6px"><button id="lAim" style="flex:1">Apontar para o centro da cena</button></div>':'');
-const ap=()=>lightSync(o);$('#lC').oninput=e=>{lPushOnce();L.c=e.target.value;ap();dirty=1;saveSoon()};
-bindR('lI',v=>{L.i=+v;ap()});bindR('lR',v=>{L.r=+v;ap()});bindR('lA',v=>{L.a=+v;ap()});bindR('lP',v=>{L.p=+v;ap()});
-[['lX',0],['lY',1],['lZ',2]].forEach(([id,i])=>bindR(id,v=>{o.t[i]=+v;applyT(o);ap()}));
-const am=$('#lAim');if(am)am.onclick=()=>{lPushOnce();aimLight(o,sceneCenter());ap();dirty=1;saveSoon();toast('Luz apontada para o centro da cena')}}
+function lRender(){if(!(SHM||LUM))return;const nm=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');$('#linfo').innerHTML=LUM?'<b>Luz do cenário</b><br><span style="color:var(--mu);font-size:12px">'+nm(ENV.n)+'</span>':'<b>Shader do objeto</b><br><span style="color:var(--mu);font-size:12px">'+nm(cur?cur.name:'')+'</span>';
+$('#ltabs').innerHTML=lTabs().map((n,i)=>'<button data-lt="'+i+'" class="'+(i===lTab()?'on':'')+'">'+n+'</button>').join('');$('#ltabs').style.setProperty('grid-template-columns','repeat('+lTabs().length+',1fr)','important');lBody()}
+$('#ltabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(LUM)ltabL=+b.dataset.lt;else ltabS=+b.dataset.lt;lRender()};
 function lMatCtl(){const el=$('#mCtl'),o=cur;if(!el||!o)return;const m=matOf(o),cap={pbr:'Exporta como PBR (metálico e rugosidade).',unlit:'Exporta como KHR_materials_unlit (sem influência de luz).',glow:'Exporta emissivo usando a cor da paleta. Acima de 1 usa KHR_materials_emissive_strength (não vai no perfil Unreal).',glass:'Exporta com transparência (BLEND) e dupla face.',toon:'Só na prévia: no arquivo vira PBR liso, pois o glTF não tem material cartoon.'};
 el.innerHTML=(m.k==='pbr'?rng('mR','Rugosidade',0,1,.05,m.ro)+rng('mM','Metálico',0,1,.05,m.me):'')+(m.k==='glow'?rng('mG','Força do brilho',0,10,.1,m.gl):'')+(m.k==='glass'?rng('mA','Opacidade',0,1,.05,m.al):'')+'<label class="ck"><input type="checkbox" id="mD"'+(m.db?' checked':'')+'>Dupla face</label><p class="tip">'+cap[m.k]+'</p>';
 bindR('mR',v=>matSet(o,{ro:+v}));bindR('mM',v=>matSet(o,{me:+v}));bindR('mG',v=>matSet(o,{gl:+v}));bindR('mA',v=>matSet(o,{al:+v}));const d=$('#mD');d.onchange=()=>matSet(o,{db:d.checked?1:0})}
 function matSet(o,p){lPushOnce();o.mt=Object.assign({},matOf(o),p);o._d=1;rebuild()}
-function lReport(){const ms=O.filter(o=>o.F.length&&!o.lt),ls=O.filter(o=>o.lt),cnt={};ms.forEach(o=>{const k=matOf(o).k;cnt[k]=(cnt[k]||0)+1});const P=ENG.p,R=[];
-R.push('<b>Cena:</b> '+ms.length+' malha(s), '+ls.length+' luz(es). Materiais: '+(Object.entries(cnt).map(([k,v])=>v+'× '+MNAME[k]).join(', ')||'nenhum')+'.');
-R.push({unity:'<b>Unity</b> (glTFast e UnityGLTF): a documentação lista luzes (KHR_lights_punctual), materiais sem luz (KHR_materials_unlit) e brilho acima de 1 (KHR_materials_emissive_strength).',unreal:'<b>Unreal</b> (importador glTF/Interchange): a lista de extensões do importador inclui luzes e materiais sem luz, mas não KHR_materials_emissive_strength. Neste perfil o brilho fica limitado a 1.',godot:'<b>Godot 4</b>: importa luzes (KHR_lights_punctual) e converte a intensidade num multiplicador sem unidade; a documentação recomenda refazer a iluminação no editor do Godot. Não confirmei na documentação consultada o suporte a materiais sem luz e a brilho acima de 1: teste depois de importar.',gen:'<b>Genérico</b>: usa todas as extensões (luzes, sem luz, brilho forte). Programas que não as conhecem as ignoram e mostram o material como PBR comum.'}[P]);
+function lReport(){const ms=O.filter(o=>o.F.length),cnt={};ms.forEach(o=>{const k=matOf(o).k;cnt[k]=(cnt[k]||0)+1});const P=ENG.p,R=[];
+R.push('<b>Cena:</b> '+ms.length+' malha(s). Shaders: '+(Object.entries(cnt).map(([k,v])=>v+'× '+MNAME[k]).join(', ')||'nenhum')+'.');
+R.push({unity:'<b>Unity</b> (glTFast e UnityGLTF): a documentação lista materiais sem luz (KHR_materials_unlit), brilho acima de 1 (KHR_materials_emissive_strength) e luzes (KHR_lights_punctual).',unreal:'<b>Unreal</b> (importador glTF/Interchange): a lista de extensões do importador inclui materiais sem luz e luzes, mas não KHR_materials_emissive_strength. Neste perfil o brilho fica limitado a 1.',godot:'<b>Godot 4</b>: importa luzes (KHR_lights_punctual) e converte a intensidade num multiplicador sem unidade; a documentação recomenda refazer a iluminação no editor do Godot. Não confirmei na documentação consultada o suporte a materiais sem luz e a brilho acima de 1: teste depois de importar.',gen:'<b>Genérico</b>: usa todas as extensões (sem luz, brilho forte, luz). Programas que não as conhecem as ignoram e mostram o material como PBR comum.'}[P]);
 if(cnt.toon)R.push('Cartoon só existe na prévia: '+cnt.toon+' objeto(s) saem como PBR liso.');
-if(ls.length)R.push('Luzes seguem o glTF (lux no Sol, candela no ponto e no holofote). Cada motor interpreta de um jeito: ajuste o multiplicador ou a luz dentro do motor. Sombras não são exportadas.');
-R.push('Céu, chão e fundo não existem no glTF. Configure no motor: céu '+ENV.sky+', chão '+ENV.gnd+', fundo '+ENV.bg+', intensidade '+ENV.int+'.');
+const nfx=ms.filter(o=>o.fx&&o.fx.on).length;if(nfx)R.push('<b>Efeitos:</b> '+nfx+' objeto(s) têm efeito de shader. O GLB não leva efeitos animados: use o botão "Exportar efeitos" para gerar o shader do Godot, o do Unity e a receita do Unreal.');
+R.push(ENG.l?'A luz do cenário vai no arquivo como luz direcional (opção na aba Ambiente do modo Luz). Cada motor interpreta a intensidade de um jeito; sombras não são exportadas.':'A luz do cenário não vai no arquivo, só os shaders (materiais). Para levar o sol, ligue a opção na aba Ambiente do modo Luz.');
+R.push('Céu, chão e fundo não existem no glTF. Configure no motor: céu '+ENV.sky+', chão '+ENV.gnd+', fundo '+ENV.bg+', intensidade '+ENV.int+'. Sol: cor '+ENV.sc+', giro '+ENV.az+'°, altura '+ENV.el+'°.');
 return R.map(x=>'<p>'+x+'</p>').join('')}
-function lBody(keep){const b=$('#lbody'),st=keep?b.scrollTop:0;
-if(ltab===0){b.innerHTML='<div class="prow" style="margin-bottom:8px"><button id="lAS" style="flex:1">+ Sol</button><button id="lAP" style="flex:1">+ Ponto</button><button id="lAH" style="flex:1">+ Holofote</button></div><div id="ltree"></div><div id="led"></div>';
- $('#lAS').onclick=()=>newLight('sun');$('#lAP').onclick=()=>newLight('point');$('#lAH').onclick=()=>newLight('spot');lTree();lEd()}
-else if(ltab===1){const objs=O.filter(o=>o.F.length&&!o.lt),ok2=cur&&cur.F.length&&!cur.lt;
- b.innerHTML=objs.length?'<label class="lb"><select id="mObj">'+(ok2?'':'<option value="">Escolha um objeto…</option>')+objs.map(o=>'<option value="'+o.id+'"'+(o===cur?' selected':'')+'>'+o.name.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</option>').join('')+'</select></label>'+(ok2?'<div class="msty" style="margin:8px 0">'+MSTY.map(([k,n,s])=>'<button data-mk="'+k+'" class="'+(matOf(cur).k===k?'on':'')+'"><span>'+n+'</span><small>'+s+'</small></button>').join('')+'</div><div id="mCtl"></div><div class="prow"><button id="mAll" style="flex:1">Aplicar a todos os objetos</button></div>':'<p class="tip">Toque num objeto na cena ou escolha na lista.</p>'):'<p class="tip">Crie uma malha no modo Modelar para definir o material.</p>';
- const sl=$('#mObj');if(sl)sl.onchange=()=>{const o=O.find(x=>String(x.id)===sl.value);if(o){pick(o);rebuild()}};
- if(ok2){b.querySelector('.msty').onclick=e=>{const x=e.target.closest('button');if(!x)return;matSet(cur,{k:x.dataset.mk});lBody(1)};lMatCtl();$('#mAll').onclick=()=>{lPushOnce();const m=Object.assign({},matOf(cur));O.forEach(o=>{if(o.F.length&&!o.lt){o.mt=Object.assign({},m);o._d=1}});rebuild();toast('Material aplicado a todos')}}}
-else if(ltab===2){b.innerHTML='<div class="eprs">'+Object.entries(ENVP).map(([k,p])=>'<button data-ep="'+k+'" class="'+(ENV.n===p.n?'on':'')+'">'+p.n+'</button>').join('')+'</div><div class="prow" style="margin:8px 0"><label class="lb" style="flex:1">Céu<input type="color" id="eS" value="'+ENV.sky+'"></label><label class="lb" style="flex:1">Chão<input type="color" id="eG" value="'+ENV.gnd+'"></label><label class="lb" style="flex:1">Fundo<input type="color" id="eB" value="'+ENV.bg+'"></label></div>'+rng('eI','Intensidade do ambiente',0,3,.05,ENV.int)+'<label class="ck"><input type="checkbox" id="eGr"'+(LGRID?' checked':'')+'>Mostrar grade e eixos</label><p class="tip">O ambiente vale só na prévia. Cada tema também cria ou atualiza uma luz "Sol (tema)".</p>';
+function lBody(keep){const b=$('#lbody'),st=keep?b.scrollTop:0,t=lTab();
+if(LUM&&t===0){b.innerHTML='<label class="ck"><input type="checkbox" id="eSh"'+(ENV.sh?' checked':'')+'>Sombras</label><label class="ck"><input type="checkbox" id="eGr"'+(ENV.gr?' checked':'')+'>Chão recebe a sombra</label>'+rng('eAz','Giro do sol (°)',0,360,1,ENV.az)+rng('eEl','Altura do sol (°)',3,90,1,ENV.el)+rng('eSi','Intensidade do sol',0,6,.1,ENV.si)+'<div class="prow" style="margin:6px 0"><label class="lb" style="flex:1">Cor do sol<input type="color" id="eSc" value="'+ENV.sc+'"></label></div><p class="tip">A luz pertence ao cenário, não aos objetos. Os objetos aparecem com o shader definido no modo Shader.</p>';
+ $('#eSh').onchange=e=>setEnv({sh:e.target.checked?1:0});$('#eGr').onchange=e=>setEnv({gr:e.target.checked?1:0});bindC('eAz',v=>setEnv({az:+v}));bindC('eEl',v=>setEnv({el:+v}));bindC('eSi',v=>setEnv({si:+v}));$('#eSc').oninput=e=>setEnv({sc:e.target.value})}
+else if(LUM){b.innerHTML='<div class="eprs">'+Object.entries(ENVP).map(([k,p])=>'<button data-ep="'+k+'" class="'+(ENV.n===p.n?'on':'')+'">'+p.n+'</button>').join('')+'</div><div class="prow" style="margin:8px 0"><label class="lb" style="flex:1">Céu<input type="color" id="eS" value="'+ENV.sky+'"></label><label class="lb" style="flex:1">Chão<input type="color" id="eG" value="'+ENV.gnd+'"></label><label class="lb" style="flex:1">Fundo<input type="color" id="eB" value="'+ENV.bg+'"></label></div>'+rng('eI','Luz do ambiente',0,3,.05,ENV.int)+
+ '<label class="ck"><input type="checkbox" id="eGd"'+(LGRID?' checked':'')+'>Mostrar grade e eixos</label><label class="ck"><input type="checkbox" id="eOn"'+(ENV.on?' checked':'')+'>Manter luz e sombra nos modos Modelar, Pintar e Shader</label><label class="ck"><input type="checkbox" id="gL"'+(ENG.l?' checked':'')+'>Levar o sol no arquivo exportado (luz direcional)</label><label class="lb">Multiplicador de intensidade do sol (exportação)<input type="number" id="gM" min="0.001" step="0.1" value="'+ENG.m+'"></label><p class="tip">Os temas definem sol e ambiente de uma vez.</p>';
  b.querySelector('.eprs').onclick=e=>{const x=e.target.closest('button');if(x)applyEnvP(x.dataset.ep)};
- const ce=(id,k)=>{$('#'+id).oninput=e=>{lPushOnce();ENV=Object.assign({},ENV,{[k]:e.target.value,n:'Personalizado'});applyLuz();saveEnv()}};ce('eS','sky');ce('eG','gnd');ce('eB','bg');
- bindR('eI',v=>{ENV=Object.assign({},ENV,{int:+v,n:'Personalizado'});applyLuz();saveEnv()});$('#eGr').onchange=e=>{LGRID=e.target.checked?1:0;applyLuz()}}
-else{b.innerHTML='<div class="eprs" id="eng" style="grid-template-columns:repeat(4,1fr)">'+['unity','unreal','godot','gen'].map(k=>'<button data-ep="'+k+'" class="'+(ENG.p===k?'on':'')+'">'+PNAME[k]+'</button>').join('')+'</div><label class="ck" style="margin-top:8px"><input type="checkbox" id="gL"'+(ENG.l?' checked':'')+'>Incluir luzes no arquivo</label><label class="lb">Multiplicador de intensidade das luzes<input type="number" id="gM" min="0.001" step="0.1" value="'+ENG.m+'"></label><div class="prow" style="margin-top:8px"><button id="gExp" class="ap" style="margin:0;flex:1">Exportar GLB</button></div><div class="rep" id="grep">'+lReport()+'</div>';
- $('#eng').onclick=e=>{const x=e.target.closest('button');if(x){ENG.p=x.dataset.ep;saveEng();lBody(1)}};
- $('#gL').onchange=e=>{ENG.l=e.target.checked?1:0;saveEng()};$('#gM').onchange=e=>{ENG.m=numc(parseFloat(e.target.value),.001,10000,1);e.target.value=ENG.m;saveEng()};$('#gExp').onclick=expGlb}
+ [['eS','sky'],['eG','gnd'],['eB','bg']].forEach(([id,k])=>{$('#'+id).oninput=e=>setEnv({[k]:e.target.value})});bindC('eI',v=>setEnv({int:+v}));
+ $('#eGd').onchange=e=>{LGRID=e.target.checked?1:0;applyLuz()};$('#eOn').onchange=e=>setEnv({on:e.target.checked?1:0});$('#gL').onchange=e=>{ENG.l=e.target.checked?1:0;saveEng()};$('#gM').onchange=e=>{ENG.m=numc(parseFloat(e.target.value),.001,10000,1);e.target.value=ENG.m;saveEng()}}
+else if(t===0){const objs=O.filter(o=>o.F.length),ok2=cur&&cur.F.length;
+ b.innerHTML=objs.length?'<label class="lb"><select id="mObj">'+(ok2?'':'<option value="">Escolha um objeto…</option>')+objs.map(o=>'<option value="'+o.id+'"'+(o===cur?' selected':'')+'>'+o.name.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</option>').join('')+'</select></label>'+(ok2?'<div class="msty" style="margin:8px 0">'+MSTY.map(([k,n,s])=>'<button data-mk="'+k+'" class="'+(matOf(cur).k===k?'on':'')+'"><span>'+n+'</span><small>'+s+'</small></button>').join('')+'</div><div id="mCtl"></div><div class="prow"><button id="mAll" style="flex:1">Aplicar a todos os objetos</button></div>':'<p class="tip">Toque num objeto na cena ou escolha na lista.</p>'):'<p class="tip">Crie uma malha no modo Modelar para definir o shader.</p>';
+ const sl=$('#mObj');if(sl)sl.onchange=()=>{const o=O.find(x=>String(x.id)===sl.value);if(o){pick(o);rebuild()}};
+ if(ok2){b.querySelector('.msty').onclick=e=>{const x=e.target.closest('button');if(!x)return;matSet(cur,{k:x.dataset.mk});lBody(1)};lMatCtl();$('#mAll').onclick=()=>{lPushOnce();const m=Object.assign({},matOf(cur));O.forEach(o=>{if(o.F.length){o.mt=Object.assign({},m);o._d=1}});rebuild();toast('Shader aplicado a todos')}}}
+else if(t===1){lFxBody(b)}
+else{b.innerHTML='<div class="eprs" id="eng" style="grid-template-columns:repeat(4,1fr)">'+['unity','unreal','godot','gen'].map(k=>'<button data-ep="'+k+'" class="'+(ENG.p===k?'on':'')+'">'+PNAME[k]+'</button>').join('')+'</div><div class="prow" style="margin-top:8px"><button id="gExp" class="ap" style="margin:0;flex:1">Exportar GLB</button></div><div class="prow" style="margin-top:8px"><button id="fxExp" style="flex:1">Exportar efeitos (Godot, Unity, Unreal)</button></div><div class="rep" id="grep">'+lReport()+'</div>';
+ $('#eng').onclick=e=>{const x=e.target.closest('button');if(x){ENG.p=x.dataset.ep;saveEng();lBody(1)}};$('#gExp').onclick=expGlb;$('#fxExp').onclick=fxExport}
 if(keep)b.scrollTop=st}
 async function expGlb(){try{const png=new Uint8Array(await(await palPNG()).arrayBuffer()),glb=buildGLB(png);if(!glb)return toast('Não há malhas visíveis para exportar');saveBlob(new Blob([glb],{type:'model/gltf-binary'}),'polypocket_'+ENG.p+'.glb');toast('GLB gerado para '+PNAME[ENG.p])}catch(e){toast('Não consegui gerar o GLB')}}
 Object.assign(ICO,{sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>'});
+$('#mShd').innerHTML='<span class="tg">'+ic('shade')+'</span><span class="tb">Shader</span>';
 $('#mLuz').innerHTML='<span class="tg">'+ic('sun')+'</span><span class="tb">Luz</span>';
+$('#bLp').onclick=()=>{ENV=envClean(Object.assign({},ENV,{on:ENV.on?0:1}));saveEnv();applyLuz();$('#bLp').textContent=lpTxt();if(PNT)pBody(1);toast(lpTxt())};
+$('#bLpC').onclick=()=>{if(SHM)lClose();lOpen('lz')};
+function lpTxt(){return'Luz e sombra nos outros modos: '+(ENV.on?'ligada':'desligada')}
+$('#bLp').textContent=lpTxt();
+
+
+/* ---------- base (modelo sem pintura) nos modos de sombreamento ---------- */
+const SHDS=['Sól.','Aram.','R-X'];
+try{BASE=localStorage.getItem('pp2base')==='0'?0:1}catch(e){}
+function baseTxt(){$('#bBase').textContent='Ver só a base (sem pintura): '+(BASE?'sim':'não');$('#lBase').textContent=BASE?'Vista: Base':'Vista: Pintado'}
+function setShd(m,b){shd=m;BASE=b?1:0;try{localStorage.setItem('pp2base',BASE)}catch(e){}applyShd();invalidateAll();rebuild();paintFabs();baseTxt();toast('Sombreamento: '+SHD[shd]+(BASE?' · base (sem pintura)':''))}
+$('#lBase').onclick=()=>setShd(shd,BASE?0:1);
+$('#bBase').onclick=()=>{if(PNT)return toast('Na pintura você sempre vê as cores');setShd(shd,BASE?0:1)};
+lpAttach($('#fShd'),()=>[...SHD.map((n,i)=>[n+' · Pintado',()=>setShd(i,0),shd===i&&!BASE]),...SHD.map((n,i)=>[n+' · Base',()=>setShd(i,1),shd===i&&BASE])]);
+baseTxt();
+
+/* ---------- bloco 9: efeitos de shader (ruído, ondas, círculos, movimento, distorção) ---------- */
+const FXK={noise:'Ruído',waves:'Ondas',rings:'Círculos',grad:'Gradiente',tex:'Textura'};
+const FXLD={noise:{sc:3,sp:.5,an:90,st:1,ct:.3,oc:3,rd:0,bl:'mul',iv:0},waves:{sc:3.5,sp:.6,an:0,st:1,ct:0,oc:3,rd:0,bl:'mul',iv:0},rings:{sc:3,sp:.6,an:0,st:1,ct:0,oc:3,rd:1,bl:'mul',iv:0},grad:{sc:1,sp:0,an:90,st:1,ct:0,oc:3,rd:0,bl:'mul',iv:0},tex:{sc:1,sp:.3,an:90,st:1,ct:0,oc:3,rd:0,bl:'mul',iv:0}};
+const fxL=(k,o)=>Object.assign({k,tx:''},FXLD[k],o||{});
+const fxNew=()=>fxClean({on:1,an:1,pj:'3d',L:[fxL('noise')],ds:{on:0,am:.25,sc:2,sp:.8,an:90},ramp:['#000000','#ff6a00','#ffe08a'],eo:1,co:0,ao:0,am:1.5});
+const FXP={
+fogo:{n:'Fogo',mt:'unlit',fx:{pj:'3d',L:[fxL('noise',{sc:2.4,sp:1.3,an:90,st:1.15,ct:.5,oc:4}),fxL('grad',{sc:1.1,an:90,iv:1})],ds:{on:1,am:.22,sc:2.6,sp:1.1,an:90},ramp:['#1a0300','#ff5a00','#ffe28a'],eo:0,co:1,ao:1,am:2.2}},
+agua:{n:'Água',mt:'pbr',fx:{pj:'3d',L:[fxL('waves',{sc:3.5,sp:.5,an:35,st:.55}),fxL('noise',{sc:3,sp:.35,an:200,oc:2,st:.45,ct:.2,bl:'add'})],ds:{on:1,am:.12,sc:2,sp:.5,an:0},ramp:['#0a3d73','#1f8fd6','#c7f1ff'],eo:0,co:1,ao:0,am:1}},
+energia:{n:'Energia',mt:'unlit',fx:{pj:'3d',L:[fxL('rings',{sc:2.5,sp:.9,rd:1,st:.8}),fxL('noise',{sc:3,sp:1,an:90,oc:2,st:.6,bl:'add'})],ds:{on:1,am:.15,sc:2.2,sp:.9,an:90},ramp:['#12003a','#7a3cff','#7ff3ff'],eo:1,co:1,ao:0,am:1.6}},
+lava:{n:'Lava',mt:'pbr',fx:{pj:'3d',L:[fxL('noise',{sc:2.2,sp:.12,an:90,oc:4,ct:.55})],ds:{on:1,am:.3,sc:1.6,sp:.25,an:0},ramp:['#1c0500','#ff3a00','#ffc24a'],eo:1,co:1,ao:0,am:1.2}},
+fumaca:{n:'Fumaça',mt:'unlit',fx:{pj:'3d',L:[fxL('noise',{sc:1.6,sp:.35,an:90,oc:4,ct:.15}),fxL('grad',{sc:.9,an:90,iv:1})],ds:{on:1,am:.35,sc:1.5,sp:.4,an:90},ramp:['#101010','#6b6b6b','#f2f2f2'],eo:0,co:1,ao:1,am:1.2}},
+pulso:{n:'Pulso',mt:'unlit',fx:{pj:'xy',L:[fxL('rings',{sc:4,sp:.8,rd:-1,st:1,ct:.6})],ds:{on:0,am:.2,sc:2,sp:.8,an:90},ramp:['#000000','#00c8ff','#ffffff'],eo:0,co:1,ao:0,am:1.5}}};
+const nm1=(x,a,b,d)=>typeof x==='number'&&isFinite(x)?Math.min(b,Math.max(a,x)):d;
+function fxClean(f){if(!f||typeof f!=='object'||!Array.isArray(f.L))return undefined;const ds=f.ds||{},hx=x=>typeof x==='string'&&/^#[0-9a-f]{6}$/i.test(x);
+const L=f.L.slice(0,6).filter(l=>l&&typeof l.k==='string'&&Object.prototype.hasOwnProperty.call(FXK,l.k)).map(l=>{const d=FXLD[l.k];return{k:l.k,sc:nm1(l.sc,.1,30,d.sc),sp:nm1(l.sp,0,6,d.sp),an:nm1(l.an,0,360,d.an),st:nm1(l.st,0,3,d.st),ct:nm1(l.ct,0,1,d.ct),oc:Math.round(nm1(l.oc,1,4,3)),rd:l.rd>0?1:l.rd<0?-1:0,bl:l.bl==='add'?'add':'mul',iv:l.iv?1:0,tx:/^[a-z0-9]{1,16}$/.test(l.tx)?l.tx:''}});
+if(!L.length)return undefined;const r=Array.isArray(f.ramp)?f.ramp:[];
+return{on:f.on===0||f.on===false?0:1,an:f.an===0||f.an===false?0:1,pj:['xy','xz','yz','3d'].includes(f.pj)?f.pj:'3d',L,ds:{on:ds.on?1:0,am:nm1(ds.am,0,2,.25),sc:nm1(ds.sc,.1,20,2),sp:nm1(ds.sp,0,6,.8),an:nm1(ds.an,0,360,90)},ramp:[0,1,2].map(i=>hx(r[i])?r[i]:['#000000','#ff6a00','#ffe08a'][i]),eo:f.eo?1:0,co:f.co?1:0,ao:f.ao?1:0,am:nm1(f.am,0,6,1.5)}}
+const fxSKey=f=>JSON.stringify([f.pj,f.ds.on,f.eo,f.co,f.ao,f.L.map(l=>[l.k,l.oc,l.rd,l.bl,l.iv])]);
+const FXLIB=`float fxH(vec3 p){p=fract(p*0.1031);p+=dot(p,p.yzx+33.33);return fract((p.x+p.y)*p.z);}
+float fxN(vec3 p){vec3 i=floor(p);vec3 f=fract(p);f=f*f*(3.0-2.0*f);
+float a=mix(fxH(i),fxH(i+vec3(1.0,0.0,0.0)),f.x);float b=mix(fxH(i+vec3(0.0,1.0,0.0)),fxH(i+vec3(1.0,1.0,0.0)),f.x);
+float c=mix(fxH(i+vec3(0.0,0.0,1.0)),fxH(i+vec3(1.0,0.0,1.0)),f.x);float d=mix(fxH(i+vec3(0.0,1.0,1.0)),fxH(i+vec3(1.0,1.0,1.0)),f.x);
+return mix(mix(a,b,f.y),mix(c,d,f.y),f.z);}
+float fxF2(vec3 p){return fxN(p)*0.66+fxN(p*2.03+vec3(5.2,1.3,3.1))*0.34;}
+float fxF3(vec3 p){return fxN(p)*0.57+fxN(p*2.03+vec3(5.2,1.3,3.1))*0.29+fxN(p*4.07+vec3(2.7,8.1,6.4))*0.14;}
+float fxF4(vec3 p){return fxN(p)*0.53+fxN(p*2.03+vec3(5.2,1.3,3.1))*0.27+fxN(p*4.07+vec3(2.7,8.1,6.4))*0.13+fxN(p*8.11+vec3(9.1,4.2,7.7))*0.07;}
+`;
+function fxDecl(f){let s='uniform float uFxT;uniform vec3 uFxC;uniform float uFxS;uniform vec4 uFxD;uniform vec3 uFxR0;uniform vec3 uFxR1;uniform vec3 uFxR2;uniform float uFxM;\n';f.L.forEach((l,i)=>{s+='uniform vec4 uFxA'+i+';uniform vec4 uFxB'+i+';\n';if(l.k==='tex')s+='uniform sampler2D uFxTx'+i+';\n'});return s}
+function fxEvalSrc(f){const P=f.pj,q0={xy:'vec3(pn.x,pn.y,0.0)',xz:'vec3(pn.x,pn.z,0.0)',yz:'vec3(pn.y,pn.z,0.0)','3d':'pn'}[P]||'pn',R=P==='3d'?'length(q)':'length(q.xy)';
+let s='void fxEval(vec3 pos,float T,out vec3 col,out float val){\n vec3 pn=(pos-uFxC.xyz)*uFxS;\n vec3 q='+q0+';\n';
+if(f.ds.on)s+=' vec3 dd=vec3(cos(uFxD.w),sin(uFxD.w),0.0);\n vec3 dp=q*uFxD.y-dd*T*uFxD.z;\n q+=(vec3(fxN(dp+vec3(7.0,3.0,1.0)),fxN(dp+vec3(2.0,9.0,5.0)),fxN(dp+vec3(4.0,6.0,8.0)))-0.5)*2.0*uFxD.x;\n';
+s+=' float acc=0.0;\n';
+f.L.forEach((l,i)=>{const rd=l.rd>0?'1.0':l.rd<0?'-1.0':'0.0',fn=l.oc<=1?'fxN':'fxF'+l.oc;
+s+=' {vec4 a=uFxA'+i+';vec3 d=vec3(cos(a.z),sin(a.z),0.0);float t=T*a.y;float v=0.0;\n';
+if(l.k==='noise')s+=l.rd?'  vec3 rv=q/(length(q)+0.0001);v='+fn+'(q*a.x-rv*t*'+rd+'+vec3(0.0,0.0,t*0.35));\n':'  v='+fn+'(q*a.x-d*t+vec3(0.0,0.0,t*0.35));\n';
+else if(l.k==='waves')s+=(l.rd?'  float x='+R+'*a.x-t*'+rd+';':'  float x=dot(q,d)*a.x-t;')+' v=0.5+0.5*sin(6.28318*x);\n';
+else if(l.k==='rings')s+='  float x='+R+'*a.x-t*'+rd+'; v=1.0-abs(fract(x)-0.5)*2.0;\n';
+else if(l.k==='grad')s+='  v=clamp(dot(q,d)*a.x*0.5+0.5,0.0,1.0);'+(l.iv?' v=1.0-v;':'')+'\n';
+else s+='  v=texture2D(uFxTx'+i+',q.xy*a.x*0.5+vec2(0.5,0.5)-d.xy*t).r;\n';
+s+='  v=clamp((v-0.5)*uFxB'+i+'.x+0.5,0.0,1.0)*a.w;\n  acc='+(i===0?'v':l.bl==='add'?'acc+v':'acc*v')+';}\n'});
+s+=' acc=clamp(acc,0.0,1.0);\n val=acc;\n col=mix(mix(uFxR0.rgb,uFxR1.rgb,clamp(acc*2.0,0.0,1.0)),uFxR2.rgb,clamp(acc*2.0-1.0,0.0,1.0));\n}\n';return s}
+function fxUniforms(f){const u={uFxT:FXT,uFxC:{value:new THREE.Vector3()},uFxS:{value:1},uFxD:{value:new THREE.Vector4()},uFxR0:{value:new THREE.Vector3()},uFxR1:{value:new THREE.Vector3()},uFxR2:{value:new THREE.Vector3()},uFxM:{value:1}};
+f.L.forEach((l,i)=>{u['uFxA'+i]={value:new THREE.Vector4()};u['uFxB'+i]={value:new THREE.Vector4()};if(l.k==='tex')u['uFxTx'+i]={value:null}});return u}
+const fxRgb=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)/255);
+function fxBox(V){if(!V.length)return{c:[0,0,0],s:1};const mn=[1e9,1e9,1e9],mx=[-1e9,-1e9,-1e9];V.forEach(v=>{for(let a=0;a<3;a++){if(v[a]<mn[a])mn[a]=v[a];if(v[a]>mx[a])mx[a]=v[a]}});const e=Math.max(mx[0]-mn[0],mx[1]-mn[1],mx[2]-mn[2],1e-4);return{c:mn.map((m,a)=>(m+mx[a])/2),s:2/e}}
+function fxApply(o){const x=o._pmat,f=o.fx;if(!x||!f||!x.userData.fx)return;const U=x.userData.fx,b=fxBox(o.V),rad=d=>d*Math.PI/180;
+U.uFxC.value.set(...b.c);U.uFxS.value=b.s;U.uFxD.value.set(f.ds.am,f.ds.sc,f.ds.sp,rad(f.ds.an));U.uFxM.value=f.am;
+U.uFxR0.value.set(...fxRgb(f.ramp[0]));U.uFxR1.value.set(...fxRgb(f.ramp[1]));U.uFxR2.value.set(...fxRgb(f.ramp[2]));
+f.L.forEach((l,i)=>{if(!U['uFxA'+i])return;U['uFxA'+i].value.set(l.sc,l.sp,rad(l.an),l.st);U['uFxB'+i].value.set(1+l.ct*8,0,0,0);if(l.k==='tex')U['uFxTx'+i].value=nzTex(l.tx)});dirty=1}
+function fxInject(s,x,f){const U=x.userData.fx;Object.keys(U).forEach(k=>{s.uniforms[k]=U[k]});
+s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vFxP;').replace('#include <begin_vertex>','#include <begin_vertex>\nvFxP=position;');
+const basic=!!x.isMeshBasicMaterial;let ap='{vec3 fxc;float fxv;fxEval(vFxP,uFxT,fxc,fxv);\n';
+if(f.eo)ap+=(basic?'diffuseColor.rgb+=fxc*uFxM;':'totalEmissiveRadiance+=fxc*uFxM;')+'\n';
+if(f.co)ap+='diffuseColor.rgb=mix(diffuseColor.rgb,fxc,clamp(uFxM,0.0,1.0));\n';
+if(f.ao)ap+='diffuseColor.a*=clamp(fxv*uFxM,0.0,1.0);\n';ap+='}\n';
+s.fragmentShader=s.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vFxP;\n'+fxDecl(f)+FXLIB+fxEvalSrc(f)).replace('#include <color_fragment>','#include <color_fragment>\n'+ap)}
+/* ----- ruídos importados ----- */
+let NZ=[];try{const a=JSON.parse(localStorage.getItem('pp2nz'));if(Array.isArray(a))NZ=nzClean(a)}catch(e){}
+function nzClean(a){return(Array.isArray(a)?a:[]).slice(0,6).filter(n=>n&&/^[a-z0-9]{1,16}$/.test(n.id)&&typeof n.u==='string'&&n.u.startsWith('data:image/png;base64,')&&n.u.length<600000).map(n=>({id:n.id,n:String(n.n||'Ruído').slice(0,40),u:n.u}))}
+const nzSave=()=>{try{localStorage.setItem('pp2nz',JSON.stringify(NZ))}catch(e){}};
+const NZC={};
+function nzTex(id){const n=NZ.find(x=>x.id===id);if(!n){if(!NZC._g){const t=new THREE.DataTexture(new Uint8Array([128,128,128,255]),1,1,THREE.RGBAFormat);t.needsUpdate=true;NZC._g=t}return NZC._g}
+if(NZC[id])return NZC[id];const im=new Image(),t=new THREE.Texture(im);t.wrapS=t.wrapT=THREE.RepeatWrapping;im.onload=()=>{t.needsUpdate=true;dirty=1};im.src=n.u;NZC[id]=t;return t}
+function nzImport(file,done){const u=URL.createObjectURL(file),im=new Image();im.onload=()=>{URL.revokeObjectURL(u);const c=document.createElement('canvas');c.width=c.height=256;const g=c.getContext('2d');g.drawImage(im,0,0,256,256);const d=g.getImageData(0,0,256,256),p=d.data;for(let i=0;i<p.length;i+=4){const y=Math.round(p[i]*.299+p[i+1]*.587+p[i+2]*.114);p[i]=p[i+1]=p[i+2]=y;p[i+3]=255}g.putImageData(d,0,0);
+if(NZ.length>=6)return toast('Limite de 6 ruídos: apague um antes');const id='n'+Date.now().toString(36);NZ.push({id,n:file.name.replace(/\.[^.]+$/,'').slice(0,40),u:c.toDataURL('image/png')});nzSave();done&&done(id)};im.onerror=()=>toast('Não consegui abrir a imagem');im.src=u}
+const fxScan=()=>{FXRUN=O.some(o=>o.vis&&o.fx&&o.fx.on&&o.fx.an)};
+
+/* ----- aba Efeitos ----- */
+function prevMat(o){const m=matOf(o),fx=o.fx&&o.fx.on?o.fx:null,sk=fx?fxSKey(fx):'',key=[m.k,m.ro,m.me,m.gl,m.al,m.db,sk].join('|');
+if(o._pk===key&&o._pmat){if(fx)fxApply(o);return o._pmat}
+if(o._pmat)o._pmat.dispose();
+const side=(m.db||m.k==='glass')?THREE.DoubleSide:THREE.FrontSide,b={vertexColors:true,side};let x,gU=null;
+if(m.k==='unlit')x=new THREE.MeshBasicMaterial(b);
+else if(m.k==='toon')x=new THREE.MeshToonMaterial({...b,gradientMap:TOON3});
+else if(m.k==='glass')x=new THREE.MeshStandardMaterial({...b,roughness:.1,metalness:0,transparent:true,opacity:m.al,depthWrite:false});
+else{x=new THREE.MeshStandardMaterial({...b,roughness:m.ro,metalness:m.me});if(m.k==='glow')gU={value:m.gl}}
+if(fx){x.userData.fx=fxUniforms(fx);if(fx.ao){x.transparent=true;x.depthWrite=false}}
+if(gU||fx){x.onBeforeCompile=s=>{if(gU){s.uniforms.uGlow=gU;s.fragmentShader=s.fragmentShader.replace('#include <common>','#include <common>\nuniform float uGlow;').replace('vec3 totalEmissiveRadiance = emissive;','vec3 totalEmissiveRadiance = emissive + vColor * uGlow;')}if(fx)fxInject(s,x,fx)};x.customProgramCacheKey=()=>'pp|'+m.k+'|'+sk}
+o._pk=key;o._pmat=x;if(fx)fxApply(o);return x}
+const fxSl=(p,label,min,max,step,val)=>'<label class="lb">'+label+' <b>'+val+'</b><input type="range" data-f="'+p+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"></label>';
+const fxSeg=(p,opts,val)=>'<div class="seg">'+opts.map(([v,n])=>'<button data-f="'+p+'" data-v="'+v+'" class="'+(String(val)===String(v)?'on':'')+'">'+n+'</button>').join('')+'</div>';
+const fxCk=(p,label,val)=>'<label class="ck"><input type="checkbox" data-f="'+p+'"'+(val?' checked':'')+'>'+label+'</label>';
+const nmEsc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+function fxLayerHTML(l,i){const mv=l.k==='rings'?fxSeg('L.'+i+'.rd',[[0,'Parado'],[1,'Para fora'],[-1,'Para dentro']],l.rd):fxSeg('L.'+i+'.rd',[[0,'Direção'],[1,'Para fora'],[-1,'Para dentro']],l.rd);
+return'<div class="fxl"><div class="prow"><b style="flex:1">Camada '+(i+1)+' · '+FXK[l.k]+'</b><button data-a="delL:'+i+'" aria-label="Remover camada" style="min-width:44px">×</button></div>'+
+fxSl('L.'+i+'.sc',l.k==='grad'?'Tamanho':'Escala',.1,30,.1,l.sc)+(l.k==='grad'?'':fxSl('L.'+i+'.sp','Velocidade',0,6,.05,l.sp))+(l.rd&&l.k!=='tex'?'':fxSl('L.'+i+'.an','Direção (°)',0,360,1,l.an))+fxSl('L.'+i+'.st','Força',0,3,.05,l.st)+fxSl('L.'+i+'.ct','Contraste',0,1,.05,l.ct)+
+(l.k==='noise'?'<div class="fxm">Oitavas</div>'+fxSeg('L.'+i+'.oc',[[1,'1'],[2,'2'],[3,'3'],[4,'4']],l.oc):'')+
+(l.k==='noise'||l.k==='waves'||l.k==='rings'?'<div class="fxm">Movimento</div>'+mv:'')+
+(l.k==='grad'?fxCk('L.'+i+'.iv','Inverter',l.iv):'')+
+(l.k==='tex'?'<label class="lb">Ruído importado<select data-f="L.'+i+'.tx"><option value="">(cinza)</option>'+NZ.map(n=>'<option value="'+n.id+'"'+(n.id===l.tx?' selected':'')+'>'+nmEsc(n.n)+'</option>').join('')+'</select></label>':'')+
+(i>0?'<div class="fxm">Mistura com as anteriores</div>'+fxSeg('L.'+i+'.bl',[['mul','Multiplicar'],['add','Somar']],l.bl):'')+'</div>'}
+function fxHTML(o){const f=o.fx,pre='<div class="eprs">'+Object.entries(FXP).map(([k,p])=>'<button data-a="preset:'+k+'">'+p.n+'</button>').join('')+'</div>',
+nz='<div class="fxl"><div class="prow"><b style="flex:1">Meus ruídos</b><button data-a="imp" style="min-width:0;padding:0 12px">Importar…</button></div>'+(NZ.length?NZ.map(n=>'<div class="prow"><span style="flex:1;font-size:13px">'+nmEsc(n.n)+'</span><button data-a="delN:'+n.id+'" aria-label="Apagar ruído" style="min-width:44px">×</button></div>').join(''):'<p class="tip">Importe uma imagem (PNG/JPG). Ela vira um ruído em tons de cinza 256×256, usado numa camada Textura e levado junto na exportação.</p>')+'<input type="file" id="nzFile" accept="image/*" hidden></div>';
+if(!f)return'<p class="tip" style="margin:0 0 8px">Efeitos: ruído, ondas, círculos, movimento e distorção. Escolha um pronto ou crie do zero. Os ajustes do efeito ficam neste objeto.</p>'+pre+'<div class="prow" style="margin:8px 0"><button data-a="create" style="flex:1">Criar efeito do zero</button></div>'+nz;
+return'<div class="prow">'+fxCk('on','Efeito ativo',f.on)+fxCk('an','Animar',f.an)+'<button data-a="remove" style="margin-left:auto;min-width:0;padding:0 12px">Remover</button></div>'+pre+
+'<div class="fxm">Projeção</div>'+fxSeg('pj',[['3d','3D'],['xy','Frente'],['xz','Topo'],['yz','Lado']],f.pj)+f.L.map(fxLayerHTML).join('')+
+(f.L.length<6?'<div class="fxm">Adicionar camada</div><div class="eprs">'+Object.entries(FXK).map(([k,n])=>'<button data-a="addL:'+k+'">+ '+n+'</button>').join('')+'</div>':'')+
+'<div class="fxl">'+fxCk('ds.on','Distorção (deforma as camadas)',f.ds.on)+(f.ds.on?fxSl('ds.am','Intensidade',0,2,.01,f.ds.am)+fxSl('ds.sc','Escala',.1,20,.1,f.ds.sc)+fxSl('ds.sp','Velocidade',0,6,.05,f.ds.sp)+fxSl('ds.an','Direção (°)',0,360,1,f.ds.an):'')+'</div>'+
+'<div class="fxl"><b>Cores e saída</b><div class="prow" style="margin:6px 0">'+['Baixo','Meio','Alto'].map((n,i)=>'<label class="lb" style="flex:1">'+n+'<input type="color" data-f="ramp.'+i+'" value="'+f.ramp[i]+'"></label>').join('')+'</div>'+fxCk('eo','Brilho (emissivo)',f.eo)+fxCk('co','Trocar a cor do objeto',f.co)+fxCk('ao','Transparência (some nas áreas fracas)',f.ao)+fxSl('am','Intensidade',0,6,.05,f.am)+'</div>'+nz}
+function fxPath(f,p){const k=p.split('.');let t=f;for(let i=0;i<k.length-1;i++)t=t[k[i]];return[t,k[k.length-1]]}
+const FXST=new Set(['pj','oc','rd','bl','iv','tx','on','eo','co','ao']);
+function fxSet(p,v){const o=cur;if(!o||!o.fx)return;lPushOnce();const[t,k]=fxPath(o.fx,p);t[k]=v;if(FXST.has(k)||p==='ds.on'){o._d=1;rebuild();lBody(1)}else{if(p==='an')fxScan();fxApply(o)}dirty=1;saveSoon()}
+function fxPreset(key){const o=cur,p=FXP[key];if(!o||!p)return;lPushOnce();o.fx=fxClean(Object.assign({on:1,an:1},JSON.parse(JSON.stringify(p.fx))));if(p.mt)o.mt=Object.assign({},matOf(o),{k:p.mt});o._d=1;rebuild();lBody(1);toast('Efeito: '+p.n)}
+function lFxBody(b){const o=cur,ok2=o&&o.F.length,objs=O.filter(x=>x.F.length);
+if(!objs.length){b.innerHTML='<p class="tip">Crie uma malha no modo Modelar para aplicar efeitos.</p>';return}
+b.innerHTML='<label class="lb"><select id="mObj2">'+(ok2?'':'<option value="">Escolha um objeto…</option>')+objs.map(x=>'<option value="'+x.id+'"'+(x===o?' selected':'')+'>'+nmEsc(x.name)+'</option>').join('')+'</select></label><div style="margin-top:8px">'+(ok2?fxHTML(o):'<p class="tip">Toque num objeto na cena ou escolha na lista.</p>')+'</div>';
+$('#mObj2').onchange=e=>{const x=O.find(y=>String(y.id)===e.target.value);if(x){pick(x);rebuild()}};
+b.oninput=e=>{const t=e.target,p=t.dataset&&t.dataset.f;if(!p)return;if(t.type==='range'){const v=parseFloat(t.value);fxSet(p,v);const bb=t.parentNode.querySelector('b');if(bb)bb.textContent=v}else if(t.type==='color')fxSet(p,t.value)};
+b.onchange=e=>{const t=e.target,p=t.dataset&&t.dataset.f;if(!p)return;if(t.type==='checkbox')fxSet(p,t.checked?1:0);else if(t.tagName==='SELECT')fxSet(p,t.value)};
+b.onclick=e=>{const bt=e.target.closest('button');if(!bt)return;if(bt.dataset.f!=null&&bt.dataset.v!=null){const v=bt.dataset.v;fxSet(bt.dataset.f,isNaN(+v)?v:+v);return}
+const a=(bt.dataset.a||'').split(':'),k=a[0],arg=a.slice(1).join(':');if(!k||!o)return;
+if(k==='preset')fxPreset(arg);
+else if(k==='create'){lPushOnce();o.fx=fxNew();o._d=1;rebuild();lBody(1)}
+else if(k==='remove'){lPushOnce();delete o.fx;o._d=1;fxScan();rebuild();lBody(1)}
+else if(k==='addL'&&o.fx&&o.fx.L.length<6){lPushOnce();o.fx.L.push(fxL(arg));o._d=1;rebuild();lBody(1)}
+else if(k==='delL'&&o.fx&&o.fx.L.length>1){lPushOnce();o.fx.L.splice(+arg,1);o._d=1;rebuild();lBody(1)}
+else if(k==='imp'){$('#nzFile').click()}
+else if(k==='delN'){NZ=NZ.filter(n=>n.id!==arg);delete NZC[arg];nzSave();O.forEach(x=>{if(x.fx)x.fx.L.forEach(l=>{if(l.tx===arg)l.tx=''})});invalidateAll();rebuild();lBody(1)}};
+const nf=$('#nzFile');if(nf)nf.onchange=e=>{const f=e.target.files[0];e.target.value='';if(f)nzImport(f,()=>{lBody(1);toast('Ruído importado')})}}
+
+/* ----- exportar efeitos: Godot, Unity e receita para o Unreal ----- */
+const fxSlug=s=>String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]+/g,'_').replace(/^_+|_+$/g,'').slice(0,32)||'objeto';
+const flt=x=>{let s=(+x).toFixed(5).replace(/0+$/,'');if(s.endsWith('.'))s+='0';return s};
+const v4s=a=>a.map(flt).join(',');
+const toHLSL=s=>s.replace(/\bvec([234])\b/g,'float$1').replace(/\bfract\(/g,'frac(').replace(/\bmix\(/g,'lerp(').replace(/\btexture2D\(/g,'tex2D(');
+const toGodot=s=>s.replace(/\btexture2D\(/g,'texture(');
+function fxVals(o){const f=o.fx,b=fxBox(o.V),rd=d=>d*Math.PI/180;return{b,A:f.L.map(l=>[l.sc,l.sp,rd(l.an),l.st]),B:f.L.map(l=>[1+l.ct*8,0,0,0]),D:[f.ds.am,f.ds.sc,f.ds.sp,rd(f.ds.an)],R:f.ramp.map(fxRgb)}}
+function fxGodot(o){const f=o.fx,V=fxVals(o),unl=matOf(o).k==='unlit';
+let s='// Gerado pelo PolyPocket: efeito do objeto "'+o.name+'"\n// Use num ShaderMaterial. Carregue palette.png em albedo_tex'+(f.L.some(l=>l.k==='tex')?' e os ruídos da pasta ruidos/ nos uniforms uFxTx*':'')+'.\nshader_type spatial;\n'+(unl?'render_mode unshaded;\n':'')+
+'uniform sampler2D albedo_tex : source_color, filter_linear, repeat_disable;\nuniform float fx_speed = 1.0;\nuniform vec3 uFxC = vec3('+v4s(V.b.c)+');\nuniform float uFxS = '+flt(V.b.s)+';\nuniform vec4 uFxD = vec4('+v4s(V.D)+');\n'+
+V.R.map((c,i)=>'uniform vec4 uFxR'+i+' : source_color = vec4('+v4s(c)+',1.0);\n').join('')+'uniform float uFxM = '+flt(f.am)+';\n'+
+f.L.map((l,i)=>'uniform vec4 uFxA'+i+' = vec4('+v4s(V.A[i])+');\nuniform vec4 uFxB'+i+' = vec4('+v4s(V.B[i])+');\n'+(l.k==='tex'?'uniform sampler2D uFxTx'+i+' : filter_linear, repeat_enable;\n':'')).join('')+
+'varying vec3 fx_p;\nvoid vertex(){ fx_p = VERTEX; }\n'+toGodot(FXLIB+fxEvalSrc(f))+
+'void fragment(){\n vec4 base = texture(albedo_tex, UV);\n vec3 col; float val;\n fxEval(fx_p, TIME * fx_speed, col, val);\n ALBEDO = base.rgb;\n ALPHA = 1.0;\n'+
+(f.eo?(unl?' ALBEDO += col * uFxM;\n':' EMISSION += col * uFxM;\n'):'')+(f.co?' ALBEDO = mix(ALBEDO, col, clamp(uFxM, 0.0, 1.0));\n':'')+(f.ao?' ALPHA = clamp(val * uFxM, 0.0, 1.0);\n':'')+'}\n';return s}
+function fxUnity(o){const f=o.fx,V=fxVals(o),nm=String(o.name).replace(/[^\w ]/g,'').slice(0,40)||'Objeto',al=f.ao;
+let s='// Gerado pelo PolyPocket: efeito do objeto "'+o.name+'"\n// Shader sem iluminação (unlit) para o pipeline Built-in; em URP também funciona como shader unlit.\nShader "PolyPocket/'+nm+'"\n{\n Properties\n {\n  _MainTex ("Paleta (palette.png)", 2D) = "white" {}\n  _FxSpeed ("Velocidade global", Float) = 1\n  uFxC ("Centro (espaço local)", Vector) = ('+v4s(V.b.c.concat([0]))+')\n  uFxS ("Escala do espaço", Float) = '+flt(V.b.s)+'\n  uFxD ("Distorção: intensidade, escala, velocidade, ângulo(rad)", Vector) = ('+v4s(V.D)+')\n'+
+V.R.map((c,i)=>'  uFxR'+i+' ("Cor '+['baixa','média','alta'][i]+'", Color) = ('+v4s(c)+',1)\n').join('')+'  uFxM ("Intensidade", Float) = '+flt(f.am)+'\n'+
+f.L.map((l,i)=>'  uFxA'+i+' ("Camada '+(i+1)+': escala, velocidade, ângulo(rad), força", Vector) = ('+v4s(V.A[i])+')\n  uFxB'+i+' ("Camada '+(i+1)+': fator de contraste", Vector) = ('+v4s(V.B[i])+')\n'+(l.k==='tex'?'  uFxTx'+i+' ("Camada '+(i+1)+': ruído", 2D) = "gray" {}\n':'')).join('')+' }\n SubShader\n {\n  Tags { "RenderType"="'+(al?'Transparent':'Opaque')+'" "Queue"="'+(al?'Transparent':'Geometry')+'" }\n'+(al?'  Blend SrcAlpha OneMinusSrcAlpha\n  ZWrite Off\n':'')+'  Cull Back\n  Pass\n  {\n   CGPROGRAM\n   #pragma vertex vert\n   #pragma fragment frag\n   #include "UnityCG.cginc"\n'+
+'   sampler2D _MainTex; float4 _MainTex_ST; float _FxSpeed;\n   float4 uFxC; float uFxS; float4 uFxD; float4 uFxR0; float4 uFxR1; float4 uFxR2; float uFxM;\n'+f.L.map((l,i)=>'   float4 uFxA'+i+'; float4 uFxB'+i+';'+(l.k==='tex'?' sampler2D uFxTx'+i+';':'')+'\n').join('')+
+'   struct appdata { float4 vertex : POSITION; float2 uv : TEXCOORD0; };\n   struct v2f { float4 pos : SV_POSITION; float2 uv : TEXCOORD0; float3 lp : TEXCOORD1; };\n   v2f vert (appdata v)\n   {\n    v2f o; o.pos = UnityObjectToClipPos(v.vertex); o.uv = TRANSFORM_TEX(v.uv, _MainTex); o.lp = v.vertex.xyz; return o;\n   }\n'+toHLSL(FXLIB+fxEvalSrc(f))+
+'   float4 frag (v2f i) : SV_Target\n   {\n    float4 base = tex2D(_MainTex, i.uv);\n    float3 rgb = base.rgb; float a = 1.0; float3 col; float val;\n    fxEval(i.lp, _Time.y * _FxSpeed, col, val);\n'+(f.eo?'    rgb += col * uFxM;\n':'')+(f.co?'    rgb = lerp(rgb, col, saturate(uFxM));\n':'')+(f.ao?'    a = saturate(val * uFxM);\n':'')+'    return float4(rgb, a);\n   }\n   ENDCG\n  }\n }\n}\n';return s}
+function fxRecipe(o){const f=o.fx,V=fxVals(o),A=V.A,r=x=>flt(x);
+const dir=a=>'(cos '+Math.round(a*180/Math.PI)+'°, sin '+Math.round(a*180/Math.PI)+'°, 0)';
+let s='RECEITA PARA O UNREAL: efeito do objeto "'+o.name+'"\n(Receita manual com nós de Material; não foi testada dentro do Unreal.)\n\n';
+s+='0) Material: Shading Model Default Lit (ou Unlit se o objeto for "Sem luz"). Blend Mode '+(f.ao?'Translucent (a opacidade vem do efeito)':'Opaque')+'. Ligue a textura palette.png (TextureSample com as UVs do modelo) em Base Color.\n\n';
+s+='1) Posição normalizada P (use sempre P nas camadas):\n   AbsoluteWorldPosition -> TransformPosition (World -> Local) = PL (em cm).\n   Converta para os eixos e metros do PolyPocket (convenção do exportador glTF da Epic): Pm = (PL.y, PL.z, PL.x) / 100.\n   Se o efeito aparecer girado, troque a ordem dos eixos nesta linha.\n   P = (Pm - ('+v4s(V.b.c)+')) * '+flt(V.b.s)+'\n   Projeção "'+f.pj+'": '+({'3d':'use P inteiro (X,Y,Z)','xy':'use (P.x, P.y, 0)','xz':'use (P.x, P.z, 0)','yz':'use (P.y, P.z, 0)'}[f.pj])+'. Chame o resultado de Q.\n';
+s+='   Tempo T = Time * (velocidade global que você quiser, 1 = igual ao PolyPocket).\n\n';
+if(f.ds.on)s+='2) Distorção: Q = Q + (Noise(Q*'+r(f.ds.sc)+' - dir*T*'+r(f.ds.sp)+') - 0.5) * 2 * '+r(f.ds.am)+'   com dir = '+dir(V.D[3])+'. Use o nó Noise (Function: Simplex - Texture Based ou Gradient - ALU), Output Min 0, Max 1, repetindo com deslocamentos diferentes para X, Y e Z.\n\n';
+else s+='2) Sem distorção.\n\n';
+s+='3) Camadas (valor v de 0 a 1 em cada uma):\n';
+f.L.forEach((l,i)=>{const a=A[i],d=dir(a[2]),R=f.pj==='3d'?'Length(Q)':'Length(Q.xy)',rd=l.rd>0?'+':l.rd<0?'-':'';
+s+='  Camada '+(i+1)+' ('+FXK[l.k]+'): escala '+r(a[0])+', velocidade '+r(a[1])+', direção '+d+', força '+r(a[3])+', contraste '+r(1+l.ct*8)+'\n    ';
+if(l.k==='noise')s+=l.rd?'v = Noise(Q*'+r(a[0])+' '+(l.rd>0?'-':'+')+' Normalize(Q)*T*'+r(a[1])+')':'v = Noise(Q*'+r(a[0])+' - dir*T*'+r(a[1])+')';
+else if(l.k==='waves')s+=l.rd?'x = '+R+'*'+r(a[0])+' - T*'+r(a[1])+(l.rd>0?'':' (sinal do tempo invertido: + em vez de -)')+'; v = 0.5 + 0.5*Sine(x) com Period = 1':'x = Dot(Q, dir)*'+r(a[0])+' - T*'+r(a[1])+'; v = 0.5 + 0.5*Sine(x) com Period = 1';
+else if(l.k==='rings')s+='x = '+R+'*'+r(a[0])+(l.rd>0?' - T*'+r(a[1]):l.rd<0?' + T*'+r(a[1]):'')+'; v = 1 - Abs(Frac(x) - 0.5)*2';
+else if(l.k==='grad')s+='v = Saturate(Dot(Q, dir)*'+r(a[0])+'*0.5 + 0.5)'+(l.iv?'; depois v = 1 - v':'');
+else s+='v = TextureSample(ruído, UV = Q.xy*'+r(a[0])+'*0.5 + 0.5 - dir.xy*T*'+r(a[1])+').r  (arquivo na pasta ruidos/, textura com sRGB desligado e Tiling ligado)';
+s+='\n    depois: v = Saturate((v - 0.5)*'+r(1+l.ct*8)+' + 0.5) * '+r(a[3])+(i>0?'\n    mistura com o resultado anterior: '+(l.bl==='add'?'Somar (acc = acc + v)':'Multiplicar (acc = acc * v)'):'\n    acc = v')+'\n'});
+s+='  acc = Saturate(acc)\n\n4) Cor pela rampa:\n   cor = Lerp( Lerp(C0, C1, Saturate(acc*2)), C2, Saturate(acc*2-1) )\n   C0 = '+f.ramp[0]+'   C1 = '+f.ramp[1]+'   C2 = '+f.ramp[2]+'  (valores sRGB; use Constant3Vector)\n\n5) Saídas (Intensidade = '+r(f.am)+'):\n';
+s+=(f.eo?'   Emissive Color = Emissive + cor * Intensidade\n':'')+(f.co?'   Base Color = Lerp(Base Color, cor, Saturate(Intensidade))\n':'')+(f.ao?'   Opacity = Saturate(acc * Intensidade)\n':'')+((f.eo||f.co||f.ao)?'':'   (nenhuma saída ligada)\n');return s}
+function fxReadme(L){return`EFEITOS DE SHADER DO POLYPOCKET
+================================
+O arquivo GLB não leva shaders animados (o glTF não tem esse recurso). Por isso os efeitos saem aqui, como código pronto para cada motor. O GLB continua levando a malha, a paleta e os materiais básicos.
+
+Objetos com efeito: ${L.map(o=>o.name).join(', ')}
+
+COMO USAR
+- palette.png: textura de cor do modelo (UVs do GLB). Ligue-a como textura principal em todos os motores.
+- ruidos/: ruídos importados usados por camadas "Textura" (use como textura em tons de cinza, sem sRGB, com repetição ligada).
+- efeitos/*.json: todos os parâmetros de cada efeito, caso queira recriar à mão.
+
+GODOT 4 (godot/*.gdshader)
+  1. Crie um ShaderMaterial no MeshInstance3D e carregue o arquivo .gdshader.
+  2. Em "Shader Parameters" carregue palette.png em albedo_tex (e os ruídos em uFxTx*).
+  3. Ajuste fx_speed, uFxM (intensidade) e as camadas uFxA*/uFxB* ali mesmo.
+
+UNITY (unity/*.shader)
+  1. Coloque o .shader na pasta Assets. Crie um Material e escolha PolyPocket/<nome>.
+  2. Arraste palette.png para "Paleta" (e os ruídos para os campos de camada).
+  3. Os parâmetros ficam no Inspector (Vector = escala, velocidade, ângulo em radianos, força).
+  Feito para o pipeline Built-in (sem iluminação). Em URP costuma funcionar como shader unlit; confira no seu projeto.
+
+UNREAL (unreal/*_receita.txt)
+  O Unreal não importa shader em texto. Cada arquivo traz uma receita passo a passo com os nós de Material e os valores exatos do efeito.
+
+AVISOS
+- Os eixos locais mudam de motor para motor. Efeitos verticais (fogo subindo) costumam ficar iguais; direções horizontais podem aparecer espelhadas ou giradas e é só ajustar o ângulo.
+- Estes shaders foram validados como código (compilam), mas não foram testados dentro de Unity, Godot ou Unreal.
+`}
+function b64bytes(u){const b=atob(u.split(',')[1]),a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a}
+async function fxExport(){try{const L=O.filter(o=>o.F.length&&o.fx&&o.fx.on);if(!L.length)return toast('Nenhum objeto com efeito ativo');const en=new TextEncoder(),files=[{n:'palette.png',d:new Uint8Array(await(await palPNG()).arrayBuffer())}],used=new Set(),seen={};
+L.forEach(o=>{let sl=fxSlug(o.name);seen[sl]=(seen[sl]||0)+1;if(seen[sl]>1)sl+='_'+seen[sl];const V=fxVals(o);
+files.push({n:'godot/'+sl+'.gdshader',d:en.encode(fxGodot(o))},{n:'unity/'+sl+'.shader',d:en.encode(fxUnity(o))},{n:'unreal/'+sl+'_receita.txt',d:en.encode(fxRecipe(o))},{n:'efeitos/'+sl+'.json',d:en.encode(JSON.stringify({objeto:o.name,centro:V.b.c,escala:V.b.s,fx:o.fx},null,1))});o.fx.L.forEach(l=>{if(l.k==='tex'&&l.tx)used.add(l.tx)})});
+NZ.filter(n=>used.has(n.id)).forEach(n=>files.push({n:'ruidos/'+fxSlug(n.n)+'_'+n.id+'.png',d:b64bytes(n.u)}));files.push({n:'LEIA-ME.txt',d:en.encode(fxReadme(L))});
+saveBlob(zip(files),'polypocket_efeitos.zip');toast('Efeitos exportados: '+L.length+' objeto(s) em ZIP')}catch(e){toast('Não consegui gerar o ZIP de efeitos')}}
 
 paint();upd();if(ok)rebuild();else{add('cubo');undo=[]}toolsUI();paintAdd();paintFabs();
 </script></body></html>
