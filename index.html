@@ -169,9 +169,15 @@ body.lumm .cat.mesh{display:none}
 #lBase{min-width:96px;height:44px;font-size:12.5px;padding:0 8px}
 .seg{display:flex;gap:6px;margin:4px 0}.seg button{flex:1;min-width:0;min-height:38px;padding:0 4px;font-size:12.5px}
 .fxl{border:1px solid var(--bd);border-radius:14px;padding:8px 10px;margin:8px 0}.fxm{font-size:12px;color:var(--mu);margin:6px 0 0}
+#pj{display:block;font:600 10px/1 Inter,system-ui,sans-serif;color:var(--mu);text-shadow:none;margin-top:4px;letter-spacing:0;max-width:52vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#pj.er{color:#ff5252}
+#pm{position:fixed;inset:0;z-index:60;background:rgba(3,6,12,.75);display:flex;align-items:center;justify-content:center;padding:12px;box-sizing:border-box}#pm[hidden]{display:none}
+#pm .bx{background:var(--pn);border:1px solid rgba(0,245,255,.25);border-radius:16px;padding:12px;width:100%;max-width:460px;max-height:86vh;display:flex;flex-direction:column;gap:8px;color:var(--tx)}
+#pm .ls{overflow:auto;display:flex;flex-direction:column;gap:6px}#pm .it{background:var(--ch);border:1px solid var(--bd);border-radius:12px;padding:8px}#pm .it.on{border-color:var(--cy)}
+#pm .rw{display:flex;gap:6px;flex-wrap:wrap;align-items:center}#pm .sp{flex:1}#pm button{min-height:40px;padding:0 10px;font-size:13px}#pm b{font-size:14px;word-break:break-word}#pm .sub{color:var(--mu);font-size:11px;margin:2px 0 6px}
+#toast{z-index:80}
 </style></head><body>
 <div id="app">
-<div id="top"><button id="bMenu" aria-label="Abrir menu" data-ic="menu"></button><h1>PolyPocket</h1><button id="bMo" aria-label="Trocar modo"></button><div class="hist"><button id="bU" aria-label="Desfazer" data-ic="undo"></button><button id="bR" aria-label="Refazer" data-ic="redo"></button></div></div>
+<div id="top"><button id="bMenu" aria-label="Abrir menu" data-ic="menu"></button><h1 style="cursor:pointer">PolyPocket<span id="pj"></span></h1><button id="bMo" aria-label="Trocar modo"></button><div class="hist"><button id="bU" aria-label="Desfazer" data-ic="undo"></button><button id="bR" aria-label="Refazer" data-ic="redo"></button></div></div>
 <div id="cv"><div id="hint">1 dedo gira · 2 dedos zoom e move</div>
 <svg id="ov"></svg><div id="ctx" hidden></div><div id="opt" hidden></div>
 <div id="tools2"><button id="bShape" aria-label="Forma"></button><button data-et aria-label="Extrusão"><span class="tg">⬆</span><span class="tb">Extrusão</span></button><button data-et aria-label="Inserção"><span class="tg">⊡</span><span class="tb">Inserção</span></button><button data-et aria-label="Chanfro"><span class="tg">◣</span><span class="tb">Chanfro</span></button><button data-et aria-label="Corte"><span class="tg">✂</span><span class="tb">Corte</span></button><button data-et aria-label="Bissecção"><span class="tg">⫽</span><span class="tb">Bissecção</span></button><button data-et aria-label="Poly Build"><span class="tg">⬡</span><span class="tb">Poly</span></button><button data-et aria-label="Gira (Spin)"><span class="tg">⟲</span><span class="tb">Gira</span></button></div>
@@ -190,13 +196,14 @@ body.lumm .cat.mesh{display:none}
 
 
 
-<section class="cat mesh"><h2>Malha e objeto</h2><div class="cb"><button id="bDis" data-close>Dissolver seleção</button><button id="bOrS" data-close>Origem na seleção</button><button id="bOrC" data-close>Origem no centro</button><button id="bOrB" data-close>Origem na base</button><button id="bApX" data-close>Aplicar escala/rotação</button><button id="bVis">Selecionar só visíveis</button></div></section>
-<section class="cat open"><h2>Vista e arquivo</h2><div class="cb"><button id="bV" data-close>Centralizar câmera</button><button id="bBase">Ver só a base</button><button id="bX" data-close>Exportar OBJ</button><button id="bGlb" data-close>Exportar GLB (com paleta)</button><button id="bSv" data-close>Salvar projeto (arquivo)</button><button id="bOp" data-close>Abrir projeto…</button><input type="file" id="fProj" accept=".json,application/json" hidden></div></section>
+<section class="cat mesh"><h2>Malha e objeto</h2><div class="cb"><button id="bDis" data-close>Dissolver seleção</button><button id="bMc" data-close>Verificar malha…</button><button id="bOrS" data-close>Origem na seleção</button><button id="bOrC" data-close>Origem no centro</button><button id="bOrB" data-close>Origem na base</button><button id="bApX" data-close>Aplicar escala/rotação</button><button id="bVis">Selecionar só visíveis</button></div></section>
+<section class="cat open"><h2>Vista e arquivo</h2><div class="cb"><button id="bV" data-close>Centralizar câmera</button><button id="bBase">Ver só a base</button><button id="bIo" data-close>Importar / Exportar…</button><button id="bX" data-close>Exportar OBJ</button><button id="bGlb" data-close>Exportar GLB (com paleta)</button><button id="bPj" data-close>Projetos…</button><button id="bSv" data-close>Salvar arquivo</button><button id="bSa" data-close>Salvar como…</button><button id="bOp" data-close>Abrir arquivo…</button><input type="file" id="fProj" accept=".json,application/json" hidden></div></section>
 </div></div>
 <div id="toast"></div>
 <div id="modal" hidden><div><textarea id="obj" readonly></textarea><div style="display:flex;gap:6px;margin-top:8px;padding:0;background:none"><button id="bCp" style="flex:1">Copiar OBJ</button><button id="bCl" style="flex:1">Fechar</button></div></div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
+var DB=null,PJ={id:null,name:'Sem título',h:null,ready:0,q:Promise.resolve(),d:null,dt:0,bt:0,bak:null,ls:null,err:0,warned:0};
 const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
 const ICO={
 menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
@@ -309,8 +316,8 @@ og.dispose();const g=new THREE.BufferGeometry(),P=new THREE.Float32BufferAttribu
 const disposeObj=o=>[o.m,o.rm,o.l].forEach(x=>x&&x.geometry&&x.geometry.dispose());
 function edgeMap(FF=F){const E=new Map();FF.forEach(q=>q.forEach((a,k)=>{const b=q[(k+1)%q.length],key=a<b?a+','+b:b+','+a;if(!E.has(key))E.set(key,[Math.min(a,b),Math.max(a,b)])}));return E}
 let svOn=0,svT=0;
-function saveNow(){clearTimeout(svT);if(!svOn)return;svOn=0;try{localStorage.setItem('pp2',snap())}catch(e){}}
-function saveSoon(){svOn=1;clearTimeout(svT);svT=setTimeout(saveNow,600)}
+function saveNow(){clearTimeout(svT);if(!svOn)return;svOn=0;pjSave()}
+function saveSoon(){svOn=1;clearTimeout(svT);svT=setTimeout(saveNow,600);pjStat('alterado…')}
 addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')saveNow()});addEventListener('pagehide',saveNow);
 function rebuild(){
 cur.V=V;cur.F=F;mesh=cur.m;lines=cur.l;cur._d=1;O.forEach(o=>{if(o!==cur&&o.vis&&o._d!==0){refresh(o);o._d=0}o.g.visible=o.vis&&(!ISO||o===cur||isDesc(o,cur))});if(LPV())shadowFit();fxScan();
@@ -536,15 +543,15 @@ const inner=new Map();nx.forEach((_,v)=>inner.set(v,mk(v)));
 inner.forEach((ni,v)=>{const n1=nx.get(v),p1=pv.get(v);let d=new THREE.Vector3();if(n1&&p1&&n1.length===1&&p1.length===1){const m1=inwN(ow.get(p1[0]+','+v),p1[0],v),m2=inwN(ow.get(v+','+n1[0]),v,n1[0]);d=m1.clone().add(m2).multiplyScalar(1/Math.max(.25,1+m1.dot(m2)))}list.push({i:ni,b:V[ni].slice(),d:d.toArray()})});
 nx.forEach((bs,a)=>bs.forEach(b=>ring.push(inh(F[ow.get(a+','+b)],[a,b,inner.get(b),inner.get(a)]))));G.forEach(f=>{F[f]=F[f].map(v=>inner.has(v)?inner.get(v):v)})});
 F.push(...ring);return xop(list,Math.max(.001,rmin*.9))}
-function bevEdgeOp(){const efm=efmap(),B=new Set();sel.forEach(k=>{if((efm.get(k)||[]).length===2)B.add(k)});if(!B.size)return fail('Chanfro precisa de arestas com duas faces');
+function bevEdgeOp(){const efm=efmap(),B=new Set(),o0=[...efm.values()].filter(x=>x.length===1).length;sel.forEach(k=>{if((efm.get(k)||[]).length===2)B.add(k)});if(!B.size)return fail('Chanfro precisa de arestas com duas faces');
 const list=[],mk=(v,d)=>{V.push(V[v].slice());list.push({i:V.length-1,b:V[v].slice(),d});return V.length-1},mark=new Set(),slide=new Map(),S=(a,v)=>{const k=ek(a,v)+'@'+v;if(!slide.has(k))slide.set(k,mk(v,un3(v,a)));return slide.get(k)};
 F.forEach(q=>q.forEach((v,j)=>{const n=q.length,p=q[(j+n-1)%n],x=q[(j+1)%n],bp=B.has(ek(p,v)),bn=B.has(ek(v,x));if(bp&&!bn)mark.add(ek(v,x)+'@'+v);if(bn&&!bp)mark.add(ek(p,v)+'@'+v)}));
 const out=new Map(),nf=[];F.forEach((q,f)=>{const n=q.length,L=[];q.forEach((v,j)=>{const p=q[(j+n-1)%n],x=q[(j+1)%n],bp=B.has(ek(p,v)),bn=B.has(ek(v,x));let o;
 if(bp&&bn){const m1=inwN(f,p,v),m2=inwN(f,v,x);o=[mk(v,m1.clone().add(m2).multiplyScalar(1/Math.max(.25,1+m1.dot(m2))).toArray())]}else if(bp)o=[S(x,v)];else if(bn)o=[S(p,v)];
-else{o=[];if(mark.has(ek(p,v)+'@'+v))o.push(S(p,v));if(mark.has(ek(v,x)+'@'+v))o.push(S(x,v));if(!o.length)o=[v]}out.set(f+','+j,o);L.push(...o)});nf.push(inh(q,L))});
+else{const mp=mark.has(ek(p,v)+'@'+v),mn=mark.has(ek(v,x)+'@'+v);o=[];if(mp)o.push(S(p,v));if(!(mp&&mn))o.push(v);if(mn)o.push(S(x,v))}out.set(f+','+j,o);L.push(...o)});nf.push(inh(q,L))});
 const strips=[];B.forEach(k=>{const[[f1,j1],[f2,j2]]=efm.get(k),n1=F[f1].length,n2=F[f2].length,A1=out.get(f1+','+j1)[0],B1=out.get(f1+','+((j1+1)%n1))[0],B2=out.get(f2+','+j2)[0],A2=out.get(f2+','+((j2+1)%n2))[0];strips.push(inh(F[f1],[B1,A1,A2,B2]))});
 const bv=new Set();B.forEach(k=>k.split(',').forEach(x=>bv.add(+x)));const caps=walkCaps([...bv],(f,j)=>out.get(f+','+j),efm);let ml=1e9;efm.forEach((_,k)=>{const[a,b]=k.split(',').map(Number);if(bv.has(a)||bv.has(b))ml=Math.min(ml,Math.hypot(V[a][0]-V[b][0],V[a][1]-V[b][1],V[a][2]-V[b][2]))});
-F=nf.concat(strips,caps);return xop(list,Math.max(.001,ml*.45),()=>{const r=wcollapse(V,F,[]);V=r[0];F=r[1];sel=new Set()})}
+F=nf.concat(strips,caps);{const o1=[...efmap().values()].filter(x=>x.length===1).length;if(o1>o0)toast('Chanfro deixou '+(o1-o0)+' aresta(s) aberta(s): há borda aberta ou aresta com 3+ faces perto desses vértices. Desfaça, use Verificar malha (menu) e tente de novo')}return xop(list,Math.max(.001,ml*.45),()=>{const r=wcollapse(V,F,[]);V=r[0];F=r[1];sel=new Set()})}
 function bevVertOp(){const Vs=new Set(sel),efm=efmap(),list=[],slide=new Map(),mk=(v,d)=>{V.push(V[v].slice());list.push({i:V.length-1,b:V[v].slice(),d});return V.length-1},S=(a,v)=>{const k=a+'@'+v;if(!slide.has(k))slide.set(k,mk(v,un3(v,a)));return slide.get(k)};
 const outOf=(f,j)=>{const q=F[f],n=q.length,v=q[j];return Vs.has(v)?[S(q[(j+n-1)%n],v),S(q[(j+1)%n],v)]:[v]};const nf=F.map((q,f)=>{const L=[];q.forEach((v,j)=>L.push(...outOf(f,j)));return inh(q,L)});
 const caps=walkCaps([...Vs],outOf,efm);let ml=1e9;efm.forEach((_,k)=>{const[a,b]=k.split(',').map(Number);if(Vs.has(a)||Vs.has(b))ml=Math.min(ml,Math.hypot(V[a][0]-V[b][0],V[a][1]-V[b][1],V[a][2]-V[b][2]))});
@@ -847,14 +854,13 @@ for(const o of L){if(o.par!=null){if(!ids.has(o.par))return'Pai inexistente';let
 return null}
 function projClean(d){return d.scene.O.map(o=>{const m=[];(Array.isArray(o.mods)?o.mods:[]).forEach(x=>{if(!x||typeof x.t!=='string'||!Object.prototype.hasOwnProperty.call(MOD,x.t))return;const y={t:x.t,on:x.on!==false};Object.keys(MOD[x.t].d).forEach(k=>{if(typeof x[k]===typeof MOD[x.t].d[k])y[k]=x[k]});m.push(y)});
 return{fx:fxClean(o.fx),mt:mtClean(o.mt),id:o.id,name:String(o.name||'Objeto').slice(0,60),V:o.V.map(v=>v.slice()),F:o.F.map(q=>q.slice()),K:Array.isArray(o.K)&&o.K.length===o.F.length?o.K.map(k=>Number.isInteger(k)?k:-1):undefined,par:o.par==null?null:o.par,vis:o.vis!==false,lock:!!o.lock,fold:!!o.fold,mods:m,t:o.t.slice(),r:o.r.slice(),s:o.s.slice()}})}
-function projSave(){cur.V=V;cur.F=F;const d={app:'PolyPocket',fmt:1,saved:new Date().toISOString(),scene:JSON.parse(snap()),pal:{name:PAL.name,cols:PAL.cols,cells:PAL.cells},gm:GM,luz:ENV,noise:NZ},st=new Date().toISOString().slice(0,16).replace(/[-:]/g,'').replace('T','_');
-saveBlob(new Blob([JSON.stringify(d)],{type:'application/json'}),'polypocket_'+st+'.json');toast('Projeto salvo em arquivo')}
-async function projOpen(f){if(!f)return;if(f.size>40e6)return toast('Arquivo grande demais');let d;try{d=JSON.parse(await f.text())}catch(e){return toast('Arquivo inválido (não é JSON)')}
-const err=projCheck(d);if(err)return toast(err);
-const L=projClean(d),u2=Math.max(...L.map(o=>o.id))+1;push();load(JSON.stringify({O:L,c:d.scene.c,u:u2,m:'o',s:[]}));
+function projSave(){return pjFile()}
+async function projOpen(f,h){if(!f)return;if(f.size>40e6)return toast('Arquivo grande demais');let d;try{d=JSON.parse(await f.text())}catch(e){return toast('Arquivo inválido (não é JSON)')}
+const err=projCheck(d);if(err)return toast(err);await pjFlush();pjNew(String(d.name||f.name.replace(/(\.polypocket)?\.json$/i,'')||'Importado').slice(0,60),h||null);projLoadData(d);pjSave()}
+function projLoadData(d){const L=projClean(d),u2=Math.max(...L.map(o=>o.id))+1;push();load(JSON.stringify({O:L,c:d.scene.c,u:u2,m:'o',s:[]}));
 const p=d.pal;if(p&&Number.isInteger(p.cols)&&p.cols>=1&&p.cols<=256&&Array.isArray(p.cells)&&p.cells.length<=4096&&p.cells.every(c=>Array.isArray(c)&&c.length>=2&&c.every(s=>Array.isArray(s)&&s.length===3&&s.every(x=>Number.isInteger(x)&&x>=0&&x<=255)))){PAL={name:String(p.name||'Paleta').slice(0,40),cols:p.cols,cells:p.cells.map(c=>c.map(s=>s.slice()))};GM=d.gm?1:0;selK=0;savePal()}
-{const le=envClean(d.luz);if(le){ENV=le;saveEnv()}}if(Array.isArray(d.noise)){NZ=nzClean(d.noise);Object.keys(NZC).forEach(k=>delete NZC[k]);nzSave()}applyLuz();invalidateAll();rebuild();if(PNT)pRender();toast('Projeto aberto: '+L.length+' objeto(s). Desfazer volta ao anterior')}
-$('#bGlb').onclick=expGlb;$('#bSv').onclick=projSave;$('#bOp').onclick=()=>$('#fProj').click();$('#fProj').onchange=e=>{const f=e.target.files[0];e.target.value='';projOpen(f)};
+{const le=envClean(d.luz);if(le){ENV=le;saveEnv()}}if(Array.isArray(d.noise)){NZ=nzClean(d.noise);Object.keys(NZC).forEach(k=>delete NZC[k]);nzSave()}applyLuz();invalidateAll();rebuild();if(PNT)pRender();undo=[];redo=[];pjStat('aberto');toast('Projeto aberto: '+PJ.name+' ('+L.length+' objeto(s))')}
+$('#bGlb').onclick=expGlb;$('#bSv').onclick=()=>pjFile();$('#bSa').onclick=()=>pjFile(1);$('#bPj').onclick=pmShow;$('#bOp').onclick=pjOpenFile;$('#fProj').onchange=e=>{const f=e.target.files[0];e.target.value='';projOpen(f)};
 
 /* ---------- bloco 6: modos Modelar / Pintar no menu + hierarquia na pintura ---------- */
 $('#mModel').innerHTML='<span class="tg">'+ic('cube')+'</span><span class="tb">Modelar</span>';
@@ -1208,4 +1214,279 @@ NZ.filter(n=>used.has(n.id)).forEach(n=>files.push({n:'ruidos/'+fxSlug(n.n)+'_'+
 saveBlob(zip(files),'polypocket_efeitos.zip');toast('Efeitos exportados: '+L.length+' objeto(s) em ZIP')}catch(e){toast('Não consegui gerar o ZIP de efeitos')}}
 
 paint();upd();if(ok)rebuild();else{add('cubo');undo=[]}toolsUI();paintAdd();paintFabs();
+
+/* ---------- bloco 10: projetos, arquivo vinculado e autosave seguro ---------- */
+const nid=()=>'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),hhmm=t=>new Date(t).toTimeString().slice(0,5);
+function dbo(){return DB||(DB=new Promise((ok,no)=>{try{const r=indexedDB.open('polypocket',1);r.onupgradeneeded=()=>r.result.createObjectStore('p',{keyPath:'id'});r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)}catch(e){no(e)}}))}
+async function dbx(m,a){const d=await dbo();return new Promise((ok,no)=>{const t=d.transaction('p',m==='put'||m==='delete'?'readwrite':'readonly'),s=t.objectStore('p'),q=m==='all'?s.getAll():s[m](a);t.oncomplete=()=>ok(q.result);t.onerror=t.onabort=()=>no(t.error||new Error('db'))})}
+function projStr(){const r=JSON.stringify({app:'PolyPocket',fmt:1,saved:new Date().toISOString(),name:PJ.name,pal:{name:PAL.name,cols:PAL.cols,cells:PAL.cells},gm:GM,luz:ENV,noise:NZ});return r.slice(0,-1)+',"scene":'+snap()+'}'}
+function pjStat(t,er){const e=document.getElementById('pj');if(!e)return;e.textContent=PJ.name+' · '+t;e.classList.toggle('er',!!er)}
+function pjNew(name,h){PJ.id=nid();PJ.name=name;PJ.h=h||null;PJ.d=null;PJ.bak=null;PJ.bt=Date.now();PJ.dt=0;PJ.err=0}
+function pjSet(r){PJ.id=r.id;PJ.name=r.name;PJ.h=r.h||null;PJ.d=r.data;PJ.dt=r.mod;PJ.bak=r.bak||null;PJ.bt=0;PJ.err=0}
+function pjSave(){if(!PJ.ready||!PJ.id)return PJ.q;const s=projStr(),id=PJ.id,nm=PJ.name,h=PJ.h;return PJ.q=PJ.q.then(()=>pjWrite(s,id,nm,h))}
+async function pjFlush(){saveNow();await PJ.q}
+async function pjWrite(s,id,nm,h){const now=Date.now();pjStat('salvando…');
+ if(PJ.d&&PJ.d!==s&&now-PJ.bt>3e5){PJ.bak={t:PJ.dt,d:PJ.d};PJ.bt=now}
+ try{await dbx('put',{id,name:nm,mod:now,tris:O.reduce((n,o)=>n+(o.F||[]).reduce((m,q)=>m+q.length-2,0),0),data:s,bak:PJ.bak,h:h||undefined});
+  if(PJ.ls!==id){await dbx('put',{id:'_last',v:id});PJ.ls=id}PJ.d=s;PJ.dt=now;PJ.err=0}
+ catch(e){PJ.err=1;pjStat('ERRO: não salvou',1);if(!PJ.warned){PJ.warned=1;toast('Não consegui salvar no aparelho. Use Salvar arquivo!')}return 0}
+ if(h){try{const w=await h.createWritable();await w.write(s);await w.close()}catch(e){pjStat('salvo no app · arquivo sem acesso',1);return 0}}
+ pjStat('salvo '+hhmm(now)+(h?' · arquivo':''));return 1}
+async function pjFile(as){await pjFlush();const fn=PJ.name.replace(/[\\/:*?"<>|]/g,'_')+'.polypocket.json';
+ if(window.showSaveFilePicker){try{
+  if(!PJ.h||as){PJ.h=await showSaveFilePicker({suggestedName:fn,types:[{description:'Projeto PolyPocket',accept:{'application/json':['.json']}}]});PJ.name=PJ.h.name.replace(/(\.polypocket)?\.json$/i,'')||PJ.name}
+  else if(PJ.h.requestPermission&&await PJ.h.requestPermission({mode:'readwrite'})!=='granted')return toast('Sem permissão para gravar no arquivo');
+  const ok=await pjWrite(projStr(),PJ.id,PJ.name,PJ.h);toast(ok?'Salvo em '+PJ.h.name+'. Próximas alterações vão direto para ele':'Não foi possível gravar o arquivo')}
+  catch(e){if(!e||e.name!=='AbortError')toast('Não foi possível gravar o arquivo')}return}
+ saveBlob(new Blob([projStr()],{type:'application/json'}),fn);toast('Arquivo exportado: '+fn+'. O app também guarda tudo sozinho')}
+async function pjOpenFile(){if(window.showOpenFilePicker){let h;try{[h]=await showOpenFilePicker({types:[{description:'Projeto PolyPocket',accept:{'application/json':['.json']}}]})}catch(e){return}return projOpen(await h.getFile(),h)}$('#fProj').click()}
+/* biblioteca de projetos */
+const PM=document.createElement('div');PM.id='pm';PM.hidden=true;PM.innerHTML='<div class="bx"></div>';document.body.append(PM);PM.onclick=e=>{if(e.target===PM)pmHide()};
+function pmHide(){PM.hidden=true}
+function el(t,x,c,f){const e=document.createElement(t);if(x!=null)e.textContent=x;if(c)e.className=c;if(f)e.onclick=f;return e}
+async function pmNew(){await pjFlush();pjNew('Projeto '+new Date().toLocaleDateString('pt-BR'));const[v,f]=SH.cubo();projLoadData({scene:{O:[{id:1,name:'Cubo 1',V:v.map(x=>[...x]),F:f.map(q=>[...q]),par:null,t:[0,0,0],r:[0,0,0],s:[1,1,1]}],c:1}});pjSave();pmHide()}
+async function pmOpen(r,bak){await pjFlush();const d=JSON.parse(bak?r.bak.d:r.data),err=projCheck(d);if(err)return toast(err);
+ if(bak)pjNew(r.name+' — versão '+hhmm(r.bak.t));else pjSet(r);projLoadData(d);if(bak)pjSave();pmHide()}
+async function pmShow(){let L;try{L=(await dbx('all')).filter(r=>r.id!=='_last')}catch(e){L=[]}
+ L.sort((a,b)=>b.mod-a.mod);const bx=PM.firstChild;bx.replaceChildren();
+ const hd=el('div',null,'rw');hd.append(el('b','Projetos'),el('span',null,'sp'),el('button','Fechar',0,pmHide));
+ const ac=el('div',null,'rw');ac.append(el('button','Novo',0,pmNew),el('button','Abrir arquivo…',0,()=>{pmHide();pjOpenFile()}),el('button','Salvar arquivo',0,()=>{pmHide();pjFile()}),el('button','Salvar como…',0,()=>{pmHide();pjFile(1)}));
+ const ls=el('div',null,'ls');
+ if(!L.length)ls.append(el('div','Nenhum projeto salvo ainda','sub'));
+ L.forEach(r=>{const me=r.id===PJ.id,it=el('div',null,'it'+(me?' on':'')),rw=el('div',null,'rw');
+  it.append(el('b',r.name+(me?' (aberto)':'')),el('div',new Date(r.mod).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})+' · '+r.tris+' triângulos'+(r.h?' · arquivo: '+r.h.name:''),'sub'));
+  if(!me)rw.append(el('button','Abrir',0,()=>pmOpen(r)));
+  rw.append(el('button','Renomear',0,async()=>{const n=prompt('Nome do projeto',r.name);if(!n||!n.trim())return;const nm=n.trim().slice(0,60);
+    if(me){PJ.name=nm;svOn=1;await pjFlush()}else{r.name=nm;await dbx('put',r)}pmShow()}));
+  rw.append(el('button','Duplicar',0,async()=>{await pjFlush();const r2=await dbx('get',r.id);await dbx('put',{...r2,id:nid(),name:r2.name+' (cópia)',mod:Date.now(),h:undefined,bak:null});pmShow()}));
+  if(!me)rw.append(el('button','Excluir',0,async()=>{if(confirm('Excluir "'+r.name+'"? Não dá para desfazer.')){await dbx('delete',r.id);pmShow()}}));
+  if(r.bak)rw.append(el('button','Versão de '+hhmm(r.bak.t),0,()=>pmOpen(r,1)));
+  it.append(rw);ls.append(it)});
+ bx.append(hd,ac,ls);PM.hidden=false}
+$('#top h1').onclick=pmShow;
+addEventListener('keydown',e=>{if(!(e.ctrlKey||e.metaKey)||e.target.closest&&e.target.closest('input,textarea'))return;const k=e.key.toLowerCase();
+ if(k==='s'){e.preventDefault();pjFile()}else if(k==='z'){e.preventDefault();$(e.shiftKey?'#bR':'#bU').click()}else if(k==='y'){e.preventDefault();$('#bR').click()}});
+addEventListener('beforeunload',e=>{if(svOn||PJ.err){e.preventDefault();e.returnValue=''}});
+/* início: abre o último projeto; na 1ª vez, a cena atual (antiga ou cubo) vira projeto */
+(async()=>{let rec=null;try{const l=await dbx('get','_last');rec=l&&await dbx('get',l.v);
+  if(rec){const d=JSON.parse(rec.data);if(projCheck(d))throw 0;pjSet(rec);projLoadData(d)}
+  else{pjNew(ok?'Projeto recuperado':'Meu projeto');PJ.ready=1;await pjSave()}
+ }catch(e){if(rec){pjNew('Sem título');toast('O último projeto não abriu. Veja em Projetos…')}else if(!PJ.id){pjNew('Sem título');PJ.err=1;pjStat('sem armazenamento no aparelho · use Salvar arquivo',1)}}
+ PJ.ready=1;PJ.bt=Date.now();pjStat(rec?'aberto':'pronto');
+ if(!PJ.err)try{localStorage.removeItem('pp2')}catch(e){}
+ try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}})();
+/* ---------- bloco 11: importar e exportar mais formatos (OBJ+MTL, GLB, glTF, STL, PLY, OFF, 3MF) ---------- */
+const ioDec=b=>new TextDecoder().decode(b),ioC8=x=>Math.max(0,Math.min(255,Math.round(x))),
+ioS=x=>ioC8(255*(x<=.0031308?12.92*x:1.055*Math.pow(Math.max(x,0),1/2.4)-.055)),ioL=x=>x<=.04045?x/12.92:Math.pow((x+.055)/1.055,2.4),IODEF=[150,163,177];
+/* solda vértices na mesma posição (STL e glTF vêm "picados"; para editar é melhor ter vértices compartilhados) */
+function ioWeldM(m){const mn=[1e30,1e30,1e30],mx=[-1e30,-1e30,-1e30];m.V.forEach(v=>{for(let a=0;a<3;a++){if(v[a]<mn[a])mn[a]=v[a];if(v[a]>mx[a])mx[a]=v[a]}});
+ const q=Math.max(1e-12,Math.hypot(mx[0]-mn[0],mx[1]-mn[1],mx[2]-mn[2])*1e-6),mp=new Map(),V=[],map=new Array(m.V.length);
+ m.V.forEach((v,i)=>{const k=Math.round(v[0]/q)+','+Math.round(v[1]/q)+','+Math.round(v[2]/q);let id=mp.get(k);if(id==null){id=V.length;mp.set(k,id);V.push(v)}map[i]=id});
+ const F=[],C=[];m.F.forEach((f,i)=>{const g=f.map(x=>map[x]);if(new Set(g).size>=3){F.push(g);C.push(m.C[i])}});return{name:m.name,V,F,C}}
+/* tira faces inválidas (índice fora da malha, menos de 3 pontos) e vértices não finitos */
+function ioClean(m){if(!m.V.every(v=>v.length===3&&v.every(Number.isFinite)))return null;const n=m.V.length,F=[],C=[];m.F.forEach((f,i)=>{if(f.length>=3&&f.every(x=>Number.isInteger(x)&&x>=0&&x<n)){F.push(f);C.push(m.C[i]||null)}});return F.length?{name:m.name,V:m.V,F,C}:null}
+function ioObj(txt,mtl){const V=[],VC=[],objs=[],kd={};let cu=null,mc=null;
+ (mtl||[]).forEach(t=>{let n=null;t.split(/\r?\n/).forEach(l=>{const p=l.trim().split(/\s+/);if(p[0]==='newmtl')n=p.slice(1).join(' ');else if(p[0]==='Kd'&&n)kd[n]=[+p[1],+p[2],+p[3]].map(x=>ioC8(Math.min(1,Math.max(0,x||0))*255))})});
+ const mk=n=>{cu={name:n,F:[],C:[]};objs.push(cu)};
+ txt.split(/\r?\n/).forEach(l=>{const p=l.trim().split(/\s+/),c=p[0];
+  if(c==='v'){V.push([+p[1],+p[2],+p[3]]);if(p.length>=7){const rgb=[+p[4],+p[5],+p[6]],mx=Math.max(...rgb);VC.push(rgb.map(x=>ioC8(Math.min(1,Math.max(0,mx>1?x/255:x))*255)))}else VC.push(null)}
+  else if(c==='o'||c==='g'){const n=p.slice(1).join(' ')||'Objeto';if(cu&&!cu.F.length)cu.name=n;else mk(n)}
+  else if(c==='usemtl')mc=kd[p.slice(1).join(' ')]||null;
+  else if(c==='f'&&p.length>=4){if(!cu)mk('Objeto');const q=p.slice(1).map(t=>{const i=parseInt(t);return i<0?V.length+i:i-1});if(q.some(i=>!(i>=0&&i<V.length)))return;
+   let col=mc;if(!col&&q.every(i=>VC[i]))col=[0,1,2].map(a=>ioC8(q.reduce((s,i)=>s+VC[i][a],0)/q.length));cu.F.push(q);cu.C.push(col)}});
+ return objs.filter(o=>o.F.length).map(o=>{const mp=new Map(),nv=[],F=o.F.map(q=>q.map(i=>{let k=mp.get(i);if(k==null){k=nv.length;mp.set(i,k);nv.push(V[i])}return k}));return{name:o.name,V:nv,F,C:o.C}})}
+function ioStl(buf){const dv=new DataView(buf),n=buf.byteLength>=84?dv.getUint32(80,true):0;let P;
+ if(n>0&&buf.byteLength===84+50*n){if(n>6e5)throw new Error('STL com '+n+' triângulos (o app aceita até 200 mil por objeto)');P=new Float64Array(n*9);for(let i=0;i<n;i++){const o=84+i*50+12;for(let k=0;k<9;k++)P[i*9+k]=dv.getFloat32(o+k*4,true)}}
+ else{const r=/vertex\s+(\S+)\s+(\S+)\s+(\S+)/g,a=[];let m;const t=ioDec(buf);while((m=r.exec(t)))a.push(+m[1],+m[2],+m[3]);P=a}
+ const nt=Math.floor(P.length/9);if(!nt)throw new Error('STL vazio');if(nt>6e5)throw new Error('STL com '+nt+' triângulos (o app aceita até 200 mil por objeto)');const V=[],F=[];for(let i=0;i<nt*3;i++)V.push([P[i*3],P[i*3+1],P[i*3+2]]);for(let i=0;i<nt;i++)F.push([i*3,i*3+1,i*3+2]);
+ return[ioWeldM({name:'STL',V,F,C:F.map(()=>null)})]}
+function ioPly(buf){const u8=new Uint8Array(buf),hd=ioDec(u8.subarray(0,Math.min(u8.length,65536))),m=/end_header\r?\n/.exec(hd);if(!m||!/^ply/.test(hd))throw new Error('PLY inválido');
+ const els=[];let fmt='ascii';hd.slice(0,m.index).split(/\r?\n/).forEach(l=>{const p=l.trim().split(/\s+/);if(p[0]==='format')fmt=p[1];else if(p[0]==='element')els.push({n:p[1],c:+p[2],p:[]});else if(p[0]==='property'&&els.length)els[els.length-1].p.push(p[1]==='list'?{l:1,ct:p[2],t:p[3],n:p[4]}:{t:p[1],n:p[2]})});
+ const TY={char:'Int8',int8:'Int8',uchar:'Uint8',uint8:'Uint8',short:'Int16',int16:'Int16',ushort:'Uint16',uint16:'Uint16',int:'Int32',int32:'Int32',uint:'Uint32',uint32:'Uint32',float:'Float32',float32:'Float32',double:'Float64',float64:'Float64'},SZ={Int8:1,Uint8:1,Int16:2,Uint16:2,Int32:4,Uint32:4,Float32:4,Float64:8};
+ const off=m.index+m[0].length,asc=fmt==='ascii',le=fmt!=='binary_big_endian',dv=new DataView(buf);let rd,ti=0,pos=off,tok;
+ if(asc){tok=ioDec(u8.subarray(off)).split(/\s+/).filter(Boolean);rd=()=>+tok[ti++]}else rd=t=>{const n=TY[t],v=dv['get'+n](pos,le);pos+=SZ[n];return v};
+ const V=[],VC=[],F=[],C=[];
+ els.forEach(e=>{const fl=e.p.some(p=>p.n==='red'&&/float|double/.test(p.t)),cs=c=>c==null?null:ioC8(fl?c*255:c);
+  for(let i=0;i<e.c;i++){const r={};e.p.forEach(p=>{if(p.l){const c=rd(p.ct),a=[];for(let k=0;k<c;k++)a.push(rd(p.t));r[p.n]=a}else r[p.n]=rd(p.t)});
+   if(e.n==='vertex'){V.push([r.x,r.y,r.z]);VC.push(r.red!=null?[cs(r.red),cs(r.green),cs(r.blue)]:null)}
+   else if(e.n==='face'){const ix=r.vertex_indices||r.vertex_index;if(ix){F.push(ix);C.push(r.red!=null?[cs(r.red),cs(r.green),cs(r.blue)]:null)}}}});
+ F.forEach((q,i)=>{if(!C[i]&&q.every(k=>VC[k]))C[i]=[0,1,2].map(a=>ioC8(q.reduce((s,k)=>s+VC[k][a],0)/q.length))});return[{name:'PLY',V,F,C}]}
+function ioOff(txt){const t=txt.replace(/#.*$/gm,'').trim().split(/\s+/);if(t[0]!=='OFF')throw new Error('só OFF simples (sem cores)');let i=1;const nv=+t[i++],nf=+t[i++];i++;const V=[],F=[];
+ for(let k=0;k<nv;k++){V.push([+t[i],+t[i+1],+t[i+2]]);i+=3}for(let k=0;k<nf;k++){const n=+t[i++];F.push(t.slice(i,i+n).map(Number));i+=n}return[{name:'OFF',V,F,C:F.map(()=>null)}]}
+async function ioGltf(buf,files,isGlb){let j,bin=null;
+ if(isGlb){const dv=new DataView(buf);if(dv.getUint32(0,true)!==0x46546C67)throw new Error('GLB inválido');let o=12;while(o+8<=buf.byteLength){const len=dv.getUint32(o,true),ty=dv.getUint32(o+4,true),ch=buf.slice(o+8,o+8+len);if(ty===0x4E4F534A)j=JSON.parse(ioDec(ch));else if(ty===0x004E4942&&!bin)bin=ch;o+=8+len}}else j=JSON.parse(ioDec(buf));
+ if(!j||!j.meshes)throw new Error('sem malhas');
+ const getUri=async u=>{if(/^data:/.test(u)){const s=atob(u.slice(u.indexOf(',')+1)),a=new Uint8Array(s.length);for(let i=0;i<s.length;i++)a[i]=s.charCodeAt(i);return a.buffer}const f=files&&(files.get(u)||files.get(decodeURIComponent(u))||files.get(u.split('/').pop()));if(!f)throw new Error('falta o arquivo '+u+' (selecione-o junto)');return f.arrayBuffer()};
+ const bufs=await Promise.all((j.buffers||[]).map((b,i)=>b.uri?getUri(b.uri):bin));
+ const CT={5120:['Int8',1],5121:['Uint8',1],5122:['Int16',2],5123:['Uint16',2],5125:['Uint32',4],5126:['Float32',4]},NC={SCALAR:1,VEC2:2,VEC3:3,VEC4:4};
+ const acc=i=>{const a=j.accessors[i],nc=NC[a.type],[tn,sz]=CT[a.componentType],out=new Float64Array(a.count*nc);if(a.bufferView==null)return out;const bv=j.bufferViews[a.bufferView],dv=new DataView(bufs[bv.buffer]),base=(bv.byteOffset||0)+(a.byteOffset||0),st=bv.byteStride||nc*sz,nm=a.normalized?{Int8:127,Uint8:255,Int16:32767,Uint16:65535}[tn]||1:1;
+  for(let k=0;k<a.count;k++)for(let c=0;c<nc;c++){const v=dv['get'+tn](base+k*st+c*sz,true);out[k*nc+c]=nm>1?Math.max(v/nm,-1):v}return out};
+ const imgs={},tex=async ti=>{if(imgs[ti]!==undefined)return imgs[ti];let r=null;try{const t=j.textures[ti],im=j.images[t.source];let blob;if(im.bufferView!=null){const bv=j.bufferViews[im.bufferView];blob=new Blob([new Uint8Array(bufs[bv.buffer],bv.byteOffset||0,bv.byteLength)],{type:im.mimeType||'image/png'})}else blob=new Blob([await getUri(im.uri)]);
+  const bm=await createImageBitmap(blob),sc=Math.min(1,512/Math.max(bm.width,bm.height)),w=Math.max(1,Math.round(bm.width*sc)),h=Math.max(1,Math.round(bm.height*sc)),c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(bm,0,0,w,h);r={w,h,d:x.getImageData(0,0,w,h).data}}catch(e){}return imgs[ti]=r};
+ const nodes=j.nodes||[],par=new Array(nodes.length).fill(-1);nodes.forEach((n,i)=>(n.children||[]).forEach(c=>par[c]=i));
+ const loc=n=>{const m=new THREE.Matrix4();if(n.matrix)m.fromArray(n.matrix);else m.compose(new THREE.Vector3(...(n.translation||[0,0,0])),new THREE.Quaternion(...(n.rotation||[0,0,0,1])),new THREE.Vector3(...(n.scale||[1,1,1])));return m};
+ const world=(i,g=0)=>{const m=loc(nodes[i]);return par[i]>=0&&g<64?world(par[i],g+1).multiply(m):m};
+ const out=[];
+ for(let ni=0;ni<nodes.length;ni++){const n=nodes[ni];if(n.mesh==null)continue;const mesh=j.meshes[n.mesh],W=world(ni),flip=W.determinant()<0,V=[],F=[],C=[],v3=new THREE.Vector3();
+  for(const pr of mesh.primitives||[]){const mode=pr.mode==null?4:pr.mode;if(mode<4||!pr.attributes||pr.attributes.POSITION==null)continue;
+   const pos=acc(pr.attributes.POSITION),nv=pos.length/3,base=V.length;for(let i=0;i<nv;i++){v3.set(pos[i*3],pos[i*3+1],pos[i*3+2]).applyMatrix4(W);V.push([v3.x,v3.y,v3.z])}
+   const ix=pr.indices!=null?acc(pr.indices):null,cnt=ix?ix.length:nv,id=k=>ix?ix[k]:k,tr=[];
+   if(mode===4)for(let k=0;k+2<cnt;k+=3)tr.push([id(k),id(k+1),id(k+2)]);else if(mode===5)for(let k=0;k+2<cnt;k++)tr.push(k&1?[id(k+1),id(k),id(k+2)]:[id(k),id(k+1),id(k+2)]);else for(let k=1;k+1<cnt;k++)tr.push([id(0),id(k),id(k+1)]);
+   const mt=pr.material!=null?(j.materials||[])[pr.material]:null,pb=(mt&&mt.pbrMetallicRoughness)||{},bf=pb.baseColorFactor||[1,1,1,1],bc=mt?[0,1,2].map(a=>ioS(bf[a])):null;
+   const col=pr.attributes.COLOR_0!=null?acc(pr.attributes.COLOR_0):null,cn=col?col.length/nv:0,uv=pr.attributes.TEXCOORD_0!=null?acc(pr.attributes.TEXCOORD_0):null,im=pb.baseColorTexture&&uv?await tex(pb.baseColorTexture.index):null;
+   tr.forEach(t=>{let c=bc;
+    if(im){const u=(uv[t[0]*2]+uv[t[1]*2]+uv[t[2]*2])/3,w=(uv[t[0]*2+1]+uv[t[1]*2+1]+uv[t[2]*2+1])/3,x=Math.min(im.w-1,Math.floor((((u%1)+1)%1)*im.w)),y=Math.min(im.h-1,Math.floor((((w%1)+1)%1)*im.h)),o=(y*im.w+x)*4;c=[im.d[o],im.d[o+1],im.d[o+2]]}
+    else if(col)c=[0,1,2].map(a=>ioS((col[t[0]*cn+a]+col[t[1]*cn+a]+col[t[2]*cn+a])/3));
+    F.push(flip?[t[2]+base,t[1]+base,t[0]+base]:[t[0]+base,t[1]+base,t[2]+base]);C.push(c)})}
+  if(F.length)out.push(ioWeldM({name:n.name||mesh.name||'Malha',V,F,C}))}
+ return out}
+async function ioUnzip(buf){if(typeof DecompressionStream==='undefined')throw new Error('este navegador não descompacta 3MF');const dv=new DataView(buf);let e=buf.byteLength-22;while(e>=0&&dv.getUint32(e,true)!==0x06054b50)e--;if(e<0)throw new Error('ZIP inválido');
+ const n=dv.getUint16(e+10,true);let p=dv.getUint32(e+16,true);const out={};
+ for(let i=0;i<n;i++){const me=dv.getUint16(p+10,true),cs=dv.getUint32(p+20,true),nl=dv.getUint16(p+28,true),xl=dv.getUint16(p+30,true),cl=dv.getUint16(p+32,true),lo=dv.getUint32(p+42,true),name=ioDec(new Uint8Array(buf,p+46,nl));p+=46+nl+xl+cl;
+  const ds=lo+30+dv.getUint16(lo+26,true)+dv.getUint16(lo+28,true),raw=new Uint8Array(buf,ds,cs);out[name]=me===0?raw:new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer())}return out}
+async function io3mfRead(buf){const z=await ioUnzip(buf),k=Object.keys(z).find(n=>/3dmodel\.model$/i.test(n));if(!k)throw new Error('3MF sem modelo');const x=ioDec(z[k]);
+ const at=s=>{const o={};s.replace(/([\w:]+)="([^"]*)"/g,(_,a,b)=>{o[a]=b;return''});return o},mats={},objs={};
+ x.replace(/<(?:\w+:)?basematerials\b([^>]*)>([\s\S]*?)<\/(?:\w+:)?basematerials>/g,(_,a,b)=>{const L=[];b.replace(/<(?:\w+:)?base\b([^>]*)>/g,(_,c)=>{const d=at(c).displaycolor||'#969696';L.push([1,3,5].map(i=>parseInt(d.substr(i,2),16)));return''});mats[at(a).id]=L;return''});
+ x.replace(/<(?:\w+:)?object\b([^>]*)>([\s\S]*?)<\/(?:\w+:)?object>/g,(_,a,b)=>{const A=at(a),o={name:A.name||'Objeto '+A.id,V:[],F:[],C:[],comp:[]};
+  b.replace(/<(?:\w+:)?vertex\b([^>]*)>/g,(_,c)=>{const v=at(c);o.V.push([+v.x,+v.y,+v.z]);return''});
+  b.replace(/<(?:\w+:)?triangle\b([^>]*)>/g,(_,c)=>{const t=at(c);o.F.push([+t.v1,+t.v2,+t.v3]);const pid=t.pid||A.pid,p=t.p1!=null?+t.p1:(A.pindex!=null?+A.pindex:null);o.C.push(pid&&mats[pid]&&p!=null?mats[pid][p]||null:null);return''});
+  b.replace(/<(?:\w+:)?component\b([^>]*)>/g,(_,c)=>{const q=at(c);o.comp.push({id:q.objectid,m:q.transform});return''});objs[A.id]=o;return''});
+ const T=s=>{const m=new THREE.Matrix4(),t=s?s.trim().split(/\s+/).map(Number):null;if(t&&t.length===12&&t.every(Number.isFinite))m.set(t[0],t[3],t[6],t[9],t[1],t[4],t[7],t[10],t[2],t[5],t[8],t[11],0,0,0,1);return m};
+ const out=[],walk=(id,M,g)=>{const o=objs[id];if(!o||g>16)return;if(o.V.length){const fl=M.determinant()<0,v3=new THREE.Vector3();out.push({name:o.name,V:o.V.map(v=>{v3.set(v[0],v[1],v[2]).applyMatrix4(M);return[v3.x,v3.y,v3.z]}),F:o.F.map(f=>fl?f.slice().reverse():f),C:o.C})}o.comp.forEach(c=>walk(c.id,M.clone().multiply(T(c.m)),g+1))};
+ const items=[];x.replace(/<(?:\w+:)?item\b([^>]*)>/g,(_,a)=>{items.push(at(a));return''});
+ (items.length?items:Object.keys(objs).map(id=>({objectid:id}))).forEach(it=>walk(it.objectid,T(it.transform),0));return out}
+async function ioParse(name,buf,files){const e=((name.match(/\.([a-z0-9]+)$/i)||[])[1]||'').toLowerCase();
+ if(e==='obj'){const txt=ioDec(buf),ml=[...files.values()].filter(f=>/\.mtl$/i.test(f.name)),mt=await Promise.all(ml.map(f=>f.text()));return{M:ioObj(txt,mt),up:'y',note:!ml.length&&/^\s*mtllib\s/m.test(txt)?'sem o .mtl as cores foram ignoradas':''}}
+ if(e==='stl')return{M:ioStl(buf),up:'z'};if(e==='ply')return{M:ioPly(buf),up:'z'};if(e==='off')return{M:ioOff(ioDec(buf)),up:'z'};
+ if(e==='glb'||e==='gltf')return{M:await ioGltf(buf,files,e==='glb'),up:'y'};if(e==='3mf')return{M:await io3mfRead(buf),up:'z'};throw new Error('formato não suportado')}
+/* eixo, tamanho e posição */
+function ioPlace(M,o){const up=o.up==='auto'?o.fup:o.up,T=up==='z'?v=>[v[0],v[2],-v[1]]:v=>v,R=M.map(m=>({name:m.name,F:m.F,C:m.C,V:m.V.map(T)}));
+ const mn=[1e30,1e30,1e30],mx=[-1e30,-1e30,-1e30];R.forEach(m=>m.V.forEach(v=>{for(let a=0;a<3;a++){if(v[a]<mn[a])mn[a]=v[a];if(v[a]>mx[a])mx[a]=v[a]}}));
+ const ext=Math.max(mx[0]-mn[0],mx[1]-mn[1],mx[2]-mn[2])||1,s=o.fit?(+o.size||2)/ext:(+o.scale||1),cx=(mn[0]+mx[0])/2,cz=(mn[2]+mx[2])/2;
+ R.forEach(m=>m.V=m.V.map(v=>{let x=v[0],y=v[1],z=v[2];if(o.center){x-=cx;z-=cz;y-=mn[1]}return[x*s,y*s,z*s]}));return R}
+/* ---------- exportadores (M = malhas em coordenadas do mundo; C = cor RGB por face) ---------- */
+const ioNrm=(a,b,d)=>{const x=(b[1]-a[1])*(d[2]-a[2])-(b[2]-a[2])*(d[1]-a[1]),y=(b[2]-a[2])*(d[0]-a[0])-(b[0]-a[0])*(d[2]-a[2]),z=(b[0]-a[0])*(d[1]-a[1])-(b[1]-a[1])*(d[0]-a[0]),l=Math.hypot(x,y,z)||1;return[x/l,y/l,z/l]};
+function ioStlBuild(M,tri){const T=[];M.forEach(m=>m.F.forEach(q=>tri(q,m.V).forEach(t=>T.push([m.V[t[0]],m.V[t[1]],m.V[t[2]]]))));if(!T.length)return null;
+ const b=new ArrayBuffer(84+50*T.length),dv=new DataView(b);new Uint8Array(b).set(new TextEncoder().encode('PolyPocket STL'));dv.setUint32(80,T.length,true);
+ T.forEach((t,i)=>{const o=84+i*50;[...ioNrm(t[0],t[1],t[2]),...t[0],...t[1],...t[2]].forEach((x,k)=>dv.setFloat32(o+k*4,x,true))});return new Blob([b],{type:'model/stl'})}
+function ioPlyBuild(M){let nv=0,nf=0,fb=0;M.forEach(m=>{nv+=m.V.length;nf+=m.F.length;m.F.forEach(q=>fb+=4+4*q.length)});if(!nf)return null;
+ const h=new TextEncoder().encode('ply\nformat binary_little_endian 1.0\ncomment PolyPocket\nelement vertex '+nv+'\nproperty float x\nproperty float y\nproperty float z\nelement face '+nf+'\nproperty list uchar int vertex_indices\nproperty uchar red\nproperty uchar green\nproperty uchar blue\nend_header\n');
+ const b=new ArrayBuffer(h.length+nv*12+fb),dv=new DataView(b);new Uint8Array(b).set(h);let p=h.length;
+ M.forEach(m=>m.V.forEach(v=>{for(let a=0;a<3;a++){dv.setFloat32(p,v[a],true);p+=4}}));
+ let base=0;M.forEach(m=>{m.F.forEach((q,fi)=>{dv.setUint8(p++,Math.min(255,q.length));q.forEach(i=>{dv.setInt32(p,i+base,true);p+=4});(m.C[fi]||IODEF).forEach(x=>dv.setUint8(p++,ioC8(x)))});base+=m.V.length});return new Blob([b],{type:'application/octet-stream'})}
+async function ioB64(u8){let s='';for(let i=0;i<u8.length;i+=32768)s+=String.fromCharCode.apply(null,u8.subarray(i,i+32768));return btoa(s)}
+async function ioGltfBuild(M,glb,tri){const chunks=[],bvs=[],acs=[],meshes=[],nodes=[];let off=0;
+ const add=ta=>{const u=new Uint8Array(ta.buffer),pad=(4-off%4)%4;if(pad){chunks.push(new Uint8Array(pad));off+=pad}bvs.push({buffer:0,byteOffset:off,byteLength:u.length,target:34962});chunks.push(u);off+=u.length;return bvs.length-1};
+ M.forEach(m=>{const pos=[],nor=[],col=[];m.F.forEach((q,fi)=>{const c=(m.C[fi]||IODEF).map(x=>ioL(x/255));tri(q,m.V).forEach(t=>{const n=ioNrm(m.V[t[0]],m.V[t[1]],m.V[t[2]]);t.forEach(i=>{pos.push(...m.V[i]);nor.push(...n);col.push(...c)})})});
+  if(!pos.length)return;const mn=[1e30,1e30,1e30],mx=[-1e30,-1e30,-1e30];for(let i=0;i<pos.length;i+=3)for(let a=0;a<3;a++){mn[a]=Math.min(mn[a],pos[i+a]);mx[a]=Math.max(mx[a],pos[i+a])}
+  const n=pos.length/3,a0=acs.length;acs.push({bufferView:add(new Float32Array(pos)),componentType:5126,count:n,type:'VEC3',min:mn,max:mx},{bufferView:add(new Float32Array(nor)),componentType:5126,count:n,type:'VEC3'},{bufferView:add(new Float32Array(col)),componentType:5126,count:n,type:'VEC3'});
+  meshes.push({name:m.name,primitives:[{attributes:{POSITION:a0,NORMAL:a0+1,COLOR_0:a0+2},material:0,mode:4}]});nodes.push({name:m.name,mesh:meshes.length-1})});
+ if(!meshes.length)return null;const pad=(4-off%4)%4;if(pad){chunks.push(new Uint8Array(pad));off+=pad}const bin=new Uint8Array(off);let o=0;chunks.forEach(c=>{bin.set(c,o);o+=c.length});
+ const js={asset:{version:'2.0',generator:'PolyPocket'},scene:0,scenes:[{nodes:nodes.map((_,i)=>i)}],nodes,meshes,materials:[{name:'cores',pbrMetallicRoughness:{baseColorFactor:[1,1,1,1],metallicFactor:0,roughnessFactor:1}}],accessors:acs,bufferViews:bvs,buffers:[{byteLength:off}]};
+ if(!glb){js.buffers[0].uri='data:application/octet-stream;base64,'+await ioB64(bin);return new Blob([JSON.stringify(js)],{type:'model/gltf+json'})}
+ let jb=new TextEncoder().encode(JSON.stringify(js));const jp=(4-jb.length%4)%4;if(jp){const t=new Uint8Array(jb.length+jp).fill(32);t.set(jb);jb=t}
+ const tot=12+8+jb.length+8+bin.length,b=new ArrayBuffer(tot),dv=new DataView(b),u8=new Uint8Array(b);dv.setUint32(0,0x46546C67,true);dv.setUint32(4,2,true);dv.setUint32(8,tot,true);dv.setUint32(12,jb.length,true);dv.setUint32(16,0x4E4F534A,true);u8.set(jb,20);
+ const q=20+jb.length;dv.setUint32(q,bin.length,true);dv.setUint32(q+4,0x004E4942,true);u8.set(bin,q+8);return new Blob([b],{type:'model/gltf-binary'})}
+function io3mfBuild(M,tri,zip){const cols=[],cm=new Map(),hx=c=>'#'+c.map(x=>ioC8(x).toString(16).padStart(2,'0')).join('').toUpperCase(),n6=x=>String(+x.toFixed(6)),esc=s=>String(s).replace(/[<>&"']/g,c=>'&#'+c.charCodeAt(0)+';');
+ const cid=c=>{const h=hx(c||IODEF);let i=cm.get(h);if(i==null){i=cols.length;cm.set(h,i);cols.push(h)}return i};let id=1,objs='',items='';
+ M.forEach(m=>{if(!m.F.length)return;const oid=++id;let t='';m.F.forEach((q,fi)=>{const c=cid(m.C[fi]);tri(q,m.V).forEach(f=>{t+='<triangle v1="'+f[0]+'" v2="'+f[1]+'" v3="'+f[2]+'" pid="1" p1="'+c+'"/>'})});
+  objs+='<object id="'+oid+'" name="'+esc(m.name)+'" type="model"><mesh><vertices>'+m.V.map(v=>'<vertex x="'+n6(v[0])+'" y="'+n6(v[1])+'" z="'+n6(v[2])+'"/>').join('')+'</vertices><triangles>'+t+'</triangles></mesh></object>';items+='<item objectid="'+oid+'"/>'});
+ if(!objs)return null;const X='<?xml version="1.0" encoding="UTF-8"?>',e=new TextEncoder(),
+ model=X+'<model unit="millimeter" xml:lang="en-US" xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02"><metadata name="Application">PolyPocket</metadata><resources><basematerials id="1">'+cols.map((c,i)=>'<base name="cor'+(i+1)+'" displaycolor="'+c+'"/>').join('')+'</basematerials>'+objs+'</resources><build>'+items+'</build></model>';
+ return zip([{n:'[Content_Types].xml',d:e.encode(X+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="model" ContentType="application/vnd.ms-package.3dmanufacturing-3dmodel+xml"/></Types>')},
+ {n:'_rels/.rels',d:e.encode(X+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Target="/3D/3dmodel.model" Id="rel0" Type="http://schemas.microsoft.com/3dmanufacturing/2013/01/3dmodel"/></Relationships>')},
+ {n:'3D/3dmodel.model',d:e.encode(model)}])}
+
+/* ---------- bloco 11: interface (importar / exportar) ---------- */
+const IOS={fit:1,size:2,center:1,up:'auto',iscale:1,escale:1,eup:'y',sel:0};
+try{Object.assign(IOS,JSON.parse(localStorage.getItem('pp2io')||'{}'))}catch(e){}
+const ioSave=()=>{try{localStorage.setItem('pp2io',JSON.stringify(IOS))}catch(e){}};
+async function ioImport(fl,o){const L=[...fl],by=new Map(L.map(f=>[f.name,f])),f0=L.find(f=>/\.(obj|glb|gltf|stl|ply|off|3mf)$/i.test(f.name));
+ if(!f0)return toast('Formato não suportado. Aceito: OBJ, GLB, glTF, STL, PLY, OFF e 3MF');
+ if(f0.size>80e6)return toast('Arquivo grande demais (limite de 80 MB)');
+ toast('Lendo '+f0.name+'…');let r;
+ try{r=await ioParse(f0.name,await f0.arrayBuffer(),by)}catch(e){return toast('Não consegui ler '+f0.name+(e&&e.message?': '+e.message:''))}
+ let M=r.M.map(ioClean).filter(Boolean);if(!M.length)return toast('Nenhuma malha encontrada no arquivo');
+ let skip=0;M=M.filter(m=>{const ok=m.V.length<=2e5&&m.F.length<=2e5;if(!ok)skip++;return ok});
+ const room=Math.max(0,500-O.length);if(M.length>room){skip+=M.length-room;M=M.slice(0,room)}
+ if(!M.length)return toast('Malha grande demais: o app aceita até 200 mil faces por objeto e 500 objetos');
+ M=ioPlace(M,{fit:o.fit,size:o.size,center:o.center,up:o.up,scale:o.iscale,fup:r.up});
+ const cm=new Map();let added=0;
+ const kOfC=c=>{const key=c.join(',');let k=cm.get(key);if(k!=null)return k;let b=-1,bd=1e9;for(let i=0;i<PAL.cells.length;i++){const x=PAL.cells[i][2],d=(x[0]-c[0])**2+(x[1]-c[1])**2+(x[2]-c[2])**2;if(d<bd){bd=d;b=i}}
+  if(bd<=900||added>=128)k=b;else{PAL.cells.push(mkCell(c,c));added++;k=PAL.cells.length-1}cm.set(key,k);return k};
+ push();let last=null,nv=0,nt=0;
+ M.forEach(m=>{const F=m.F.map((q,i)=>{const a=q.slice();if(m.C[i])a.k=kOfC(m.C[i]);return a});last=newObj(String(m.name||'Malha').slice(0,40),m.V,F,null);nv+=m.V.length;nt+=m.F.reduce((s,q)=>s+q.length-2,0)});
+ if(added){savePal();invalidateAll()}
+ build();pick(last);mode='o';paint();rebuild();
+ toast('Importado: '+M.length+' objeto(s), '+nv+' vértices, '+nt+' triângulos'+(added?' · '+added+' cor(es) nova(s) na paleta':'')+(skip?' · '+skip+' ignorado(s) por tamanho':'')+(r.note?' · '+r.note:''))}
+function ioWorld(o){cur.V=V;cur.F=F;scene.updateMatrixWorld();const nc=PAL.cells.length,z=o.eup==='z',s=+o.escale||1,R=[],w=new THREE.Vector3();
+ (o.sel?[cur]:O).forEach(o0=>{if(!o0.vis||!o0.F.length)return;const e=Object.assign({},o0,evalMods(o0)||{}),mw=o0.g.matrixWorld,fl=mw.determinant()<0;
+  R.push({name:o0.name,V:e.V.map(v=>{w.set(v[0],v[1],v[2]).applyMatrix4(mw).multiplyScalar(s);return z?[w.x,-w.z,w.y]:[w.x,w.y,w.z]}),F:e.F.map(q=>{const a=Array.from(q);return fl?a.reverse():a}),C:e.F.map(q=>{const k=q.k;return k!=null&&k>=0&&k<nc?PAL.cells[k][2]:IODEF})})});return R}
+async function ioExport(fmt){const M=ioWorld(IOS);if(!M.length)return toast('Não há malhas visíveis para exportar');let b,ext,sx='';
+ try{if(fmt==='stl'){b=ioStlBuild(M,triOf);ext='.stl'}else if(fmt==='ply'){b=ioPlyBuild(M);ext='.ply'}else if(fmt==='gltf'){b=await ioGltfBuild(M,0,triOf);ext='.gltf'}else if(fmt==='glbc'){b=await ioGltfBuild(M,1,triOf);ext='.glb';sx='_cores'}else{b=io3mfBuild(M,triOf,zip);ext='.3mf'}}catch(e){return toast('Não consegui gerar o arquivo')}
+ if(!b)return toast('Não há malhas visíveis para exportar');saveBlob(b,PJ.name.replace(/[\\/:*?"<>|]/g,'_')+sx+ext);toast(ext.slice(1).toUpperCase()+' gerado: '+M.length+' objeto(s)')}
+const fIo=document.createElement('input');fIo.type='file';fIo.multiple=true;fIo.hidden=true;document.body.append(fIo);fIo.onchange=()=>{const l=[...fIo.files];fIo.value='';if(l.length){pmHide();ioImport(l,IOS)}};
+addEventListener('dragover',e=>e.preventDefault());addEventListener('drop',e=>{e.preventDefault();if(e.dataTransfer&&e.dataTransfer.files.length)ioImport(e.dataTransfer.files,IOS)});
+function ioShow(){const bx=PM.firstChild;bx.replaceChildren();
+ const lab=(t,i)=>{const l=el('label',null,'rw');l.style.cssText='font-size:13px;gap:8px';l.append(i,document.createTextNode(t));return l},
+ chk=(k,t)=>{const i=document.createElement('input');i.type='checkbox';i.checked=!!IOS[k];i.onchange=()=>{IOS[k]=i.checked?1:0;ioSave()};return lab(t,i)},
+ num=(k,t)=>{const i=document.createElement('input');i.type='number';i.step='any';i.min='0';i.value=IOS[k];i.style.cssText='width:84px;min-height:36px';i.onchange=()=>{const v=parseFloat(i.value);if(v>0){IOS[k]=v;ioSave()}else i.value=IOS[k]};return lab(t,i)},
+ sel=(k,t,L)=>{const s=document.createElement('select');s.style.minHeight='36px';L.forEach(([v,x])=>{const o=document.createElement('option');o.value=v;o.textContent=x;s.append(o)});s.value=IOS[k];s.onchange=()=>{IOS[k]=s.value;ioSave()};return lab(t,s)},
+ hd=el('div',null,'rw'),bt=(t,f)=>el('button',t,0,f),ex=(t,f)=>bt(t,()=>ioExport(f));
+ hd.append(el('b','Importar / Exportar'),el('span',null,'sp'),bt('Fechar',pmHide));
+ const im=el('div',null,'it'),ie=el('div',null,'it'),r1=el('div',null,'rw'),r2=el('div',null,'rw');
+ im.append(el('b','Importar'),el('div','OBJ (+MTL), GLB, glTF (+bin), STL, PLY, OFF e 3MF. Também dá para arrastar o arquivo para a tela. Para OBJ com cores, escolha o .obj e o .mtl juntos.','sub'),
+  chk('fit','Ajustar o maior lado ao tamanho abaixo'),num('size','Maior lado (unidades; o cubo padrão mede 1)'),num('iscale','Escala (quando não ajustar)'),chk('center','Centralizar e apoiar no chão'),sel('up','Eixo vertical do arquivo',[['auto','Automático'],['y','Y para cima'],['z','Z para cima']]),
+  bt('Escolher arquivo(s)…',()=>fIo.click()));
+ r1.append(bt('OBJ (com UV)',()=>{pmHide();$('#bX').click()}),bt('GLB (com paleta)',()=>{pmHide();$('#bGlb').click()}));
+ r2.append(ex('GLB (cores de vértice)','glbc'),ex('glTF (.gltf)','gltf'),ex('STL (sem cores)','stl'),ex('PLY (cores por face)','ply'),ex('3MF (com cores)','3mf'));
+ ie.append(el('b','Exportar'),el('div','Escala, eixo e "só o selecionado" valem para GLB (cores), glTF, STL, PLY e 3MF.','sub'),num('escale','Escala'),sel('eup','Eixo vertical do arquivo',[['y','Y para cima (glTF, Unity, Roblox)'],['z','Z para cima (Blender, CAD, impressão 3D)']]),chk('sel','Só o objeto selecionado'),r1,r2);
+ bx.append(hd,im,ie);PM.hidden=false}
+$('#bIo').onclick=ioShow;
+
+/* ---------- bloco 12: verificar e reparar malha ---------- */
+function mhBox(V){const mn=[1e30,1e30,1e30],mx=[-1e30,-1e30,-1e30];V.forEach(v=>{for(let a=0;a<3;a++){if(v[a]<mn[a])mn[a]=v[a];if(v[a]>mx[a])mx[a]=v[a]}});return Math.hypot(mx[0]-mn[0],mx[1]-mn[1],mx[2]-mn[2])||1}
+function mhGrid(P,h){const g=new Map(),K=(x,y,z)=>x+','+y+','+z;P.forEach((p,i)=>{const k=K(Math.floor(p[0]/h),Math.floor(p[1]/h),Math.floor(p[2]/h));(g.get(k)||g.set(k,[]).get(k)).push(i)});
+ return(lo,hi,fn)=>{for(let x=Math.floor(lo[0]/h);x<=Math.floor(hi[0]/h);x++)for(let y=Math.floor(lo[1]/h);y<=Math.floor(hi[1]/h);y++)for(let z=Math.floor(lo[2]/h);z<=Math.floor(hi[2]/h);z++){const c=g.get(K(x,y,z));if(c)c.forEach(fn)}}}
+function mhPairs(V,tol){const q=mhGrid(V,tol*2||1e-9),G=[];V.forEach((p,i)=>q(p.map(x=>x-tol),p.map(x=>x+tol),j=>{if(j>i&&Math.hypot(p[0]-V[j][0],p[1]-V[j][1],p[2]-V[j][2])<=tol)G.push([i,j])}));return G}
+function mhEdges(F){const m=new Map();F.forEach((q,f)=>q.forEach((a,j)=>{const b=q[(j+1)%q.length],k=ek(a,b);(m.get(k)||m.set(k,[]).get(k)).push([f,a,b])}));return m}
+/* arestas abertas que têm um vértice de borda no meio (junção em T): {chave:[vértices ordenados de a para b]} */
+function mhTj(V,F,tol,em){em=em||mhEdges(F);const open=[],bv=new Set();em.forEach((L,k)=>{if(L.length===1){open.push(k);const[a,b]=k.split(',').map(Number);bv.add(a);bv.add(b)}});if(!open.length)return{};
+ const ids=[...bv],P=ids.map(i=>V[i]),q=mhGrid(P,Math.max(tol*4,1e-9)),out={};
+ open.forEach(k=>{const[a,b]=k.split(',').map(Number),A=V[a],B=V[b],d=[B[0]-A[0],B[1]-A[1],B[2]-A[2]],l2=d[0]*d[0]+d[1]*d[1]+d[2]*d[2],l=Math.sqrt(l2);if(l<tol)return;const r=Math.max(tol,l*2e-3),hits=[];
+  q([Math.min(A[0],B[0])-r,Math.min(A[1],B[1])-r,Math.min(A[2],B[2])-r],[Math.max(A[0],B[0])+r,Math.max(A[1],B[1])+r,Math.max(A[2],B[2])+r],pi=>{const m=ids[pi];if(m===a||m===b)return;const M=V[m],t=((M[0]-A[0])*d[0]+(M[1]-A[1])*d[1]+(M[2]-A[2])*d[2])/l2;if(t<=.001||t>=.999)return;
+   const dx=A[0]+d[0]*t-M[0],dy=A[1]+d[1]*t-M[1],dz=A[2]+d[2]*t-M[2];if(Math.hypot(dx,dy,dz)<=r)hits.push([t,m])});
+  if(hits.length)out[k]=hits.sort((x,y)=>x[0]-y[0]).map(x=>x[1])});return out}
+function mhDiag(V,F){const tol=mhBox(V)*1e-4,em=mhEdges(F),r={tol,open:[],nm:[],tj:0,dupV:0,dupF:0,deg:0,loose:0};
+ em.forEach((L,k)=>{if(L.length===1)r.open.push(k);else if(L.length>2)r.nm.push(k)});
+ r.tj=Object.keys(mhTj(V,F,tol,em)).length;const g=mhPairs(V,tol),s=new Set();g.forEach(p=>{s.add(p[0]);s.add(p[1])});r.dupV=s.size;
+ const seen=new Set();F.forEach(q=>{if(new Set(q).size<q.length)r.deg++;const k=[...q].sort((a,b)=>a-b).join(',');if(seen.has(k))r.dupF++;else seen.add(k)});
+ const used=new Set(F.flat());r.loose=V.length-used.size;r.ok=!(r.open.length||r.nm.length||r.tj||r.dupV||r.dupF||r.deg||r.loose);return r}
+/* repara: solda vértices coincidentes, tira faces repetidas/degeneradas, divide arestas com junção em T e (opcional) tampa buracos pequenos */
+function mhRepair(V,F,o){const log={weld:0,faces:0,tj:0,fill:0},tol=mhBox(V)*1e-4;
+ const n0=V.length,f0=F.length;let G=o.weld?mhPairs(V,tol):[];let r=wcollapse(V,F,G);V=r[0];F=r[1];log.weld=n0-V.length;
+ const seen=new Map(),kill=new Set(),canon=q=>{const i=q.indexOf(Math.min(...q));return q.map((_,j)=>q[(i+j)%q.length]).join(',')};
+ F.forEach((q,i)=>{const k=[...q].sort((a,b)=>a-b).join(','),c=canon(q);if(!seen.has(k)){seen.set(k,[[i,c]]);return}const L=seen.get(k);if(L.some(x=>x[1]===c))kill.add(i);else{L.push([i,c]);kill.add(i);L.forEach(x=>{if(x[1]!==c)kill.add(x[0])})}});
+ F=F.filter((_,i)=>!kill.has(i));
+ for(let pass=0;pass<3;pass++){const sp=mhTj(V,F,tol);const ks=Object.keys(sp);if(!ks.length)break;
+  F=F.map(q=>{let ch=0;const L=[];q.forEach((a,j)=>{const b=q[(j+1)%q.length],k=ek(a,b);L.push(a);if(sp[k]){ch=1;const mids=a<b?sp[k]:sp[k].slice().reverse();L.push(...mids);log.tj+=1}});return ch?inh(q,L):q})}
+ if(o.fill){const he=new Map(),has=new Set(),HF=new Map();F.forEach((q,f)=>q.forEach((a,j)=>{const b=q[(j+1)%q.length];has.add(a+'>'+b);HF.set(a+'>'+b,f)}));
+  const into=new Map();has.forEach(h=>{const[u,v]=h.split('>').map(Number);if(!has.has(v+'>'+u)){(into.get(v)||into.set(v,[]).get(v)).push(u)}});
+  const used=new Set(),add=[];into.forEach((us,v)=>us.forEach(u=>{const h0=u+'>'+v;if(used.has(h0))return;const L=[v],hs=[h0];let cur=u,ok=true,g=0;
+   while(cur!==v&&g++<(o.maxLoop||12)){L.push(cur);const w=into.get(cur);if(!w||w.length!==1){ok=false;break}hs.push(w[0]+'>'+cur);cur=w[0]}
+   if(ok&&cur===v&&L.length>=3&&L.length<=(o.maxLoop||12)){hs.forEach(h=>used.add(h));add.push(inh(F[HF.get(h0)],L));log.fill++}}));F=F.concat(add)}
+ const used=[...new Set(F.flat())].sort((x,y)=>x-y),mp=new Map(used.map((a,i)=>[a,i]));V=used.map(i=>V[i]);F=F.map(q=>inh(q,q.map(i=>mp.get(i))));
+ log.faces=f0-F.length;return{V,F,log}}
+function mhDo(fill){push();const r=mhRepair(V,F,{weld:1,fill:fill,maxLoop:12});V=r.V;F=r.F;sel=new Set();cur.V=V;cur.F=F;rebuild();const d=mhDiag(V,F);
+ toast('Reparo: '+r.log.weld+' vértice(s) soldado(s), '+r.log.tj+' junção(ões) em T, '+r.log.fill+' buraco(s) tampado(s), '+r.log.faces+' face(s) removida(s)'+(d.ok?'. Malha limpa':' · ainda restam '+d.open.length+' aresta(s) aberta(s)'));mhShow()}
+let MHF=1;
+function mhShow(){if(!cur)return;const d=mhDiag(V,F),bx=PM.firstChild;bx.replaceChildren();
+ const hd=el('div',null,'rw'),it=el('div',null,'it'),rw=el('div',null,'rw');hd.append(el('b','Verificar malha'),el('span',null,'sp'),el('button','Fechar',0,pmHide));
+ it.append(el('b',cur.name+' · '+V.length+' vértices · '+F.length+' faces'));
+ [['Arestas abertas (buraco ou borda)',d.open.length],['Arestas com 3+ faces',d.nm.length],['Junções em T',d.tj],['Vértices duplicados',d.dupV],['Faces repetidas',d.dupF],['Faces degeneradas',d.deg],['Vértices soltos',d.loose]].forEach(([t,n])=>{const r=el('div',(n?'✗ ':'✓ ')+t+': '+n,'sub');if(n)r.style.color='#ffb74d';it.append(r)});
+ it.append(el('div',d.ok?'Malha fechada e limpa: o chanfro deve funcionar em qualquer aresta.':'O chanfro só fecha direito onde cada aresta tem exatamente 2 faces. Repare antes de chanfrar.','sub'));
+ const l=el('label',null,'rw'),c=document.createElement('input');c.type='checkbox';c.checked=!!MHF;c.onchange=()=>{MHF=c.checked?1:0};l.style.cssText='font-size:13px;gap:8px';l.append(c,document.createTextNode('Tampar buracos pequenos (até 12 lados)'));
+ rw.append(el('button','Reparar',0,()=>mhDo(MHF)),el('button','Mostrar problemas',0,()=>{const k=[...d.open,...d.nm];if(!k.length)return toast('Nenhuma aresta com problema');pmHide();setMode('e');sel=new Set(k);rebuild();toast(k.length+' aresta(s) marcada(s) em laranja')}));
+ bx.append(hd,it,l,rw);PM.hidden=false}
+$('#bMc').onclick=mhShow;
 </script></body></html>
